@@ -16,11 +16,12 @@ export default function Home() {
                 Bienvenido a la administración de Co-working, por favor seleccione
                 la categoría a administrar:
               </h2>
-          <div className=" flex sm:grid lg:grid-cols-4 sm:grid-cols-1 flex-col w-[80%] gap-4 mt-16 mx-auto justify-center items-center">
-            <Button route="/classrooms" text="Aulas y Salones" />
-            <Button route="/meeting" text="Sala de Juntas" />
-            <Button route="/sports" text="Sitios Deportivos" />
-            <Button route="/recreational" text="Sitios Recreativos" />
+          <div className=" flex sm:grid lg:grid-cols-3 sm:grid-cols-1 flex-col w-[80%] gap-4 mt-16 mx-auto justify-center items-center">
+            <Button route="/classrooms" text="Salones de Clase" />
+            <Button route="/sports" text="Espacios Deportivos" />
+            <Button route="/auditoriums" text="Auditorios" />
+            <Button route="/meeting" text="Salas de reunión" />
+            <Button route="/laboratories" text="Laboratorios" />
           </div>
         </div>
       </main>
