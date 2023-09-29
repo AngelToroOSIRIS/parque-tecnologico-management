@@ -148,15 +148,15 @@ export default function App() {
               className="font-semibold rounded-lg shadow-xl bg-borders-light"
               content="Ver página del sitio"
             >
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <EyeIcon />
               </span>
             </Tooltip>
             <Tooltip
-              className="font-semibold rounded-lg shadow-xl bg-borders-light"
+              className="font-semibold rounded-lg shadow-xl bg-borders-light "
               content="Editar sitio"
             >
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <EditIcon />
               </span>
             </Tooltip>
@@ -164,7 +164,7 @@ export default function App() {
               className="font-semibold text-primary rounded-lg shadow-xl bg-borders-light"
               content="Eliminar sitio"
             >
-              <span className="text-lg hover:text-primary text-danger cursor-pointer active:opacity-50">
+              <span className="text-lg hover:text-primary text-danger cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <DeleteIcon />
               </span>
             </Tooltip>
@@ -225,7 +225,7 @@ export default function App() {
           </label>
           <div className="flex gap-3 bg-borders rounded-lg text-default-white p-2">
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
+              <DropdownTrigger className="hidden sm:flex mx-2">
                 <Button
                   endContent={<ChevronDownIcon className="text-small" />}
                   size="sm"
@@ -237,7 +237,7 @@ export default function App() {
               <DropdownMenu
                 className="bg-borders-light flex rounded-lg justify-between"
                 disallowEmptySelection
-                aria-label="Table Columns"
+                aria-label="TableColumn"
                 closeOnSelect={false}
                 selectedKeys={statusFilter}
                 selectionMode="multiple"
@@ -300,7 +300,7 @@ export default function App() {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="p-2 flex justify-between gap-x-4 items-center transition-all">
+      <div className="p-2 flex text-center justify-between gap-x-4 items-center transition-all">
         <Pagination
           showControls
           classNames={{
@@ -313,11 +313,6 @@ export default function App() {
           variant="light"
           onChange={setPage}
         />
-        <span className="text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${items.length} selected`}
-        </span>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
@@ -347,20 +342,13 @@ export default function App() {
 
   return (
     <Table
-      className="p-3"
+      className="p-3 text-left"
       isCompact
       removeWrapper
-      aria-label="Example table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
-      checkboxesProps={{
-        classNames: {
-          wrapper: "after:bg-foreground after:text-background text-background",
-        },
-      }}
       classNames={classNames}
       selectedKeys={selectedKeys}
-      selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
@@ -372,7 +360,6 @@ export default function App() {
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>

@@ -21,7 +21,7 @@ export default function Categories({ category }: { category: Category }) {
         Administración de {returnTitle(category)}
       </h1>
       {/* <Tabs /> */}
-      <div className="bg-off-white p-5  mb-60 rounded-lg shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+      <div className="bg-off-white mx-auto p-5 w-[80%]  mb-60 rounded-lg shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
         <Table/>
       </div>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-x-3 gap-y-5 text-center">
