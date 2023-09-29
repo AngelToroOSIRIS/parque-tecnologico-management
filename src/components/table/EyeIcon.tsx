@@ -5,10 +5,10 @@ export const EyeIcon = (props:any) => (
     aria-hidden="true"
     fill="none"
     focusable="false"
-    height="1em"
+    height="1.3em"
     role="presentation"
     viewBox="0 0 20 20"
-    width="1em"
+    width="1.3em"
     {...props}
   >
     <path

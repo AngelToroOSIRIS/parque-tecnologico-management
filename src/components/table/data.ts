@@ -1,17 +1,26 @@
+import React from "react";
+
 const columns = [
-  {name: "NOMBRE", uid: "name"},
-  {name: "UBICACIÓN", uid: "role"},
+  {name: "ID", uid: "id", sortable: true},
+  {name: "SITIO", uid: "name", sortable: true},
+  {name: "UBICACION", uid: "role", sortable: true},
   {name: "TIPO", uid: "type"},
-  {name: "ESTADO", uid: "status"},
-  {name: "FECHA ACTUALIZACIÓN", uid: "fecha_actual"},
+  {name: "ESTADO", uid: "status", sortable: true},
+  {name: "ACTUALIZACIÓN", uid: "fecha_Actual"},
   {name: "OPCIONES", uid: "actions"},
+];
+
+const statusOptions = [
+  {name: "Disponible", uid: "Disponible"},
+  {name: "Reservado", uid: "Reservado"},
+  {name: "Mantenimiento", uid: "Mantenimiento"},
 ];
 
 const users = [
   {
     id: 1,
     name: "Coliseo",
-    role: "Coliceo",
+    role: "Coliseo",
     type: "Espacio Deportivo",
     status: "Disponible",
     fecha_Actual: "28/09/2023"
@@ -34,9 +43,9 @@ const users = [
   },
   {
     id: 4,
-    name: "Salon 3",
+    name: "Auditorio 1",
     role: "Edificio D",
-    type: "Salones de Clase",
+    type: "Auditorios",
     status: "Mantenimiento",
     fecha_Actual: "28/09/2023"
   },
@@ -82,9 +91,9 @@ const users = [
   },
   {
     id: 10,
-    name: "Salon 9",
+    name: "Auditorio 2",
     role: "Edificio H",
-    type: "Salones de Clase",
+    type: "Auditorios",
     status: "Disponible",
     fecha_Actual: "28/09/2023"
   },
@@ -106,41 +115,41 @@ const users = [
   },
   {
     id: 13,
-    name: "Salon 12",
-    role: "Edificio C",
-    type: "Salones de Clase",
+    name: "Cancha de Volleyball",
+    role: "Cancha Volleyball 1",
+    type: "Espacio Deportivo",
     status: "Disponible",
     fecha_Actual: "28/09/2023"
   },
   {
     id: 14,
-    name: "Salon 13",
+    name: "Auditorio 3",
     role: "Edificio H",
-    type: "Salones de Clase",
+    type: "Auditorios",
     status: "Disponible",
     fecha_Actual: "28/09/2023"
   },
   {
     id: 15,
-    name: "Salon 14",
-    role: "Edificio E",
-    type: "Salones de Clase",
+    name: "Cancha de Basquetball",
+    role: "Coliseo",
+    type: "Espacios Deportivos",
     status: "Reservado",
     fecha_Actual: "28/09/2023"
   },
   {
     id: 16,
-    name: "Salon 15",
+    name: "Sala de Reunión 1",
     role: "Edificio C ",
-    type: "Salones de Clase",
+    type: "Sala de Reunión",
     status: "Disponible",
     fecha_Actual: "28/09/2023"
   },
   {
     id: 17,
-    name: "Salon 16",
-    role: "Edificio E",
-    type: "Salones de Clase",
+    name: "Cancha de Futbol",
+    role: "Cancha 1",
+    type: "Espacio Deportivo",
     status: "Mantenimiento",
     fecha_Actual: "28/09/2023"
   },
@@ -162,12 +171,12 @@ const users = [
   },
   {
     id: 20,
-    name: "Salon 19",
-    role: "Edificio D",
-    type: "Salones de Clase",
-    status: "Mantenimiento",
+    name: "Sala de reunión 2",
+    role: "Edificio C",
+    type: "Sala de juntas",
+    status: "Disponible",
     fecha_Actual: "28/09/2023"
   },
 ];
 
-export {columns, users};
+export {columns, users, statusOptions};
