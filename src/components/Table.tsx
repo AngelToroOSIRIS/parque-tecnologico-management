@@ -223,7 +223,7 @@ export default function App() {
               <option value="20">20</option>
             </select>
           </label>
-          <div className="flex gap-3 bg-borders rounded-lg text-default-white p-2">
+          <div className="flex gap-3 bg-borders rounded-lg  text-default-white p-2">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex mx-2">
                 <Button
@@ -262,7 +262,8 @@ export default function App() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
-                className="bg-borders-light rounded-lg"
+                className="bg-borders-light rounded-lg capitalize"
+                variant="bordered"
                 disallowEmptySelection
                 aria-label="Table Columns"
                 closeOnSelect={false}
