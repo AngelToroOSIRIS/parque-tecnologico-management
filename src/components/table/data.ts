@@ -4,13 +4,15 @@ const columns = [
   {name: "UBICACION", uid: "role", sortable: true},
   {name: "TIPO", uid: "type"},
   {name: "ESTADO", uid: "status", sortable: true},
+  {name: "CO-WORKING", uid: "cowork"},
   {name: "ACTUALIZACIÓN", uid: "fecha_Actual"},
   {name: "OPCIONES", uid: "actions"},
 ];
 
 const statusOptions = [
-  {name: "Disponible", uid: "Disponible"},
-  {name: "Reservado", uid: "Reservado"},
+  {name: "Todos", uid: "Todos" , "Disponible" : "Reservado" },
+  {name: "Disponibles", uid: "Disponible"},
+  {name: "Reservados", uid: "Reservado"},
   {name: "Mantenimiento", uid: "Mantenimiento"},
 ];
 

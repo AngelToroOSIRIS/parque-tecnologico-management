@@ -2,6 +2,7 @@ import './globals.css'
 import '@/styles/globals.sass'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Providers from './providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +28,7 @@ export default function RootLayout({
 					<meta name="theme-color" content="#990000" />
 					<meta name="description" content="ECIJG" />
 				</head>
-      <body className={inter.className}>{children}
+      <body className={inter.className}>
       <footer className="text-default-white bg-primary p-6 text-center z-40 w-full fixed bottom-0 left-0">
 						<p>
 							Todos los derechos reservados ©2023 - Escuela Colombiana de
@@ -37,6 +38,7 @@ export default function RootLayout({
 							Vigilada por Mineducación.
 						</p>
 					</footer>
+					<Providers>{children}</Providers>
       </body>
     </html>
   )

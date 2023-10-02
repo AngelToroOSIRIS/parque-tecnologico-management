@@ -22,6 +22,7 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { PlusIcon } from "@/components/table/PlusIcon";
+import DropdownOne from "@/components/DropdownOne";
 import { ChevronDownIcon } from "@/components/table/ChevronDownIcon";
 import { EditIcon } from "@/components/table/EditIcon";
 import { DeleteIcon } from "@/components/table/DeleteIcon";
@@ -29,6 +30,7 @@ import { EyeIcon } from "@/components/table/EyeIcon";
 import { SearchIcon } from "@/components/table/SearchIcon";
 import { columns, users, statusOptions } from "@/components/table/data";
 import { capitalize } from "@/components/table/utils";
+import Modal from "@/components/Modal";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Disponible: "success",
@@ -36,15 +38,25 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   Mantenimiento: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "type", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "name",
+  "type",
+  "role",
+  "status",
+  "fecha_Actual",
+  "actions",
+  "cowork",
+];
 
 type User = (typeof users)[0];
 
-export default function App() {
+export default function TableComponent() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
   );
+
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -143,12 +155,12 @@ export default function App() {
         return <div>{user.fecha_Actual}</div>;
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
+          <div className="relative justify-center flex items-center gap-2">
             <Tooltip
-              className="font-semibold rounded-lg shadow-xl bg-borders-light"
+              className="font-semibold  rounded-lg shadow-xl bg-borders-light"
               content="Ver página del sitio"
             >
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+              <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <EyeIcon />
               </span>
             </Tooltip>
@@ -156,7 +168,7 @@ export default function App() {
               className="font-semibold rounded-lg shadow-xl bg-borders-light "
               content="Editar sitio"
             >
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+              <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <EditIcon />
               </span>
             </Tooltip>
@@ -164,8 +176,9 @@ export default function App() {
               className="font-semibold text-primary rounded-lg shadow-xl bg-borders-light"
               content="Eliminar sitio"
             >
-              <span className="text-lg hover:text-primary text-danger cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+              <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <DeleteIcon />
+                <Modal/>
               </span>
             </Tooltip>
           </div>
@@ -194,94 +207,46 @@ export default function App() {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center gap-3 ">
-          <Input
-            isClearable
-            classNames={{
-              base: "w-full sm:max-w-[40%]",
-              inputWrapper: "h-[35px] rounded-lg text-custom-black p-2",
-            }}
-            placeholder="Buscar por nombre..."
-            size="sm"
-            startContent={
-              <SearchIcon className=" text-borders h-[20px] w-[20px] mr-2" />
-            }
-            value={filterValue}
-            variant="bordered"
-            onClear={() => setFilterValue("")}
-            onValueChange={onSearchChange}
-          />
-          <label className="justify-center items-center">
-            Sitios por página:
-            <select
-              className="bg-borders outline-none rounded-lg ml-2 text-default-white text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-            </select>
-          </label>
-          <div className="flex gap-3 bg-borders rounded-lg  text-default-white p-2">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex mx-2">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="flat"
-                >
-                  Estado
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                className="bg-borders-light flex rounded-lg justify-between"
-                disallowEmptySelection
-                aria-label="TableColumn"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
+      <div className="flex justify-between font-medium items-center gap-3 ">
+        <Input
+          isClearable
+          classNames={{
+            base: "w-full sm:max-w-[40%]",
+            inputWrapper:
+              "h-[45px] rounded-lg bg-white-off shadow-none text-custom-black p-2",
+          }}
+          placeholder="Buscar por nombre de sitio..."
+          size="lg"
+          startContent={
+            <SearchIcon className=" text-borders h-[20px] w-[20px] mr-2" />
+          }
+          value={filterValue}
+          variant="bordered"
+          onClear={() => setFilterValue("")}
+          onValueChange={onSearchChange}
+        />
+
+        <div className="flex gap-4">
+          <div className="flex gap-3 text-soft-gray rounded-xl p-2">
+            <label className="justify-center items-center">
+              Sitios por página:
+              <select
+                className="outline-none bg-borders-light rounded-md ml-2 text-soft-gray text-small"
+                onChange={onRowsPerPageChange}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                    <i className="bi bi-check absolute"></i>
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="flat"
-                >
-                  Columnas
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                className="bg-borders-light rounded-lg capitalize"
-                variant="bordered"
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="flex gap-3 bg-primary text-default-white rounded-xl p-2">
             <Button
-              className="bg-foreground text-background"
+              className="text-background"
               endContent={<PlusIcon height={25} width={25} size={25} />}
               size="sm"
+              disableAnimation={true}
             >
               Añadir sitio
             </Button>
@@ -301,13 +266,13 @@ export default function App() {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="p-2 flex text-center justify-between gap-x-4 items-center transition-all">
+      <div className="p-2 flex text-center justify-between font-medium text-md gap-x-4 items-center transition-all">
         <Pagination
           showControls
           classNames={{
-            cursor: "bg-primary text-default-white transition-all ",
+            cursor:
+              "bg-primary text-default-white font-medium text-md transition-all rounded-lg",
           }}
-          color="primary"
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
@@ -320,17 +285,12 @@ export default function App() {
 
   const classNames = React.useMemo(
     () => ({
-      th: [
-        "bg-borders",
-        "text-default-white",
-        "border-y",
-        "border-custom-black",
-      ],
+      th: ["bg-[#C8C8C8]", "text-soft-gray", "text-center"],
       td: [
         // changing the rows border radius
         // first
-        "border-borders border-y ",
-        "",
+        "p-3",
+        "text-center",
         // middle
         "group-data-[middle=true]:before:rounded-none",
         // last
@@ -343,7 +303,7 @@ export default function App() {
 
   return (
     <Table
-      className="p-3 text-left"
+      className=" bg-default-white p-3 text-center"
       isCompact
       removeWrapper
       bottomContent={bottomContent}
@@ -368,7 +328,7 @@ export default function App() {
       </TableHeader>
       <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
-          <TableRow className="border-[2px] border-borders-light" key={item.id}>
+          <TableRow key={item.id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

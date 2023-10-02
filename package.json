@@ -11,7 +11,10 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@nextui-org/button": "^2.0.21",
     "@nextui-org/react": "^2.1.13",
+    "@nextui-org/system": "^2.0.10",
+    "@nextui-org/theme": "^2.1.9",
     "@react-stately/data": "^3.10.2",
     "@tanstack/react-table": "^8.10.3",
     "bootstrap-icons": "^1.11.1",
