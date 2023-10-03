@@ -10,31 +10,25 @@ import {
   Input,
   Button,
   Tooltip,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
   Chip,
   User,
   Pagination,
   Selection,
   ChipProps,
   SortDescriptor,
+  Switch,
 } from "@nextui-org/react";
 import { PlusIcon } from "@/components/table/PlusIcon";
-import DropdownOne from "@/components/DropdownOne";
-import { ChevronDownIcon } from "@/components/table/ChevronDownIcon";
 import { EditIcon } from "@/components/table/EditIcon";
 import { DeleteIcon } from "@/components/table/DeleteIcon";
 import { EyeIcon } from "@/components/table/EyeIcon";
 import { SearchIcon } from "@/components/table/SearchIcon";
 import { columns, users, statusOptions } from "@/components/table/data";
-import { capitalize } from "@/components/table/utils";
 import Modal from "@/components/Modal";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  Disponible: "success",
-  Reservado: "danger",
+  Activo: "success",
+  Inactivo: "danger",
   Mantenimiento: "warning",
 };
 
@@ -131,12 +125,12 @@ export default function TableComponent() {
       case "role":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-base capitalize">{cellValue}</p>
           </div>
         );
       case "type":
         return (
-          <p className="text-bold text-tiny capitalize text-default-500">
+          <p className="text-bold text-base capitalize text-default-500">
             {cellValue}
           </p>
         );
@@ -151,13 +145,17 @@ export default function TableComponent() {
             {cellValue}
           </Chip>
         );
+        case "cowork":
+          return (
+            <Switch aria-label="Automatic updates" color="success"/>
+          );
       case "fecha_Actual":
         return <div>{user.fecha_Actual}</div>;
       case "actions":
         return (
           <div className="relative justify-center flex items-center gap-2">
             <Tooltip
-              className="font-semibold  rounded-lg shadow-xl bg-borders-light"
+              className="font-semibold  rounded-lg shadow-xl bg-off-white"
               content="Ver página del sitio"
             >
               <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
@@ -165,7 +163,7 @@ export default function TableComponent() {
               </span>
             </Tooltip>
             <Tooltip
-              className="font-semibold rounded-lg shadow-xl bg-borders-light "
+              className="font-semibold rounded-lg shadow-xl bg-off-white"
               content="Editar sitio"
             >
               <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
@@ -173,12 +171,12 @@ export default function TableComponent() {
               </span>
             </Tooltip>
             <Tooltip
-              className="font-semibold text-primary rounded-lg shadow-xl bg-borders-light"
+              className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
               content="Eliminar sitio"
             >
               <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <DeleteIcon />
-                <Modal/>
+                <Modal />
               </span>
             </Tooltip>
           </div>
@@ -212,8 +210,9 @@ export default function TableComponent() {
           isClearable
           classNames={{
             base: "w-full sm:max-w-[40%]",
+            input: "rounded-lg",
             inputWrapper:
-              "h-[45px] rounded-lg bg-white-off shadow-none text-custom-black p-2",
+              "h-[45px] rounded-lg bg-[#ffffff] shadow-none text-custom-black p-2",
           }}
           placeholder="Buscar por nombre de sitio..."
           size="lg"
@@ -221,36 +220,20 @@ export default function TableComponent() {
             <SearchIcon className=" text-borders h-[20px] w-[20px] mr-2" />
           }
           value={filterValue}
-          variant="bordered"
+          variant="faded"
           onClear={() => setFilterValue("")}
           onValueChange={onSearchChange}
         />
 
         <div className="flex gap-4">
-          <div className="flex gap-3 text-soft-gray rounded-xl p-2">
-            <label className="justify-center items-center">
-              Sitios por página:
-              <select
-                className="outline-none bg-borders-light rounded-md ml-2 text-soft-gray text-small"
-                onChange={onRowsPerPageChange}
-              >
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
-            </label>
-          </div>
-
-          <div className="flex gap-3 bg-primary text-default-white rounded-xl p-2">
-            <Button
-              className="text-background"
-              endContent={<PlusIcon height={25} width={25} size={25} />}
-              size="sm"
-              disableAnimation={true}
-            >
-              Añadir sitio
-            </Button>
-          </div>
+          <Button
+            className="text-default-white bg-primary p-4"
+            endContent={<PlusIcon height={32} width={32} size={32} />}
+            size="lg"
+            disableAnimation={true}
+          >
+            Añadir sitio
+          </Button>
         </div>
       </div>
     );
@@ -269,6 +252,8 @@ export default function TableComponent() {
       <div className="p-2 flex text-center justify-between font-medium text-md gap-x-4 items-center transition-all">
         <Pagination
           showControls
+          showShadow
+          size="lg"
           classNames={{
             cursor:
               "bg-primary text-default-white font-medium text-md transition-all rounded-lg",
@@ -279,17 +264,33 @@ export default function TableComponent() {
           variant="light"
           onChange={setPage}
         />
+        <div className="flex gap-4">
+          <div className="flex gap-3 text-soft-gray rounded-xl p-2">
+            <label className="justify-center items-center">
+              Sitios por página:
+              <select
+                className="outline-none h-7 text-base bg-primary rounded-md ml-2 text-default-white"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </label>
+          </div>
+        </div>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   const classNames = React.useMemo(
     () => ({
-      th: ["bg-[#C8C8C8]", "text-soft-gray", "text-center"],
+      th: ["bg-[#C8C8C8]", "text-soft-gray", "text-center", "text-base"],
       td: [
         // changing the rows border radius
         // first
         "p-3",
+        "text-base",
         "text-center",
         // middle
         "group-data-[middle=true]:before:rounded-none",
@@ -303,7 +304,7 @@ export default function TableComponent() {
 
   return (
     <Table
-      className=" bg-default-white p-3 text-center"
+      className=" bg-default-white text-base text-center p-3"
       isCompact
       removeWrapper
       bottomContent={bottomContent}
@@ -326,7 +327,7 @@ export default function TableComponent() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
+      <TableBody emptyContent={"No se han encontrado sitios"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

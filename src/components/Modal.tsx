@@ -55,26 +55,26 @@ export default function MyModal() {
                   >
                     Eliminar Sitio
                   </Dialog.Title>
-                  <div className="mt-2">
+                  <div className="mt-4">
                     <p className="text-lg text-center justify-center rounded-lg outline-none text-gray-500">
                       ¿Esta seguro que desea eliminar el sitio?
                     </p>
                   </div>
 
-                  <div className='flex mx-5 text-center justify-center items-center'>
-                    <div className="mt-4">
+                  <div className='flex items-center justify-center text-center'>
+                    <div className="mt-2">
                       <button
                         type="button"
-                        className="inline-flex outline-none justify-center rounded-lg bg-primary text-default-white border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        className="inline-flex font-medium hover:text-primary hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
                         Eliminar
                       </button>
                     </div>
-                    <div className="mt-4">
+                    <div className="mt-2">
                       <button
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        className="inline-flex font-medium hover:font-bold border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
                         Cancelar
