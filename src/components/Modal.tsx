@@ -65,7 +65,7 @@ export default function MyModal() {
                     <div className="mt-2">
                       <button
                         type="button"
-                        className="inline-flex font-medium hover:text-primary hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                        className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
                         Eliminar
@@ -74,7 +74,7 @@ export default function MyModal() {
                     <div className="mt-2">
                       <button
                         type="button"
-                        className="inline-flex font-medium hover:font-bold border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
+                        className="inline-flex font-base hover:font-bold outline-none border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
                         Cancelar

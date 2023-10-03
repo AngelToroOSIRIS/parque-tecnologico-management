@@ -1,10 +1,10 @@
 const columns = [
   {name: "ID", uid: "id", sortable: true},
-  {name: "SITIO", uid: "name", sortable: true},
+  {name: "NOMBRE SITIO", uid: "name", sortable: true},
   {name: "UBICACION", uid: "role", sortable: true},
   {name: "TIPO", uid: "type"},
   {name: "ESTADO", uid: "status", sortable: true},
-  {name: "CO-WORKING", uid: "cowork"},
+  {name: "VISIBLE EN CO-WORKING", uid: "cowork"},
   {name: "ACTUALIZACIÓN", uid: "fecha_Actual"},
   {name: "OPCIONES", uid: "actions"},
 ];
@@ -130,7 +130,7 @@ const users = [
     role: "Cancha Volleyball 1",
     type: "Espacio Deportivo",
     status: "Activo",
-    cowork: "0",
+    cowork: "1",
     fecha_Actual: "30/09/2023"
   },
   {
@@ -139,7 +139,7 @@ const users = [
     role: "Edificio H",
     type: "Auditorios",
     status: "Activo",
-    cowork: "0",
+    cowork: "1",
     fecha_Actual: "01/10/2023"
   },
   {

@@ -17,6 +17,7 @@ import {
   ChipProps,
   SortDescriptor,
   Switch,
+  cn,
 } from "@nextui-org/react";
 import { PlusIcon } from "@/components/table/PlusIcon";
 import { EditIcon } from "@/components/table/EditIcon";
@@ -145,10 +146,43 @@ export default function TableComponent() {
             {cellValue}
           </Chip>
         );
-        case "cowork":
+      case "cowork":
+        if (user.cowork === "1") {
           return (
-            <Switch aria-label="Automatic updates" color="success"/>
+            <Switch
+              aria-label="Automatic updates"
+              color="success"
+              defaultSelected
+              classNames={{
+                thumb: cn(
+                  "group-data-[hover=true]:bg-default-white",
+                  //selected
+                  "group-data-[selected=true]:bg-default-white ",
+                  // pressed
+                  "group-data-[pressed=true]:w-7",
+                  "group-data-[selected]:group-data-[pressed]:ml-5 bg-default-white"
+                ),
+              }}
+            ></Switch>
           );
+        } else {
+          return (
+            <Switch
+              color="success"
+              aria-label="Automatic updates"
+              classNames={{
+                thumb: cn(
+                  "group-data-[hover=true]:bg-default-white",
+                  //selected
+                  "group-data-[selected=true]:bg-default-white ",
+                  // pressed
+                  "group-data-[pressed=true]:w-7",
+                  "group-data-[selected]:group-data-[pressed]:ml-5 bg-default-white"
+                ),
+              }}
+            ></Switch>
+          );
+        }
       case "fecha_Actual":
         return <div>{user.fecha_Actual}</div>;
       case "actions":
@@ -323,11 +357,15 @@ export default function TableComponent() {
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
           >
-            {column.name}
+                {column.name}
+                  <i className="bi bi-funnel-fill ml-2"></i>
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No se han encontrado sitios"} items={sortedItems}>
+      <TableBody
+        emptyContent={"No se han encontrado sitios"}
+        items={sortedItems}
+      >
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
