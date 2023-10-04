@@ -4,7 +4,7 @@ const columns = [
   {name: "UBICACION", uid: "role", sortable: true},
   {name: "TIPO", uid: "type"},
   {name: "ESTADO", uid: "status", sortable: true},
-  {name: "VISIBLE EN CO-WORKING", uid: "cowork"},
+  {name: "VISIBLE CO-WORKING", uid: "cowork"},
   {name: "ACTUALIZACIÓN", uid: "fecha_Actual"},
   {name: "OPCIONES", uid: "actions"},
 ];
@@ -139,7 +139,7 @@ const users = [
     role: "Edificio H",
     type: "Auditorios",
     status: "Activo",
-    cowork: "1",
+    cowork: "0",
     fecha_Actual: "01/10/2023"
   },
   {

@@ -26,6 +26,7 @@ import { EyeIcon } from "@/components/table/EyeIcon";
 import { SearchIcon } from "@/components/table/SearchIcon";
 import { columns, users, statusOptions } from "@/components/table/data";
 import Modal from "@/components/Modal";
+import { useRouter } from "next/navigation";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Activo: "success",
@@ -111,6 +112,7 @@ export default function TableComponent() {
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
+  const router = useRouter();
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
@@ -130,15 +132,11 @@ export default function TableComponent() {
           </div>
         );
       case "type":
-        return (
-          <p className="text-bold text-base capitalize text-default-500">
-            {cellValue}
-          </p>
-        );
+        return <p className="text-bold text-base capitalize ">{cellValue}</p>;
       case "status":
         return (
           <Chip
-            className="capitalize border-none gap-1 text-default-600"
+            className="capitalize border-none gap-1"
             color={statusColorMap[user.status]}
             size="lg"
             variant="dot"
@@ -155,7 +153,6 @@ export default function TableComponent() {
               defaultSelected
               classNames={{
                 thumb: cn(
-                  "group-data-[hover=true]:bg-default-white",
                   //selected
                   "group-data-[selected=true]:bg-default-white ",
                   // pressed
@@ -193,7 +190,7 @@ export default function TableComponent() {
               content="Ver página del sitio"
             >
               <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                <EyeIcon />
+                  <EyeIcon />
               </span>
             </Tooltip>
             <Tooltip
@@ -201,7 +198,9 @@ export default function TableComponent() {
               content="Editar sitio"
             >
               <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                <EditIcon />
+                <button onClick={() => router.push(`/sites/${user.id}/edit`)}>
+                  <EditIcon />
+                </button>
               </span>
             </Tooltip>
             <Tooltip
@@ -241,6 +240,7 @@ export default function TableComponent() {
     return (
       <div className="flex justify-between font-medium items-center gap-3 ">
         <Input
+          aria-label="Search"
           isClearable
           classNames={{
             base: "w-full sm:max-w-[40%]",
@@ -261,6 +261,7 @@ export default function TableComponent() {
 
         <div className="flex gap-4">
           <Button
+            aria-label="button"
             className="text-default-white bg-primary p-4"
             endContent={<PlusIcon height={32} width={32} size={32} />}
             size="lg"
@@ -286,6 +287,7 @@ export default function TableComponent() {
       <div className="p-2 flex text-center justify-between font-medium text-md gap-x-4 items-center transition-all">
         <Pagination
           showControls
+          aria-label="Pagination"
           showShadow
           size="lg"
           classNames={{
@@ -338,11 +340,10 @@ export default function TableComponent() {
 
   return (
     <Table
-      className=" bg-default-white text-base text-center p-3"
-      isCompact
-      removeWrapper
+      className=" bg-default-white mb-36 mx-auto text-sm text-center p-3"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
+      aria-label="table"
       classNames={classNames}
       selectedKeys={selectedKeys}
       sortDescriptor={sortDescriptor}
@@ -357,12 +358,13 @@ export default function TableComponent() {
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
           >
-                {column.name}
-                  <i className="bi bi-funnel-fill ml-2"></i>
+            {column.name}
           </TableColumn>
         )}
       </TableHeader>
       <TableBody
+        aria-label="Body table"
+        className="bg-green"
         emptyContent={"No se han encontrado sitios"}
         items={sortedItems}
       >

@@ -5,9 +5,9 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="margin-header">
+      <main className="">
         <div className="grid grid-cols-1">
-          <div className="margin-header mt-[15%] lg:mt-[7%]  mx-auto justify-center items-center">
+          <div className="margin-header  mx-auto justify-center items-center">
             <h1 className="font-bold text-primary text-3xl text-center m-8">
               Administración Co-Working
             </h1>

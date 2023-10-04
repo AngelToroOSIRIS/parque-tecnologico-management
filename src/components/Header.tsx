@@ -8,19 +8,19 @@ import { Menu } from "@headlessui/react";
 const Header = () => {
   const router = useRouter();
   return (
-    <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-sm bg-gray-box border-b border-borders-light z-40 select-none">
+    <header className="top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="h-[65px] flex justify-between">
-          <Image
+          {/* <Image
             src="/images/ecijg60.png"
             width={105}
             height={60}
             alt="Logo header"
             className="cursor-pointer fixed hidden xl:block"
             priority={true}
-          />
+          /> */}
         </section>
-          <ul className="lg:flex grid grid-cols-6 items-center justify-center font-medium lg:flex-row">
+          <ul className="lg:flex grid grid-cols-6 items-center justify-center font-medium md:flex-row">
             <li>
               <button
                 onClick={() => router.push("/")}
