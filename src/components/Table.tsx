@@ -19,14 +19,13 @@ import {
   Switch,
   cn,
 } from "@nextui-org/react";
-import { PlusIcon } from "@/components/table/PlusIcon";
 import { EditIcon } from "@/components/table/EditIcon";
 import { DeleteIcon } from "@/components/table/DeleteIcon";
 import { EyeIcon } from "@/components/table/EyeIcon";
-import { SearchIcon } from "@/components/table/SearchIcon";
 import { columns, users, statusOptions } from "@/components/table/data";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
+import SwitchComponent from "./Switch";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Activo: "success",
@@ -146,22 +145,7 @@ export default function TableComponent() {
         );
       case "cowork":
         if (user.cowork === "1") {
-          return (
-            <Switch
-              aria-label="Automatic updates"
-              color="success"
-              defaultSelected
-              classNames={{
-                thumb: cn(
-                  //selected
-                  "group-data-[selected=true]:bg-default-white ",
-                  // pressed
-                  "group-data-[pressed=true]:w-7",
-                  "group-data-[selected]:group-data-[pressed]:ml-5 bg-default-white"
-                ),
-              }}
-            ></Switch>
-          );
+          return <SwitchComponent />;
         } else {
           return (
             <Switch
@@ -190,17 +174,29 @@ export default function TableComponent() {
               content="Ver página del sitio"
             >
               <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                  <EyeIcon />
+              <i className="bi bi-eye text-2xl"></i>
+              </span>
+            </Tooltip>
+            <Tooltip
+              className="font-semibold  rounded-lg shadow-xl bg-off-white"
+              content="Ver agenda del sitio"
+            >
+              <span
+                onClick={() => router.push(`/sites/${user.id}/calendar`)}
+                className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+              >
+                <i className="bi bi-calendar2-check text-xl"></i>
               </span>
             </Tooltip>
             <Tooltip
               className="font-semibold rounded-lg shadow-xl bg-off-white"
               content="Editar sitio"
             >
-              <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                <button onClick={() => router.push(`/sites/${user.id}/edit`)}>
-                  <EditIcon />
-                </button>
+              <span
+                onClick={() => router.push(`/sites/${user.id}/edit`)}
+                className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+              >
+              <i className="bi bi-pen text-xl"></i>
               </span>
             </Tooltip>
             <Tooltip
@@ -208,7 +204,7 @@ export default function TableComponent() {
               content="Eliminar sitio"
             >
               <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                <DeleteIcon />
+              <i className="bi bi-trash3 text-xl"></i>
                 <Modal />
               </span>
             </Tooltip>
@@ -250,9 +246,7 @@ export default function TableComponent() {
           }}
           placeholder="Buscar por nombre de sitio..."
           size="lg"
-          startContent={
-            <SearchIcon className=" text-borders h-[20px] w-[20px] mr-2" />
-          }
+          startContent={<i className="bi bi-search text-lg"></i>}
           value={filterValue}
           variant="faded"
           onClear={() => setFilterValue("")}
@@ -263,11 +257,11 @@ export default function TableComponent() {
           <Button
             aria-label="button"
             className="text-default-white bg-primary p-4"
-            endContent={<PlusIcon height={32} width={32} size={32} />}
             size="lg"
             disableAnimation={true}
           >
             Añadir sitio
+            <i className="bi bi-plus-lg text-xl"></i>
           </Button>
         </div>
       </div>
@@ -340,7 +334,7 @@ export default function TableComponent() {
 
   return (
     <Table
-      className=" bg-default-white mb-36 mx-auto text-sm text-center p-3"
+      className=" bg-default-white mb-36 rounded-xl overflow-x-auto shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] mx-auto text-sm text-center p-3"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       aria-label="table"
@@ -357,6 +351,7 @@ export default function TableComponent() {
           <TableColumn
             key={column.uid}
             align={column.uid === "actions" ? "center" : "start"}
+            allowsSorting={column.sortable}
           >
             {column.name}
           </TableColumn>

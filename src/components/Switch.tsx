@@ -1,6 +1,7 @@
 import { Switch, cn } from "@nextui-org/react";
 import React from "react";
 
+
 const SwitchComponent = () => {
   return (
     <Switch

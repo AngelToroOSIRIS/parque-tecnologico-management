@@ -1,5 +1,6 @@
 import './globals.css'
 import '@/styles/globals.sass'
+import 'react-calendar/dist/Calendar.css';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from './providers'

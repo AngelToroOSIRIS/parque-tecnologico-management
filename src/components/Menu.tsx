@@ -1,6 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 

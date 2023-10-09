@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 export const metadata = {
-	title: "Página no encontrada | Servicios",
+	title: "Página no encontrada | Parque Tecnologico ADM",
 };
 
 const NotFound: NextPage = () => {
