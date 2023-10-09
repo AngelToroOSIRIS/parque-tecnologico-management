@@ -33,7 +33,7 @@ const CategoryPage = ({ params }: Props) => {
 
   return (
     <>
-      <Header />
+      <Header/>
 
       <main className="margin-header w-[90%] mx-auto">
       <h1 className="mt-[7%] md:mt-[5%] pt-5 lg:mt-[2%] mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">

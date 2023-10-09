@@ -26,12 +26,15 @@ const Header = () => {
         <section className="h-[65px] flex justify-start">
           <ul className="lg:flex grid grid-cols-4 items-center justify-center font-medium md:flex-row">
             <li>
-              <button
-                onClick={() => router.push("/")}
-                className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-              >
+              <button onClick={() => router.push(`/`)} className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
                 <i className="bi bi-house-fill text-primary text-xl"></i>
                 <p className="ml-2 hidden lg:block">Inicio</p>
+              </button>
+            </li>
+            <li>
+              <button onClick={() => router.push(`/financial`)} className="flex m-2 p-1 items-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                <i className="bi bi-currency-dollar text-[#CCA400] text-xl"></i>
+                <p className="ml-2 hidden lg:block">Financiera</p>
               </button>
             </li>
             <Menu
@@ -45,32 +48,35 @@ const Header = () => {
                 <i className="bi bi-stack mr-2 text-2xl sm:text-base text-primary"></i>{" "}
                 <p className="hidden sm:block">Categorías</p>
               </Menu.Button>
-              <Menu.Items className="absolute mx-auto mt-[360px] w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
+              <Menu.Items className="absolute mt-64 w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
                 {categoriesObj.map(
                   ({ name, route, icon, color, disabled }, i) => {
-                    if (!disabled){
+                    if (!disabled) {
                       return (
                         <div className="px-1  py-1" key={i}>
                           <Menu.Item>
                             {({ active }) => (
                               <button
                                 className={`${
-                                  active && `font-bold bg-hover ${color}`
+                                  active && `font-bold bg-hover `
                                 } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                style={{color:  active ? color: ""}}
                                 onClick={() => router.push(`/${route}`)}
                               >
                                 <i
                                   className={
-                                    `mr-2 ${color} hidden text-lg sm:block bi bi-` +
+                                    `mr-2 hidden text-lg sm:block bi bi-` +
                                     icon
                                   }
+                                  style={{color}}
                                 ></i>
                                 {name}
                               </button>
                             )}
                           </Menu.Item>
                         </div>
-                      );}
+                      );
+                    }
                   }
                 )}
               </Menu.Items>
