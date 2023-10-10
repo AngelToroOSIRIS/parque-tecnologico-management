@@ -8,7 +8,6 @@ import {
   TableRow,
   TableCell,
   Input,
-  Button,
   Tooltip,
   Chip,
   User,
@@ -19,9 +18,6 @@ import {
   Switch,
   cn,
 } from "@nextui-org/react";
-import { EditIcon } from "@/components/table/EditIcon";
-import { DeleteIcon } from "@/components/table/DeleteIcon";
-import { EyeIcon } from "@/components/table/EyeIcon";
 import { columns, users, statusOptions } from "@/components/table/data";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
@@ -168,7 +164,7 @@ export default function TableComponent() {
         return <div>{user.fecha_Actual}</div>;
       case "actions":
         return (
-          <div className="relative justify-center flex items-center gap-2">
+          <div className="relative justify-center flex items-center gap-3">
             <Tooltip
               className="font-semibold  rounded-lg shadow-xl bg-off-white"
               content="Ver página del sitio"
@@ -254,15 +250,14 @@ export default function TableComponent() {
         />
 
         <div className="flex gap-4">
-          <Button
+          <button
+            onClick={() => router.push("/sites/add")}
             aria-label="button"
-            className="text-default-white bg-primary p-4"
-            size="lg"
-            disableAnimation={true}
+            className="text-default-white rounded-lg text-base bg-primary p-4"
           >
             Añadir sitio
             <i className="bi bi-plus-lg text-xl"></i>
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -334,7 +329,7 @@ export default function TableComponent() {
 
   return (
     <Table
-      className=" bg-default-white mb-36 rounded-xl overflow-x-auto shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] mx-auto text-sm text-center p-3"
+      className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] mx-auto text-sm text-center p-3"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       aria-label="table"

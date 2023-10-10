@@ -24,15 +24,21 @@ const Header = () => {
           </div>
         </section>
         <section className="h-[65px] flex justify-start">
-          <ul className="lg:flex grid grid-cols-4 items-center justify-center font-medium md:flex-row">
+          <ul className="lg:flex grid grid-cols-5 items-center justify-center font-medium md:flex-row">
             <li>
-              <button onClick={() => router.push(`/`)} className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+              <button
+                onClick={() => router.push(`/`)}
+                className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+              >
                 <i className="bi bi-house-fill text-primary text-xl"></i>
                 <p className="ml-2 hidden lg:block">Inicio</p>
               </button>
             </li>
             <li>
-              <button onClick={() => router.push(`/financial`)} className="flex m-2 p-1 items-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+              <button
+                onClick={() => router.push(`/financial`)}
+                className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+              >
                 <i className="bi bi-currency-dollar text-[#CCA400] text-xl"></i>
                 <p className="ml-2 hidden lg:block">Financiera</p>
               </button>
@@ -46,7 +52,8 @@ const Header = () => {
                 className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
                 <i className="bi bi-stack mr-2 text-2xl sm:text-base text-primary"></i>{" "}
-                <p className="hidden sm:block">Categorías</p>
+                <p className="hidden lg:block">Categorías</p>
+                <i className="bi bi-caret-down-fill ml-1 mt-[4px] text-xs transition-none"></i>
               </Menu.Button>
               <Menu.Items className="absolute mt-64 w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
                 {categoriesObj.map(
@@ -60,15 +67,14 @@ const Header = () => {
                                 className={`${
                                   active && `font-bold bg-hover `
                                 } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                style={{color:  active ? color: ""}}
+                                style={{ color: active ? color : "" }}
                                 onClick={() => router.push(`/${route}`)}
                               >
                                 <i
                                   className={
-                                    `mr-2 hidden text-lg sm:block bi bi-` +
-                                    icon
+                                    `mr-2 hidden text-lg sm:block bi bi-` + icon
                                   }
-                                  style={{color}}
+                                  style={{ color }}
                                 ></i>
                                 {name}
                               </button>

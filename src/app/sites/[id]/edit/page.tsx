@@ -1,15 +1,22 @@
 import Header from "@/components/Header";
-import { Category } from "@/app/[category]/page";
 import FormSite from "@/components/FormSite";
+import { validateString } from "@/libs/functionsStrings";
+import { redirect } from "next/navigation";
 
-export default function EditPage({ params }: { params: { id: string, category: Category } }) {
+export default function EditPage({ params }: { params: { id: string } }) {
+const idSite = validateString(params.id,"int")
+//TODO:
+   if (!idSite) {
+     return redirect(`/sports`)
+   }
+
   return (
     <>
       <Header />
         <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
           Editar sitio {params.id}
         </p>
-      <FormSite params={params}/>
+      <FormSite site={{}}/>
     </>
   );
 }
