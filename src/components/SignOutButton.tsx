@@ -5,15 +5,17 @@ export default function Home() {
 	const router = useRouter();
 	return (
 		<button
-			className="bg-primary w-[120px] h-10 items-center p-1 my-3 hidden lg:block hover:bg-dark-primary text-off-white justify-center rounded-xl"
+		title="Cerrar sesión"
+		aria-label="Cerrar sesión"
+			className="bg-primary w-[40px] h-10 items-center hover:bg-dark-primary text-off-white text-2xl justify-between rounded-2xl"
 			onClick={() =>
 				router.push(
 					"https://login.microsoftonline.com/common/oauth2/v2.0/logout"
 				)
 			}
 		>
-			{/* <i className="bi bi-box-arrow-right mr-2 mt-3 text-2xl sm:text-base "></i> */}
-			Cerrar Sesión
+			<i className="bi bi-box-arrow-right justify-center items-center text-xl"></i>
+			{/* Cerrar Sesión */}
 		</button>
 	);
 }

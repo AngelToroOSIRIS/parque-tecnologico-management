@@ -32,7 +32,7 @@ const users = [
     type: "Salones de Clase",
     status: "Inactivo",
     cowork: "0",
-    fecha_Actual: "30/09/2023"
+    fecha_Actual: "10/10/2023"
   },
   {
     id: 3,
@@ -59,7 +59,7 @@ const users = [
     type: "Salones de Clase",
     status: "Activo",
     cowork: "1",
-    fecha_Actual: "04/10/2023"
+    fecha_Actual: "09/10/2023"
   },
   {
     id: 6,
@@ -68,7 +68,7 @@ const users = [
     type: "Laboratorios",
     status: "Activo",
     cowork: "1",
-    fecha_Actual: "02/10/2023"
+    fecha_Actual: "11/10/2023"
   },
   {
     id: 7,
@@ -86,7 +86,7 @@ const users = [
     type: "Salones de Clase",
     status: "Activo",
     cowork: "1",
-    fecha_Actual: "04/10/2023"
+    fecha_Actual: "09/10/2023"
   },
   {
     id: 9,
@@ -113,7 +113,7 @@ const users = [
     type: "Laboratorios",
     status: "Activo",
     cowork: "1",
-    fecha_Actual: "05/10/2023"
+    fecha_Actual: "07/10/2023"
   },
   {
     id: 12,
@@ -140,7 +140,7 @@ const users = [
     type: "Auditorios",
     status: "Activo",
     cowork: "0",
-    fecha_Actual: "04/10/2023"
+    fecha_Actual: "09/10/2023"
   },
   {
     id: 15,
@@ -149,7 +149,7 @@ const users = [
     type: "Espacios Deportivos",
     status: "Inactivo",
     cowork: "0",
-    fecha_Actual: "02/10/2023"
+    fecha_Actual: "11/10/2023"
   },
   {
     id: 16,
@@ -167,7 +167,7 @@ const users = [
     type: "Espacio Deportivo",
     status: "Mantenimiento",
     cowork: "0",
-    fecha_Actual: "30/09/2023"
+    fecha_Actual: "10/10/2023"
   },
   {
     id: 18,
@@ -194,7 +194,7 @@ const users = [
     type: "Sala de juntas",
     status: "Activo",
     cowork: "1",
-    fecha_Actual: "05/10/2023"
+    fecha_Actual: "07/10/2023"
   },
 ];
 

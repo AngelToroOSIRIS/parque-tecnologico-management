@@ -1,4 +1,4 @@
-import LoadingPage from "@/components/LoadingPage";
+import LoadingPage from "@/components/pages/LoadingPage";
 
 export const metadata = {
   title: "Cargando... | Parque Tecnólogico",

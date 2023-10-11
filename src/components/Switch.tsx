@@ -10,9 +10,9 @@ const SwitchComponent = () => {
       defaultSelected
       classNames={{
         thumb: cn(
-          "group-data-[hover=true]:bg-default-white",
+          "group-data-[hover=true]:bg-default-white justify-content",
           //selected
-          "group-data-[selected=true]:bg-default-white ",
+          "group-data-[selected=true]:bg-default-white",
           // pressed
           "group-data-[pressed=true]:w-7",
           "group-data-[selected]:group-data-[pressed]:ml-5 bg-default-white"
