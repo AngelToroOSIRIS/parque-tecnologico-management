@@ -16,7 +16,7 @@ const FormSite = ({ site }: { site?: any }) => {
   ]);
   return (
     <>
-      <div className="w-[95%] gap-10 flex mx-auto p-5">
+      <div className="w-[75%] gap-10 ml-[30%] flex p-5">
         {/* <i className="bi bi-upload flex my-10 text-borders-light items-center justify-center border-3 border-dotted border-borders-light rounded-lg p-5 text-5xl ">
             <p className="p-5 text-base text-center">
               Subir imagenes: <br /> <b> minimo 3 y maximo 10</b>
@@ -25,7 +25,7 @@ const FormSite = ({ site }: { site?: any }) => {
             </p>
           </i> */}
 
-        <div className="p-10 mx-auto w-[90%] md:flex-nowrap mb-6 md:mb-0 ">
+        <div className="p-10 w-[90%] md:flex-nowrap mb-6 md:mb-0 ">
           <InputForm
             type="text"
             name="nombre del sitio"

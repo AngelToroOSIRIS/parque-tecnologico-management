@@ -1,7 +1,25 @@
 import Button from "@/components/Button";
 import Header from "@/components/Header";
+import fetchFn from "@/libs/fetchFn";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+	if (session) {
+		const email = session.user?.email;
+			const response = await fetchFn(`/admin/login?email=${email}`);
+      const data = response.data
+      Object.entries(data)
+      .map(entry => {
+        const [key, value] = entry
+        if(key === "roles" && value === "sports") return redirect("/sports")
+        console.log({key, value})
+      })
+			if (response.code === 400) return redirect("/logout?error=auth");
+		} else {
+			return redirect("/logout?error=rol");
+	}
   return (
     <>
       <Header />
@@ -18,10 +36,10 @@ export default function Home() {
               </h2>
           <div className=" flex sm:grid lg:grid-cols-2 sm:grid-cols-1 flex-col w-[80%] gap-4 mt-16 mx-auto justify-center items-center">
             {/* <Button route="/classrooms" text="Salones de Clase" /> */}
-            <Button route="/sports" text="Espacios Deportivos" />
-            <Button route="/auditoriums" text="Auditorios" />
-            <Button route="/meeting" text="Salas de reunión" />
-            <Button route="/laboratories" text="Laboratorios" />
+            <Button route="/sports" text="Espacios Deportivos" key={1} />
+            <Button route="/auditoriums" text="Auditorios" key={2}/>
+            <Button route="/meeting" text="Salas de reunión" key={3}/>
+            <Button route="/laboratories" text="Laboratorios" key={4}/>
           </div>
         </div>
       </main>

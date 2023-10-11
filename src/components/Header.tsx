@@ -14,7 +14,6 @@ const Header = () => {
     name: "default",
 		email: "useremail",
 	};
-  const string = user.email;
   const ShowEmail = user.email?.substring(0, user.email.search("@"))
 
   function capitalizarPrimeraLetra(str:any) {
@@ -23,8 +22,8 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
-        <section className="h-[65px] w-[240px] flex justify-between">
-          <div className="w-[120px]">
+        <section className="h-[65px] flex justify-between">
+          <div className="w-[180px]">
             <Image
               src="/images/ecijg60.png"
               width={105}
@@ -108,7 +107,7 @@ const Header = () => {
 				<p className="hidden lg:block">
 					<b className="text-xs mx-auto">{status === "authenticated" && capitalizarPrimeraLetra(ShowEmail) && user.name}</b>
 				</p>
-			</div>
+			</div> 
           <SignOutButton />
         </section>
       </nav>

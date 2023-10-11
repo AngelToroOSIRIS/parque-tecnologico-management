@@ -9,7 +9,9 @@ export default function CreatePage() {
         Añadir sitio:
       </p>
       <div className=" w-[80%] h-[80%] rounded-lg mb-44 mx-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mt-7 m-20 p-7">
-        <button>Agregar Imagenes</button>
+        {/* <button>Agregar Imagenes
+        <i className="bi bi-images"></i>
+        </button> */}
         <FormSite site={{}} />
       </div>
     </>
