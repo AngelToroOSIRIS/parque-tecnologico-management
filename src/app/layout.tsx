@@ -30,7 +30,7 @@ export default function RootLayout({
 					<meta name="description" content="ECIJG" />
 				</head>
       <body className={inter.className}>
-      <footer className="text-default-white bg-primary p-6 text-center z-40 w-full fixed bottom-0 left-0">
+      {/* <footer className="text-default-white bg-primary p-6 text-center z-40 w-full fixed bottom-0 left-0">
 						<p>
 							Todos los derechos reservados ©2023 - Escuela Colombiana de
 							Ingeniería Julio Garavito. Personería Jurídica 086 de enero 19 de
@@ -38,7 +38,7 @@ export default function RootLayout({
 							Resolución 002710 del 18 de marzo de 2019 (vigencia de 6 años).
 							Vigilada por Mineducación.
 						</p>
-					</footer>
+					</footer> */}
 					<Providers>{children}</Providers>
       </body>
     </html>

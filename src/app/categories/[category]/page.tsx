@@ -14,8 +14,7 @@ export async function generateMetadata({
   params: { category: string };
 }) {
   const categoryFound = categoriesObj.find(
-    (item) => item.route === params.category
-  );
+    (item) => item.route);
 
   return {
     title: `${

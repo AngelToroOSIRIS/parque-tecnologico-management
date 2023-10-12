@@ -1,4 +1,4 @@
-import { Category } from "@/app/[category]/page";
+import { Category } from "@/app/categories/[category]/page";
 import Header from "@/components/Header";
 
 const CalendarPage = ({

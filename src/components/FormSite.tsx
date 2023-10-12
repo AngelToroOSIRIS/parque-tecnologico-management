@@ -90,7 +90,7 @@ const FormSite = ({ site }: { site?: any }) => {
           </SelectForm>
           <InputForm
             type="text"
-            name="descripción"
+            name="descripción corta"
             label={{
               required: true,
               value: "Descripción corta del sitio",
@@ -106,6 +106,23 @@ const FormSite = ({ site }: { site?: any }) => {
                 value: 250,
                 message:
                   "La descripción corta debe contener máximo 200 caracteres.",
+              },
+            }}
+            onChange={setField}
+          />
+          <InputForm
+            type="text"
+            name="descripción"
+            label={{
+              required: true,
+              value: "Descripción del sitio",
+            }}
+            validations={{
+              required: "Se requiere descripción del sitio.",
+              minLength: {
+                value: 15,
+                message:
+                  "La descripción debe contener minimo 15 caracteres.",
               },
             }}
             onChange={setField}

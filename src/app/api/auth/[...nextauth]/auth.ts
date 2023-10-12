@@ -20,9 +20,22 @@ export const authOptions: AuthOptions = {
     maxAge: 1 * 60 * 60,
   },
 
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if(trigger === 'update') {
+        return { ...token, ...session.user };
+      }
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = token as any;
+      return session;
+    },
+  },
+
   pages: {
     signIn: "/login",
     signOut: "/logout",
-    error: "/login/error", // Error code passed in query string as ?error=
+    error: "/login", // Error code passed in query string as ?error=
   },
 };

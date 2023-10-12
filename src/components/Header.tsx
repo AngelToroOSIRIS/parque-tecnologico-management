@@ -79,7 +79,7 @@ const Header = () => {
                                   active && `font-bold bg-hover `
                                 } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
                                 style={{ color: active ? color : "" }}
-                                onClick={() => router.push(`/${route}`)}
+                                onClick={() => router.push(`/categories/${route}`)}
                               >
                                 <i
                                   className={
