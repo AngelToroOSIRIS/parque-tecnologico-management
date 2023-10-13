@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
   const { data: session, status, update } = useSession();
   const updateSession = async (email: string) => {
-    const response = await fetchFn(`/admin/login?email=${email}`);
+    const response = await fetchFn(`/login?email=${email}`);
     if (response.code !== 200) return router.push("/logout?error=auth");
     if (response.data.interno) {
       await update({

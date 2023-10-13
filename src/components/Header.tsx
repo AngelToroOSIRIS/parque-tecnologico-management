@@ -23,7 +23,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="h-[65px] flex justify-between">
-          <div className="w-[180px]">
+          <div className="w-[150px]">
             <Image
               src="/images/ecijg60.png"
               width={105}
@@ -101,11 +101,11 @@ const Header = () => {
           </ul>
         </section>
         {/* Botón de cerrar sesión */}
-        <section className="h-[55px] w-[180px] hidden bg-borders-light rounded-full p-3 lg:flex justify-between items-center">
+        <section className="h-[55px] w-[150px] hidden bg-borders-light rounded-full p-3 lg:flex justify-between items-center">
       {/* Mostrar nombre del usuario */}
-      <div className="justify-end flex w-24 h-[60px] items-center mr-[3%] ml-[3%]">
+      <div className="justify-end flex w-20 h-[60px] items-center mr-[3%] ml-[3%]">
 				<p className="hidden lg:block">
-					<b className="text-xs mx-auto">{status === "authenticated" && capitalizarPrimeraLetra(ShowEmail) && user.name}</b>
+					<b className="text-md mx-auto">{status === "authenticated" && capitalizarPrimeraLetra(ShowEmail)}</b>
 				</p>
 			</div> 
           <SignOutButton />

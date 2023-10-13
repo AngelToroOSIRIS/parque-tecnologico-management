@@ -1,7 +1,15 @@
+"use client"
+
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export default function MyModal() {
+interface Props {
+  title: string;
+  text: string;
+  option1: string;
+}
+
+export default function Modal({title, text, option1}: Props) {
   let [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
@@ -53,11 +61,11 @@ export default function MyModal() {
                     as="h3"
                     className="text-xl font-semibold text-center justify-center text-primary leading-6 text-gray-900"
                   >
-                    Eliminar Sitio
+                   {title}
                   </Dialog.Title>
                   <div className="mt-4">
                     <p className="text-lg text-center justify-center rounded-lg outline-none text-gray-500">
-                      ¿Esta seguro que desea eliminar el sitio?
+                      {text}
                     </p>
                   </div>
 
@@ -68,7 +76,7 @@ export default function MyModal() {
                         className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
-                        Eliminar
+                        {option1}
                       </button>
                     </div>
                     <div className="mt-2">
@@ -77,7 +85,7 @@ export default function MyModal() {
                         className="inline-flex font-base hover:font-bold outline-none border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
-                        Cancelar
+                        Cerrar
                       </button>
                     </div>
                   </div>

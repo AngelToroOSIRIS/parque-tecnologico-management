@@ -15,25 +15,51 @@ export const categoriesObj: {
     route: "sports",
     name: "Espacios Deportivos",
     icon: "dribbble",
-    color:"#F28400"
+    color: "#F28400",
   },
   {
     route: "laboratories",
     name: "Laboratorios",
     icon: "book",
-    color:"#229400"
+    color: "#229400",
   },
   {
     route: "meeting",
     name: "Salas de Juntas",
     icon: "suitcase-lg",
-    color:"#0008B2"
+    color: "#0008B2",
   },
   {
     route: "classrooms",
     name: "Salones de Clase",
     icon: "backpack2",
-    color:"#6800B4",
-    disabled: true
+    color: "#6800B4",
+    disabled: true,
   },
+];
+
+export const locationSites: {
+  name: string;
+}[] = [
+  {
+   name: "Edifio A" 
+  }, 
+  { 
+    name: "Edificio B" 
+  },
+  {
+    name: "Edifico C"
+  },
+  {
+    name: "Edifico D"
+  },
+  {
+    name: "Edifico E"
+  },
+  {
+    name: "Edifico F"
+  },
+  {
+    name: "Edifico G"
+  }
 ];

@@ -5,3 +5,14 @@ export type CategoryTextShort =
   | "meeting"
   | "classrooms"
   | "financial";
+
+export interface Category {
+  id:number
+  identificador: string
+  descripcion: string
+}
+
+export interface States{
+  id: number
+  descripcion: string
+}

@@ -201,7 +201,7 @@ export default function TableComponent() {
             >
               <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
               <i className="bi bi-trash3 text-xl"></i>
-                <Modal />
+                <Modal title="Eliminar sitio" text="¿Esta seguro de eliminar el sitio?" option1="Eliminar"></Modal>
               </span>
             </Tooltip>
           </div>
@@ -253,7 +253,7 @@ export default function TableComponent() {
           <button
             onClick={() => router.push("/sites/add")}
             aria-label="button"
-            className="text-default-white rounded-lg text-base bg-primary p-4"
+            className="text-default-white h-10 justify-center px-2 items-center rounded-lg text-base bg-primary"
           >
             Añadir sitio
             <i className="bi bi-plus-lg text-xl"></i>

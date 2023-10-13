@@ -9,8 +9,8 @@ const LoadingPage = () => {
     <main className="py-14 text-center select-none mb.9">
       <>
         <TailSpin
-          height="150"
-          width="150"
+          height="100"
+          width="100"
           color="#990000"
           ariaLabel="tail-spin-loading"
           radius="1"
