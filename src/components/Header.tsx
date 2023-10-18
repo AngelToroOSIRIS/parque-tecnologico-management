@@ -7,6 +7,7 @@ import { categoriesObj } from "@/libs/staticData";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import ContentLoader from "react-content-loader";
+import Email from "next-auth/providers/email";
 
 const Header = () => {
   const router = useRouter();

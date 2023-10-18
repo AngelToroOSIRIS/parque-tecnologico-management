@@ -1,46 +1,28 @@
 "use client";
 
 import { useState } from "react";
-
 import Select from "./Select";
-
 import GraySubtitle from "../Subtitle";
-
 import { emptyValue } from "@/libs/functionsStrings";
 
 const SelectForm = ({
   name,
-
   placeholder,
-
   icon,
-
   label,
-
   onChange,
-
   required,
-
   children,
-
   defaultValue,
 }: {
   type?: string;
-
   name: string;
-
   placeholder?: string;
-
   icon?: string;
-
   required?: boolean;
-
   label?: { value?: string; required?: boolean };
-
   onChange: any;
-
   children?: any;
-
   defaultValue?: string;
 }) => {
   const [error, setError] = useState<string | undefined>(undefined);

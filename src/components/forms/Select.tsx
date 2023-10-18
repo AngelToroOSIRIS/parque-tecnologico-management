@@ -35,6 +35,7 @@ const Select: React.FC<{
 			classNames={{
 				errorMessage: "text-sm font-medium",
 				value: "text-base",
+				trigger: "bg-[#ffffff]"
 			}}
 			className={"mt-1 mb-[10px] outline-none select-none " + className}
 			variant="faded"

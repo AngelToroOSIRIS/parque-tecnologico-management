@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SelectItem, Textarea } from "@nextui-org/react";
+import { Input, SelectItem, Textarea } from "@nextui-org/react";
 import Switch from "@/components/Switch";
 import InputForm from "./forms/InputForm";
 import SelectForm from "./forms/SelectForm";
@@ -38,8 +38,8 @@ const FormSite = ({ site }: { site?: any }) => {
   const [dataFilters, setDataFilters] = useState<{
     categorias: Category[];
     estadoEspacios: States[];
-    enlaceCodigo: Enlace[];
-  }>({ categorias: [], estadoEspacios: [], enlaceCodigo: [] });
+    identificadoresEnlace: Enlace[];
+  }>({ categorias: [], estadoEspacios: [], identificadoresEnlace: [] });
 
   const getData = async () => {
     const response = await fetchFn(
@@ -48,7 +48,6 @@ const FormSite = ({ site }: { site?: any }) => {
     if (response.code !== 200) {
       return toast.error("No se han podido obtener los filtros", { id: "1" });
     }
-
     setDataFilters(response.data);
     setLoadingData(false);
   };
@@ -56,10 +55,12 @@ const FormSite = ({ site }: { site?: any }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validData) return toast.error("Por favor complete el formulario");
-    console.log(dataForm);
+    if (!validData)
+      return toast.error("Por favor complete el formulario", { id: "empty" });
     setLoading(true);
-    const toastLoading = toast.loading("Guardando información...");
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
     const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
       method: "POST",
       body: {
@@ -96,25 +97,6 @@ const FormSite = ({ site }: { site?: any }) => {
           </h1>
           <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
             <InputForm
-              type="number"
-              name="id_identificador_enlace"
-              label={{
-                required: true,
-                value: "id_identificador_enlace:",
-              }}
-              validations={{
-                required: "Se requiere un id_identificador_enlace",
-                maxLength: {
-                  value: 50,
-                  message:
-                    "El id_identificador_enlace debe contener máximo 50 caracteres.",
-                },
-              }}
-              onChange={setField}
-            />
-          </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
-            <InputForm
               type="text"
               name="nombre"
               label={{
@@ -130,29 +112,20 @@ const FormSite = ({ site }: { site?: any }) => {
               }}
               onChange={setField}
             />
-            <InputForm
-              placeholder="Ingresar descripción corta"
-              type="text"
-              name="descripcion_corta"
+            <SelectForm
+              name="id_identificador_enlace"
+              placeholder="Seleccionar Identificador de enlace"
               label={{
-                required: true,
-                value: "Descripción corta:",
-              }}
-              validations={{
-                required: "Se requiere descripción corta del sitio.",
-                minLength: {
-                  value: 15,
-                  message:
-                    "La descripción corta debe contener minimo 15 caracteres.",
-                },
-                maxLength: {
-                  value: 250,
-                  message:
-                    "La descripción corta debe contener máximo 200 caracteres.",
-                },
+                value: "Identificador de Enlace:",
               }}
               onChange={setField}
-            />
+            >
+              {dataFilters.identificadoresEnlace.map((enlace) => (
+                <SelectItem key={enlace.id} value={enlace.id}>
+                  {enlace.llave}
+                </SelectItem>
+              ))}
+            </SelectForm>
           </div>
           <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-1 px-5">
             <SelectForm
@@ -185,22 +158,31 @@ const FormSite = ({ site }: { site?: any }) => {
               ))}
             </SelectForm>
           </div>
-          <SelectForm
-            name="Id Enlace"
-            placeholder="Seleccionar Id Enlace"
-            label={{
-              value: "Seleccionar Id Enlace:",
-            }}
-            onChange={setField}
-          >
-            {dataFilters.enlaceCodigo.map((enlace) => (
-              <SelectItem key={enlace.id} value={enlace.id}>
-                {enlace.llave}
-              </SelectItem>
-            ))}
-          </SelectForm>
-          <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-3 px-5">
+          <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-5 px-5">
             <div className="mx-auto w-[50%] justify-center items-center">
+              <TextareaForm
+                name="descripcion_corta"
+                placeholder="Ingresar descripción corta completa"
+                minRows={2}
+                label={{
+                  required: true,
+                  value: "Descripción corta:",
+                }}
+                validations={{
+                  required: "Se requiere descripción corta",
+                  minLength: {
+                    value: 15,
+                    message:
+                      "La descripción corta debe contener minimo 15 caracteres.",
+                  },
+                  maxLength: {
+                    value: 250,
+                    message:
+                      "La descripción corta debe contener máximo 250 caracteres.",
+                  },
+                }}
+                onChange={setField}
+              />
               <TextareaForm
                 name="descripcion"
                 onChange={setField}
@@ -225,18 +207,61 @@ const FormSite = ({ site }: { site?: any }) => {
                 }}
               />
             </div>
-            <div className="grid grid-cols-2 w-[50%] gap-3 mx-auto p-5 text-center justify-center items-center">
-              <p>Wifi:</p>
-              <Switch onChange={() => {}} />
-              <p>Cafe:</p>
-              <Switch onChange={() => {}} />
-              <p>Proyector:</p>
-              <Switch onChange={() => {}} />
-              <p>PC:</p>
-              <Switch onChange={() => {}} />
+            <div className=" w-[50%] -mt-12 grid grid-rows-2 mx-auto">
+              <div className="flex  p-2 gap-10 items-center">
+                <div className="pt-5 mx-auto">
+                  <Input
+                    radius="full"
+                    size="lg"
+                    variant="faded"
+                    label="Capacidad:"
+                    labelPlacement="outside-left"
+                    name="capacity"
+                    type="number"
+                    placeholder="0"
+                    description="* personas"
+                    className="mt-1 mb-[10px] outline-none select-none "
+                    classNames={{
+                      inputWrapper: "bg-[#ffff]",
+                      errorMessage: "text-sm font-medium",
+                    }}
+                  />
+                </div>
+                <div className=" mx-auto">
+                  <Input
+                    radius="full"
+                    size="lg"
+                    variant="faded"
+                    type="number"
+                    label="Precio:"
+                    labelPlacement="outside-left"
+                    placeholder="0.000"
+                    className="mt-1 mb-[10px] outline-none select-none "
+                    classNames={{
+                      inputWrapper: "bg-[#ffff]",
+                      errorMessage: "text-sm font-medium",
+                    }}
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">$</span>
+                      </div>
+                    }
+                  />
+              </div>
+              </div>
+                    <div className="grid grid-cols-2 gap-5 justify-center px-52 items-center">
+                      <p>Wifi:</p>
+                      <Switch onChange={() => {}} />
+                      <p>Cafe:</p>
+                      <Switch onChange={() => {}} />
+                      <p>Proyector:</p>
+                      <Switch onChange={() => {}} />
+                      <p>PC:</p>
+                      <Switch onChange={() => {}} />
+                    </div>
             </div>
           </div>
-          <div className="flex mx-auto m-10 gap-2 justify-center items-center">
+          <div className="flex mx-auto m-10 px-[470px] gap-2 justify-center items-center">
             <p className="mr-5 "> Visible Coworking: </p>
             <Switch
               onChange={(value: boolean) =>

@@ -25,7 +25,7 @@ const Switch = ({
       onChange={setEnabled}
       className={`${enabled ? "bg-primary" : "bg-borders-light"}
 
-          relative inline-flex h-[30px] w-[50px] shrink-0 cursor-pointer rounded-full border-2 border-borders-light transition-colors duration-100 ease-in-out outline-none`}
+          relative inline-flex mx-auto h-[30px] w-[50px] shrink-0 cursor-pointer rounded-full border-2 border-borders-light transition-colors duration-100 ease-in-out outline-none`}
     >
       <span className="sr-only">Use setting</span>
 
