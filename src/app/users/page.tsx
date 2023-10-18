@@ -1,10 +1,11 @@
-import Header from "@/components/Header"
+import Header from "@/components/Header";
+import Table from "@/components/pages/Users";
 
-export default function UserPage() {
+export default function users(){
+  return(
     <>
-    <main>
-        <Header/>
-        <h1>User</h1>
-    </main>
-    </>    
+    <Header/>
+    <Table/>
+    </>
+  )
 }

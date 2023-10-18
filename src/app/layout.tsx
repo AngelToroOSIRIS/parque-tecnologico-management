@@ -36,7 +36,6 @@ export default function RootLayout({
           toastOptions={{
             style: {
               userSelect: "none",
-
               maxWidth: "400px",
             },
           }}
@@ -53,5 +52,5 @@ export default function RootLayout({
         <Providers>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }
