@@ -8,11 +8,16 @@ export type CategoryTextShort =
 
 export interface Category {
   id:number
-  identificador: string
   descripcion: string
+  identificador: string
 }
 
 export interface States{
   id: number
   descripcion: string
+}
+
+export interface Enlace{
+  id: number
+  llave: string
 }

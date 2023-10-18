@@ -89,6 +89,8 @@ const config: Config = {
             primary: { DEFAULT: "#990000", foreground: "#ffff" },
 
             secondary: { DEFAULT: "#540000", foreground: "#ffff" },
+            danger: "#990000",
+            focus: "#990000",
           },
         },
       },

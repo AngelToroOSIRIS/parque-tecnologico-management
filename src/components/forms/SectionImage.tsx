@@ -14,7 +14,6 @@ export default function ModalImage() {
     console.log(imageList, addUpdateIndex);
     setImages(imageList as never[]);
   };
-
   return (
     <>
       <ImageUploading
@@ -34,7 +33,7 @@ export default function ModalImage() {
           errors,
         }) => (
           <div>
-            <h1 className="mx-auto text-2xl text-center font-medium m-6 text-primary">
+            <h1 className="mx-auto text-3xl text-center font-semibold m-6 text-primary">
               Subir imagenes
             </h1>
             <div className="text-center">
@@ -57,36 +56,38 @@ export default function ModalImage() {
               </button>
             </div>
             {errors && (
-              <div>
+              <div className="text-center m-2">
                 {errors.maxNumber && (
-                  <span className="text-primary">
+                  <span className="text-primary font-semibold">
                     Solo puede agregar hasta 10 imagenes.
                   </span>
                 )}
                 {errors.acceptType && (
-                  <span>Solo puede subir archivos de imagen.</span>
+                  <span className="text-primary font-semibold">
+                    Solo puede subir archivos de imagen.
+                  </span>
                 )}
               </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 text-center m-5 p-5 gap-7">
+            <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-5 p-5 gap-7">
               {imageList.map((image, index) => (
                 <div key={index} className="mx-auto">
                   <img
                     src={image.dataURL}
-                    className="border-3 text-xl shadow-xl object-cover border-borders-light rounded-lg h-72"
+                    className="border-3 text-xl shadow-xl object-cover border-borders-light rounded-lg h-[400px]"
                     alt=""
-                    width="600px"
+                    width="800px"
                   />
                   <div className="image-item__btn-wrapper">
                     <button
-                      className="bg-borders-light rounded-lg m-2 p-2 hover:font-medium transition-all"
+                      className="bg-borders-light rounded-lg m-2 p-2 hover:font-semibold transition-all"
                       onClick={() => onImageUpdate(index)}
                     >
                       Cambiar
                     </button>
                     <button
-                      className="bg-borders-light rounded-lg m-2 p-2 hover:text-primary hover:font-medium transition-all"
+                      className="bg-borders-light rounded-lg m-2 p-2 hover:text-primary hover:font-semibold transition-all"
                       onClick={() => onImageRemove(index)}
                     >
                       Eliminar

@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SelectItem } from "@nextui-org/react";
-import SwitchComponent from "@/components/Switch";
-import { useRouter } from "next/navigation";
+import { SelectItem, Textarea } from "@nextui-org/react";
+import Switch from "@/components/Switch";
 import InputForm from "./forms/InputForm";
 import SelectForm from "./forms/SelectForm";
 import useValidateForm from "@/hooks/useValidateForm";
@@ -11,12 +10,12 @@ import Button from "./Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { Category, States } from "@/types/d";
+import { Category, Enlace, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
+import TextareaForm from "./forms/TextareaForm";
 
 const FormSite = ({ site }: { site?: any }) => {
-  const router = useRouter();
   const { data: session, status } = useSession();
   const {
     validData,
@@ -39,7 +38,8 @@ const FormSite = ({ site }: { site?: any }) => {
   const [dataFilters, setDataFilters] = useState<{
     categorias: Category[];
     estadoEspacios: States[];
-  }>({ categorias: [], estadoEspacios: [] });
+    enlaceCodigo: Enlace[];
+  }>({ categorias: [], estadoEspacios: [], enlaceCodigo: [] });
 
   const getData = async () => {
     const response = await fetchFn(
@@ -57,12 +57,19 @@ const FormSite = ({ site }: { site?: any }) => {
     e.preventDefault();
 
     if (!validData) return toast.error("Por favor complete el formulario");
-
+    console.log(dataForm);
     setLoading(true);
-    const toastLoading = toast.loading("Guardando información...")
+    const toastLoading = toast.loading("Guardando información...");
     const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
       method: "POST",
-      body: dataForm,
+      body: {
+        ...dataForm,
+        activo_coworking: "0",
+        activo_interno: "0",
+        id_estado_espacio: dataFilters.estadoEspacios.find(
+          (estado) => estado.descripcion === "Inactivo"
+        )?.id,
+      },
     });
     setLoading(false);
 
@@ -70,8 +77,10 @@ const FormSite = ({ site }: { site?: any }) => {
       return toast.error("No se ha podido guardar", { id: toastLoading });
     }
 
-    setContent("images")
-    return toast.success("El sitio se ha guardado exitosamente", { id: toastLoading });
+    setContent("images");
+    return toast.success("El sitio se ha guardado exitosamente", {
+      id: toastLoading,
+    });
   };
 
   useEffect(() => {
@@ -82,6 +91,9 @@ const FormSite = ({ site }: { site?: any }) => {
     <>
       {!loadingData && content === "sites" && (
         <form onSubmit={handleSubmit}>
+          <h1 className="mx-auto text-3xl text-center font-semibold m-6 text-primary">
+            Datos:
+          </h1>
           <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
             <InputForm
               type="number"
@@ -118,18 +130,29 @@ const FormSite = ({ site }: { site?: any }) => {
               }}
               onChange={setField}
             />
-            <SelectForm
+            <InputForm
+              placeholder="Ingresar descripción corta"
               type="text"
-              name="ubicacion"
-              label={{ required: true, value: "Ubicación" }}
+              name="descripcion_corta"
+              label={{
+                required: true,
+                value: "Descripción corta:",
+              }}
+              validations={{
+                required: "Se requiere descripción corta del sitio.",
+                minLength: {
+                  value: 15,
+                  message:
+                    "La descripción corta debe contener minimo 15 caracteres.",
+                },
+                maxLength: {
+                  value: 250,
+                  message:
+                    "La descripción corta debe contener máximo 200 caracteres.",
+                },
+              }}
               onChange={setField}
-            >
-              {dataFilters.categorias.map((categoria) => (
-                <SelectItem key={categoria.id} value={categoria.id}>
-                  {categoria.descripcion}
-                </SelectItem>
-              ))}
-            </SelectForm>
+            />
           </div>
           <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-1 px-5">
             <SelectForm
@@ -146,7 +169,15 @@ const FormSite = ({ site }: { site?: any }) => {
                 </SelectItem>
               ))}
             </SelectForm>
-            <SelectForm name="estado" onChange={() => {}}>
+            <SelectForm
+              name="id_estado_espacio"
+              placeholder="Seleccionar el estado"
+              label={{
+                required: true,
+                value: "Estado:",
+              }}
+              onChange={setField}
+            >
               {dataFilters.estadoEspacios.map((estado) => (
                 <SelectItem key={estado.id} value={estado.id}>
                   {estado.descripcion}
@@ -154,121 +185,92 @@ const FormSite = ({ site }: { site?: any }) => {
               ))}
             </SelectForm>
           </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
-            <InputForm
-              type="text"
-              name="activo_coworking"
-              label={{
-                required: true,
-                value: "activo_coworking:",
-              }}
-              validations={{
-                required: "Se requiere un activo_coworking",
-                maxLength: {
-                  value: 50,
-                  message:
-                    "El activo_coworking debe contener máximo 50 caracteres.",
-                },
-              }}
-              onChange={setField}
-            />
-            <InputForm
-              type="text"
-              name="activo_interno"
-              label={{
-                required: true,
-                value: "activo_interno:",
-              }}
-              validations={{
-                required: "Se requiere un activo_interno",
-                maxLength: {
-                  value: 50,
-                  message:
-                    "El activo_interno debe contener máximo 50 caracteres.",
-                },
-              }}
-              onChange={setField}
-            />
-          </div>
+          <SelectForm
+            name="Id Enlace"
+            placeholder="Seleccionar Id Enlace"
+            label={{
+              value: "Seleccionar Id Enlace:",
+            }}
+            onChange={setField}
+          >
+            {dataFilters.enlaceCodigo.map((enlace) => (
+              <SelectItem key={enlace.id} value={enlace.id}>
+                {enlace.llave}
+              </SelectItem>
+            ))}
+          </SelectForm>
           <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-3 px-5">
-            <div className="mx-auto w-[50%] gap-10 justify-center items-center">
-              <InputForm
-                placeholder="Ingresar descripción corta"
-                type="text"
-                name="descripcion_corta"
+            <div className="mx-auto w-[50%] justify-center items-center">
+              <TextareaForm
+                name="descripcion"
+                onChange={setField}
+                placeholder="Ingresar descripción completa"
+                minRows={8}
                 label={{
                   required: true,
-                  value: "Descripción corta del sitio:",
+                  value: "Descripción:",
                 }}
                 validations={{
-                  required: "Se requiere descripción corta del sitio.",
+                  required: "Se requiere descripción",
                   minLength: {
                     value: 15,
                     message:
-                      "La descripción corta debe contener minimo 15 caracteres.",
+                      "La descripción debe contener minimo 20 caracteres.",
                   },
                   maxLength: {
-                    value: 250,
+                    value: 32000,
                     message:
-                      "La descripción corta debe contener máximo 200 caracteres.",
+                      "La descripción debe contener máximo 32000 caracteres.",
                   },
                 }}
-                onChange={setField}
-              />
-
-              <InputForm
-                placeholder="Ingresar descripción"
-                type="text"
-                name="descripcion"
-                label={{
-                  required: true,
-                  value: "Descripción del sitio:",
-                }}
-                validations={{
-                  required: "Se requiere descripción del sitio.",
-                  minLength: {
-                    value: 15,
-                    message:
-                      "La descripción debe contener minimo 15 caracteres.",
-                  },
-                }}
-                onChange={setField}
               />
             </div>
             <div className="grid grid-cols-2 w-[50%] gap-3 mx-auto p-5 text-center justify-center items-center">
               <p>Wifi:</p>
-              <SwitchComponent />
+              <Switch onChange={() => {}} />
               <p>Cafe:</p>
-              <SwitchComponent />
+              <Switch onChange={() => {}} />
               <p>Proyector:</p>
-              <SwitchComponent />
+              <Switch onChange={() => {}} />
               <p>PC:</p>
-              <SwitchComponent />
+              <Switch onChange={() => {}} />
             </div>
           </div>
           <div className="flex mx-auto m-10 gap-2 justify-center items-center">
             <p className="mr-5 "> Visible Coworking: </p>
-            <SwitchComponent />
+            <Switch
+              onChange={(value: boolean) =>
+                setField({ name: "activo_coworking", value: value ? "1" : "0" })
+              }
+            />
             <p className="ml-5 mr-5">Visible Internos: </p>
-            <SwitchComponent />
+            <Switch
+              onChange={(value: boolean) =>
+                setField({ name: "activo_interno", value: value ? "1" : "0" })
+              }
+            />
           </div>
-          <div className=" flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
-            <Button route="/" text="Continuar" key={1} />
+          <div className="flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
+            <Button type="submit" text="Continuar" />
             <Button
+              //TODO:CAMBIAR RUTA
               route="/"
               text="Cancelar"
-              key={2}
-              //TODO:CAMBIAR RUTA
-              onClick={() => router.push(`/sports`)}
             />
           </div>
         </form>
       )}
       {content === "images" && (
+        <>
           <SectionImage />
+          <div className="flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
+            <Button text="Guardar" />
+            <Button text="Cancelar" route="/" />
+          </div>
+        </>
       )}
-      {loadingData &&(
-          <TailSpin
+      {loadingData && (
+        <TailSpin
           height="100"
           width="100"
           color="#990000"
@@ -276,11 +278,9 @@ const FormSite = ({ site }: { site?: any }) => {
           radius="1"
           wrapperStyle={{
             margin: "20px 0",
-
             justifyContent: "center",
           }}
         />
-
       )}
     </>
   );

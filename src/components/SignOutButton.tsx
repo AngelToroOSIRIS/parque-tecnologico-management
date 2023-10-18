@@ -8,7 +8,7 @@ export default function SignOutButton() {
 		<button
 		title="Cerrar sesión"
 		aria-label="Cerrar sesión"
-			className="bg-primary w-[40px] h-10 items-center hover:bg-dark-primary text-off-white text-2xl justify-between rounded-2xl"
+			className="w-[40px] h-10 items-center font-medium text-borders text-2xl hover:text-primary transition-all p-1"
 			onClick={() => signOut({callbackUrl:"/login"})
 			}
 		>

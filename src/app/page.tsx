@@ -63,7 +63,7 @@ export default function Home() {
             </h2>
             <div className=" flex sm:grid lg:grid-cols-2 sm:grid-cols-1 flex-col w-[80%] gap-4 mt-16 mx-auto justify-center items-center">
               {/* <Button route="/classrooms" text="Salones de Clase" /> */}
-              <Button route="/categories/sports" text="Espacios Deportivos" key={1} />
+              <Button route="/categories/sports" text="Espacios Deportivos" key={1}/>
               <Button route="/categories/auditoriums" text="Auditorios" key={2} />
               <Button route="/categories/meeting" text="Salas de reunión" key={3} />
               <Button route="/categories/laboratories" text="Laboratorios" key={4} />

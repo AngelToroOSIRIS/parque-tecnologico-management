@@ -6,24 +6,25 @@ import { Menu } from "@headlessui/react";
 import { categoriesObj } from "@/libs/staticData";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import ContentLoader from "react-content-loader";
 
 const Header = () => {
   const router = useRouter();
-	const { data, status } = useSession();
-	const user = data?.user ?? {
+  const { data, status } = useSession();
+  const user = data?.user ?? {
     name: "default",
-		email: "useremail",
-	};
-  const ShowEmail = user.email?.substring(0, user.email.search("@"))
+    email: "useremail",
+  };
+  const ShowEmail = user.email?.substring(0, user.email.search("@"));
 
-  function capitalizarPrimeraLetra(str:any) {
+  function capitalizarPrimeraLetra(str: any) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="h-[65px] flex justify-between">
-          <div className="w-[150px]">
+          <div className="w-[250px]">
             <Image
               src="/images/ecijg60.png"
               width={105}
@@ -41,7 +42,7 @@ const Header = () => {
                 onClick={() => router.push(`/`)}
                 className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
-                <i className="bi bi-house-fill text-primary text-xl"></i>
+                <i className="bi bi-house-door text-primary text-xl"></i>
                 <p className="ml-2 hidden lg:block">Inicio</p>
               </button>
             </li>
@@ -62,7 +63,7 @@ const Header = () => {
                 as="li"
                 className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
-                <i className="bi bi-stack mr-2 text-2xl sm:text-base text-primary"></i>{" "}
+                <i className="bi bi-layers mr-2 text-xl text-primary"></i>{" "}
                 <p className="hidden lg:block">Categorías</p>
                 <i className="bi bi-caret-down-fill ml-1 mt-[4px] text-xs transition-none"></i>
               </Menu.Button>
@@ -79,7 +80,9 @@ const Header = () => {
                                   active && `font-bold bg-hover `
                                 } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
                                 style={{ color: active ? color : "" }}
-                                onClick={() => router.push(`/categories/${route}`)}
+                                onClick={() =>
+                                  router.push(`/categories/${route}`)
+                                }
                               >
                                 <i
                                   className={
@@ -100,15 +103,39 @@ const Header = () => {
             </Menu>
           </ul>
         </section>
-        {/* Botón de cerrar sesión */}
-        <section className="h-[55px] w-[150px] hidden bg-borders-light rounded-full p-3 lg:flex justify-between items-center">
-      {/* Mostrar nombre del usuario */}
-      <div className="justify-end flex w-20 h-[60px] items-center mr-[3%] ml-[3%]">
-				<p className="hidden lg:block">
-					<b className="text-md mx-auto">{status === "authenticated" && capitalizarPrimeraLetra(ShowEmail)}</b>
-				</p>
-			</div> 
-          <SignOutButton />
+        <section className="flex">
+          {/* Mostrar nombre del usuario */}
+          <div className="hidden flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-50 rounded-lg rounded-r-none ml-3 my-2 px-2">
+            {status === "loading" && (
+              <ContentLoader
+              uniqueKey="user-info-header"
+              speed={0.5}
+              width={180}
+              height={30}
+              title="Cargando usuario..."
+                backgroundColor="#cccccc"
+                foregroundColor="#ecebeb"
+                >
+                <rect x="0" y="1" rx="3" ry="3" width="200" height="11" />
+
+                <rect x="0" y="18" rx="3" ry="3" width="110" height="8" />
+              </ContentLoader>
+            )}
+
+            {status === "authenticated" && (
+              <>
+                <p className="text-xs font-semibold select-text">{user.name}</p>
+
+                <p className="text-xs select-text">
+                  {user.email?.substring(0, user.email?.search("@"))}
+                </p>
+              </>
+            )}
+          </div>
+      <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-50 rounded-lg lg:rounded-lg lg:rounded-l-none my-2">
+        <SignOutButton />
+      </div>
+            {/* Botón de cerrar sesión */}
         </section>
       </nav>
     </header>

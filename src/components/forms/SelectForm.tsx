@@ -1,26 +1,60 @@
 "use client";
 
+import { useState } from "react";
+
 import Select from "./Select";
+
 import GraySubtitle from "../Subtitle";
+
+import { emptyValue } from "@/libs/functionsStrings";
 
 const SelectForm = ({
   name,
+
   placeholder,
+
   icon,
+
   label,
+
   onChange,
+
+  required,
+
   children,
+
   defaultValue,
 }: {
   type?: string;
+
   name: string;
+
   placeholder?: string;
+
   icon?: string;
+
+  required?: boolean;
+
   label?: { value?: string; required?: boolean };
+
   onChange: any;
+
   children?: any;
+
   defaultValue?: string;
 }) => {
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  const handleChange = ({ name, value }: { name: string; value: string }) => {
+    if (onChange) onChange({ name, value });
+
+    if (required && emptyValue(value)) {
+      setError("Debe seleccionar una opción");
+    } else if (required && !emptyValue(value)) {
+      setError(undefined);
+    }
+  };
+
   return (
     <div className="text-start w-full">
       <GraySubtitle
@@ -35,7 +69,8 @@ const SelectForm = ({
         name={name}
         placeholder={placeholder ?? "Seleccionar " + name}
         icon={icon}
-        onChange={onChange}
+        error={error}
+        onChange={handleChange}
         defaultValue={defaultValue}
       >
         {children}

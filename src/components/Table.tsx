@@ -15,13 +15,12 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
-  Switch,
   cn,
 } from "@nextui-org/react";
 import { columns, users, statusOptions } from "@/components/table/data";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
-import SwitchComponent from "./Switch";
+import Switch from "./Switch";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Activo: "success",
@@ -141,24 +140,9 @@ export default function TableComponent() {
         );
       case "cowork":
         if (user.cowork === "1") {
-          return <SwitchComponent />;
+          return <Switch onChange={() => {}} />;
         } else {
-          return (
-            <Switch
-              color="success"
-              aria-label="Automatic updates"
-              classNames={{
-                thumb: cn(
-                  "group-data-[hover=true]:bg-default-white",
-                  //selected
-                  "group-data-[selected=true]:bg-default-white ",
-                  // pressed
-                  "group-data-[pressed=true]:w-7",
-                  "group-data-[selected]:group-data-[pressed]:ml-5 bg-default-white"
-                ),
-              }}
-            ></Switch>
-          );
+          return <Switch onChange={() => {}} />;
         }
       case "fecha_Actual":
         return <div>{user.fecha_Actual}</div>;
@@ -169,9 +153,13 @@ export default function TableComponent() {
               className="font-semibold  rounded-lg shadow-xl bg-off-white"
               content="Ver página del sitio"
             >
-              <span className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-              <i className="bi bi-eye text-2xl"></i>
-              </span>
+              <a
+                target="_blank"
+                href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/${user.id}`}
+                className="text-lg outline-none text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+              >
+                <i className="bi bi-eye text-2xl"></i>
+              </a>
             </Tooltip>
             <Tooltip
               className="font-semibold  rounded-lg shadow-xl bg-off-white"
@@ -192,7 +180,7 @@ export default function TableComponent() {
                 onClick={() => router.push(`/sites/${user.id}/edit`)}
                 className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
-              <i className="bi bi-pen text-xl"></i>
+                <i className="bi bi-pen text-xl"></i>
               </span>
             </Tooltip>
             <Tooltip
@@ -200,8 +188,12 @@ export default function TableComponent() {
               content="Eliminar sitio"
             >
               <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-              <i className="bi bi-trash3 text-xl"></i>
-                <Modal title="Eliminar sitio" text="¿Esta seguro de eliminar el sitio?" option1="Eliminar"></Modal>
+                <i className="bi bi-trash3 text-xl"></i>
+                <Modal
+                  title="Eliminar sitio"
+                  text="¿Esta seguro de eliminar el sitio?"
+                  option1="Eliminar"
+                ></Modal>
               </span>
             </Tooltip>
           </div>
@@ -253,10 +245,10 @@ export default function TableComponent() {
           <button
             onClick={() => router.push("/sites/add")}
             aria-label="button"
-            className="text-default-white h-10 justify-center px-2 items-center rounded-lg text-base bg-primary"
+            className="text-default-white  h-10 justify-center px-2 items-center rounded-lg text-base bg-primary ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0 transition-all"
           >
             Añadir sitio
-            <i className="bi bi-plus-lg text-xl"></i>
+            <i className="bi bi-plus-lg text-xl "></i>
           </button>
         </div>
       </div>
