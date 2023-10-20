@@ -72,7 +72,7 @@ const FormUser = ({ site }: { site?: any }) => {
                   <SelectItem key={2}>Consulta</SelectItem>
                 </Select>
           </div>
-          <div className="flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
+          <div className="flex items-center mx-auto w-[30%] justify-center mt-8 gap-5">
             <Button type="submit" text="Continuar" />
             <Button
               //TODO:CAMBIAR RUTA

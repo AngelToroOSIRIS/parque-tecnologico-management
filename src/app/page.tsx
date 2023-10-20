@@ -13,11 +13,11 @@ export default function Home() {
                 Administración Co-Working
               </h1>
             </div>
-            <h2 className="text-center justify-center items-center mx-auto">
+            <h2 className="text-center justify-center text-lg items-center mx-auto">
               Bienvenido a la administración de Co-working, por favor seleccione
               la categoría a administrar:
             </h2>
-            <div className=" flex sm:grid lg:grid-cols-4 sm:grid-cols-1  gap-3 mt-16 mx-auto items-center">
+            <div className=" flex sm:grid lg:grid-cols-4 sm:grid-cols-1 w-[60%]  gap-3 mt-16 mx-auto items-center">
               {/* <Button route="/classrooms" text="Salones de Clase" /> */}
               <Button route="/categories/sports" text="Espacios Deportivos" key={1}/>
               <Button route="/categories/auditoriums" text="Auditorios" key={2} />

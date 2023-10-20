@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Administración de co-working",

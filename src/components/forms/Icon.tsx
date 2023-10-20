@@ -7,7 +7,7 @@ const Icon = ({
 	icon: string;
 	className?: string;
 }) => {
-	return <i className={`bi bi-${icon} text-gray ` + className}></i>;
+	return <i className={`bi bi-${icon} text-gray ` + className}></i>
 };
 
 export default Icon;

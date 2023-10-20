@@ -21,15 +21,8 @@ const Users = () => {
   const updateSession = async (email: string) => {
     const response = await fetchFn(`/login?email=${email}`);
     if (response.code !== 200) return router.push("/logout?error=auth");
-    if (response.data.interno) {
-      await update({
-        ...session,
-        user: { ...session?.user, interno: true },
-      });
-      return;
-    }
+    console.log(response.data)
     if(response.data){
-
     }
   };
   return (
@@ -41,7 +34,7 @@ const Users = () => {
         <div className="p-3 flex justify-end">
           <button
             onClick={() => router.push("/users/add")}
-            className="bg-borders-light px-1 border-2 items-center justify-center font-medium border-borders-light hover:border-borders transition-all text-borders rounded-lg"
+            className="bg-borders-light px-2 py-1 border-2 items-center justify-center font-medium border-borders-light hover:border-borders transition-all text-borders rounded-lg"
           >
             Añadir usuario
             <i className="bi bi-person-plus-fill ml-2 text-xl "></i>

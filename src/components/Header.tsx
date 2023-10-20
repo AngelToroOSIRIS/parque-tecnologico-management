@@ -22,7 +22,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="h-[65px] flex justify-between">
-          <div className="w-[250px]">
+          <div className="w-[260px]">
             <Image
               src="/images/ecijg60.png"
               width={105}
@@ -129,9 +129,9 @@ const Header = () => {
             )}
           </ul>
         </section>
-        <section className="flex">
+        <section className="flex w-[260px]">
           {/* Mostrar nombre del usuario */}
-          <div className="hidden w-[250px] flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-50 rounded-lg rounded-r-none ml-3 my-2 px-2">
+          <div className="hidden w-full flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
             {status === "loading" && (
               <ContentLoader
                 uniqueKey="user-info-header"
@@ -153,13 +153,14 @@ const Header = () => {
                 <p className="text-xs font-semibold select-text">{user.name}</p>
 
                 <p className="text-xs select-text">
-                  {user.email?.substring(0, user.email?.search("@"))}{" "}
+                  {/* {user.email?.substring(0, user.email?.search("@"))}{" "} */}
+                  Super Admin
                   {JSON.stringify(user.rols)}
                 </p>
               </>
             )}
           </div>
-          <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-50 rounded-lg lg:rounded-lg lg:rounded-l-none my-2">
+          <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-90 rounded-lg lg:rounded-lg lg:rounded-l-none my-2">
             <SignOutButton />
           </div>
           {/* Botón de cerrar sesión */}

@@ -13,7 +13,7 @@ interface Props {
 
 const Button = ({ route, text, onClick, type, disabled = false }: Props) => {
   const router = useRouter();
-  const classbtn = "max-w-[200px] min-w-[50px] h-10 px-2 border-2 rounded-xl xl:text-lg text-base font-normal md:h-10 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] my-1 hover:font-semibold text-primary hover:bg-primary hover:text-default-white hover:border-primary transition-all"
+  const classbtn = "w-full h-10 border-1 rounded-xl xl:text-md text-base md:h-10 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:font-semibold text-primary hover:bg-primary hover:text-default-white hover:border-primary transition-all"
   return (
     <button
     disabled={disabled}

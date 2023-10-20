@@ -8,5 +8,5 @@ interface Props {
 }
 
 export default function Providers({ children }: Props) {
-  return <SessionProvider> <NextUIProvider>{children}</NextUIProvider>;</SessionProvider>
+  return <SessionProvider> <NextUIProvider>{children}</NextUIProvider></SessionProvider>
 }
