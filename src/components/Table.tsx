@@ -15,12 +15,18 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
-  cn,
 } from "@nextui-org/react";
-import { columns, users, statusOptions } from "@/components/table/data";
+import { columns, userstable, statusOptions } from "@/components/table/data";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
 import Switch from "./Switch";
+import { includesString } from "@/libs/functionsStrings";
+import { useSession } from "next-auth/react";
+import { CategoryTextShort } from "@/types/d";
+
+interface Props {
+  params: { category: CategoryTextShort };
+}
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Activo: "success",
@@ -39,9 +45,18 @@ const INITIAL_VISIBLE_COLUMNS = [
   "cowork",
 ];
 
-type User = (typeof users)[0];
+type User = (typeof userstable)[0];
 
-export default function TableComponent() {
+export default function TableComponent({ params }: Props) {
+  const { data, status } = useSession();
+  const userSession = data?.user ?? {
+    name: "default",
+    email: "useremail",
+  };
+
+  if (includesString(userSession.rols ?? [], ["superadmin", params.category])) {
+    console.log(userSession.rols)
+  }
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
@@ -58,7 +73,7 @@ export default function TableComponent() {
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(userstable.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -71,11 +86,11 @@ export default function TableComponent() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredUsers = [...userstable];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((userstable) =>
+      userstable.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -88,7 +103,7 @@ export default function TableComponent() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [userstable, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -140,7 +155,7 @@ export default function TableComponent() {
         );
       case "cowork":
         if (user.cowork === "1") {
-          return <Switch onChange={() => {}} />;
+          return <Switch defaultEnabled onChange={() => {}} />;
         } else {
           return <Switch onChange={() => {}} />;
         }
@@ -172,30 +187,36 @@ export default function TableComponent() {
                 <i className="bi bi-calendar2-check text-xl"></i>
               </span>
             </Tooltip>
-            <Tooltip
-              className="font-semibold rounded-lg shadow-xl bg-off-white"
-              content="Editar sitio"
-            >
-              <span
-                onClick={() => router.push(`/sites/${user.id}/edit`)}
-                className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+
+            {status === "authenticated" && includesString(userSession.rols ?? [], ["superadmin", params.category]) &&(
+            <>
+              <Tooltip
+                className="font-semibold rounded-lg shadow-xl bg-off-white"
+                content="Editar sitio"
               >
-                <i className="bi bi-pen text-xl"></i>
-              </span>
-            </Tooltip>
-            <Tooltip
-              className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
-              content="Eliminar sitio"
-            >
-              <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                <i className="bi bi-trash3 text-xl"></i>
-                <Modal
-                  title="Eliminar sitio"
-                  text="¿Esta seguro de eliminar el sitio?"
-                  option1="Eliminar"
-                ></Modal>
-              </span>
-            </Tooltip>
+                <span
+                  onClick={() => router.push(`/sites/${user.id}/edit`)}
+                  className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                >
+                  <i className="bi bi-pen text-xl"></i>
+                </span>
+              </Tooltip>
+              <Tooltip
+                className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+                content="Eliminar sitio"
+              >
+                <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                  <i className="bi bi-trash3 text-xl"></i>
+                  <Modal
+                    title="Eliminar sitio"
+                    text="¿Esta seguro de eliminar el sitio?"
+                    option1="Eliminar"
+                  ></Modal>
+                </span>
+              </Tooltip>
+            </>
+            )}
+            
           </div>
         );
       default:
@@ -245,7 +266,7 @@ export default function TableComponent() {
           <button
             onClick={() => router.push("/sites/add")}
             aria-label="button"
-            className="text-default-white  h-10 justify-center px-2 items-center rounded-lg text-base bg-primary ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0 transition-all"
+            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
           >
             Añadir sitio
             <i className="bi bi-plus-lg text-xl "></i>
@@ -259,7 +280,7 @@ export default function TableComponent() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    userstable.length,
     hasSearchFilter,
   ]);
 
@@ -282,7 +303,7 @@ export default function TableComponent() {
           onChange={setPage}
         />
         <div className="flex gap-4">
-          <div className="flex gap-3 text-soft-gray rounded-xl p-2">
+          <div className="flex gap-3 text-borders rounded-xl p-2">
             <label className="justify-center items-center">
               Sitios por página:
               <select
@@ -302,7 +323,7 @@ export default function TableComponent() {
 
   const classNames = React.useMemo(
     () => ({
-      th: ["bg-[#C8C8C8]", "text-soft-gray", "text-center", "text-base"],
+      th: ["bg-borders-light", "text-borders", "text-center", "text-base"],
       td: [
         // changing the rows border radius
         // first
@@ -321,7 +342,7 @@ export default function TableComponent() {
 
   return (
     <Table
-      className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)] mx-auto text-sm text-center p-3"
+      className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       aria-label="table"
@@ -346,7 +367,6 @@ export default function TableComponent() {
       </TableHeader>
       <TableBody
         aria-label="Body table"
-        className="bg-green"
         emptyContent={"No se han encontrado sitios"}
         items={sortedItems}
       >

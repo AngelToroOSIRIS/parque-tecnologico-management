@@ -8,7 +8,7 @@ export const categoriesObj: {
   {
     route: "auditoriums",
     name: "Auditorios",
-    icon: "people-fill",
+    icon: "building",
     color: "#D33CFF",
   },
   {

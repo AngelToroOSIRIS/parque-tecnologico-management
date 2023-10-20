@@ -9,14 +9,12 @@ export const authOptions: AuthOptions = {
 
       //@ts-ignore
       clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
-
       tenantId: process.env.AZURE_AD_TENANT_ID,
     }),
   ],
 
   session: {
     strategy: "jwt" as SessionStrategy,
-
     maxAge: 1 * 60 * 60,
   },
 

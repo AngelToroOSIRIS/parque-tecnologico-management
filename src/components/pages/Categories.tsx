@@ -1,9 +1,14 @@
 "use client";
 
 import Table from "@/components/Table";
+import { CategoryTextShort } from "@/types/d";
 
-export default function Categories() {
+interface Props {
+  params: { category: CategoryTextShort };
+}
+
+export default function Categories({ params }: Props) {
   return (
-        <Table/>
+        <Table params={params}/>
   );
 }
