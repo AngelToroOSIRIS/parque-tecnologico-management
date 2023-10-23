@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Table,
@@ -55,9 +55,10 @@ export default function TableComponent({ params }: Props) {
   };
 
   if (includesString(userSession.rols ?? [], ["superadmin", params.category])) {
-    console.log(userSession.rols)
+    console.log(userSession.rols);
   }
   const [filterValue, setFilterValue] = React.useState("");
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
   );
@@ -90,7 +91,7 @@ export default function TableComponent({ params }: Props) {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((userstable) =>
-      userstable.name.toLowerCase().includes(filterValue.toLowerCase())
+        userstable.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -188,35 +189,38 @@ export default function TableComponent({ params }: Props) {
               </span>
             </Tooltip>
 
-            {status === "authenticated" && includesString(userSession.rols ?? [], ["superadmin", params.category]) &&(
-            <>
-              <Tooltip
-                className="font-semibold rounded-lg shadow-xl bg-off-white"
-                content="Editar sitio"
-              >
-                <span
-                  onClick={() => router.push(`/sites/${user.id}/edit`)}
-                  className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-                >
-                  <i className="bi bi-pen text-xl"></i>
-                </span>
-              </Tooltip>
-              <Tooltip
-                className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
-                content="Eliminar sitio"
-              >
-                <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                  <i className="bi bi-trash3 text-xl"></i>
-                  <Modal
-                    title="Eliminar sitio"
-                    text="¿Esta seguro de eliminar el sitio?"
-                    option1="Eliminar"
-                  ></Modal>
-                </span>
-              </Tooltip>
-            </>
-            )}
-            
+            {status === "authenticated" &&
+              includesString(userSession.rols ?? [], [
+                "superadmin",
+                params.category,
+              ]) && (
+                <>
+                  <Tooltip
+                    className="font-semibold rounded-lg shadow-xl bg-off-white"
+                    content="Editar sitio"
+                  >
+                    <span
+                      onClick={() => router.push(`/sites/${user.id}/edit`)}
+                      className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                    >
+                      <i className="bi bi-pen text-xl"></i>
+                    </span>
+                  </Tooltip>
+                  <Tooltip
+                    className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+                    content="Eliminar sitio"
+                  >
+                    <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                      <i className="bi bi-trash3 text-xl"></i>
+                      <Modal
+                        title="Eliminar sitio"
+                        text="¿Esta seguro de eliminar el sitio?"
+                        option1="Eliminar"
+                      ></Modal>
+                    </span>
+                  </Tooltip>
+                </>
+              )}
           </div>
         );
       default:
@@ -339,45 +343,50 @@ export default function TableComponent({ params }: Props) {
     }),
     []
   );
-
-  return (
-    <Table
-      className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      aria-label="table"
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        aria-label="Body table"
-        emptyContent={"No se han encontrado sitios"}
-        items={sortedItems}
+  useEffect(() => {
+    router.refresh();
+    setLoading(false)
+  }, []);
+  if (!loading) {
+    return (
+      <Table
+        className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        aria-label="table"
+        classNames={classNames}
+        selectedKeys={selectedKeys}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
       >
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  );
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          aria-label="Body table"
+          emptyContent={"No se han encontrado sitios"}
+          items={sortedItems}
+        >
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    );
+  }
 }

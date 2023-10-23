@@ -52,25 +52,6 @@ const FormUser = ({ site }: { site?: any }) => {
                   <SelectItem key={3}>Laboratorios</SelectItem>
                   <SelectItem key={4}>Salas de Juntas</SelectItem>
                 </Select>
-                <Select
-                  aria-label="permiso"
-                  label="Permisos"
-                  labelPlacement="outside"
-                  placeholder="Asignar Permisos"
-                  size="lg"
-                  radius="full"
-                  variant="faded"
-                  className="outline-none"
-                  classNames={{
-                    label: "text-base ml-3",
-                    errorMessage: "text-sm font-medium",
-                    value: "text-base",
-                    trigger: "bg-[#ffffff]"
-                }}
-                >
-                  <SelectItem key={1}>Editar</SelectItem>
-                  <SelectItem key={2}>Consulta</SelectItem>
-                </Select>
           </div>
           <div className="flex items-center mx-auto w-[30%] justify-center mt-8 gap-5">
             <Button type="submit" text="Continuar" />

@@ -10,21 +10,31 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import fetchFn from "@/libs/fetchFn";
+import toast from "react-hot-toast";
 
 const Users = () => {
   const router = useRouter();
-  const { data: session, status, update } = useSession();
-  const updateSession = async (email: string) => {
-    const response = await fetchFn(`/login?email=${email}`);
-    if (response.code !== 200) return router.push("/logout?error=auth");
-    console.log(response.data)
-    if(response.data){
-    }
+  const { data: session, status, update, data } = useSession();
+  const user = data?.user ?? {
+    name: "default",
+    email: "useremail",
   };
+
+  const getData = async () => {
+    const response = await fetchFn(
+      `/getUsersAndRoles?email=${session?.user.emailHash}`
+    );
+    if (response.code !== 200) {
+      return toast.error("No se han podido obtener los usuarios", { id: "1" });
+    }
+    console.log(response.data)
+  };
+
+
   return (
     <>
       <h1 className="margin-header mx-auto text-3xl text-center rounded-lg font-semibold m-6 text-primary">
@@ -46,9 +56,6 @@ const Users = () => {
               CORREO
             </TableColumn>
             <TableColumn className="bg-borders-light text-md">ROL</TableColumn>
-            <TableColumn className="bg-borders-light text-md">
-              PERMISO
-            </TableColumn>
           </TableHeader>
           <TableBody>
             <TableRow key="1">
@@ -74,22 +81,6 @@ const Users = () => {
                   <SelectItem key={2}>Espacios Deportivos</SelectItem>
                   <SelectItem key={3}>Laboratorios</SelectItem>
                   <SelectItem key={4}>Salas de Juntas</SelectItem>
-                </Select>
-              </TableCell>
-              <TableCell>
-                <Select
-                  aria-label="permiso"
-                  placeholder="Seleccionar Permisos"
-                  size="sm"
-                  radius="lg"
-                  variant="faded"
-                  className="max-w-xs outline-none"
-                  classNames={{
-                    trigger: "bg-[#ffffff]",
-                  }}
-                >
-                  <SelectItem key={1}>Editar</SelectItem>
-                  <SelectItem key={2}>Consulta</SelectItem>
                 </Select>
               </TableCell>
             </TableRow>
@@ -118,22 +109,6 @@ const Users = () => {
                   <SelectItem key={4}>Salas de Juntas</SelectItem>
                 </Select>
               </TableCell>
-              <TableCell>
-                <Select
-                  size="sm"
-                  aria-label="permiso"
-                  placeholder="Seleccionar Permisos"
-                  variant="faded"
-                  className="max-w-xs outline-none"
-                  radius="lg"
-                  classNames={{
-                    trigger: "bg-[#ffffff]",
-                  }}
-                >
-                  <SelectItem key={1}>Editar</SelectItem>
-                  <SelectItem key={2}>Consulta</SelectItem>
-                </Select>
-              </TableCell>
             </TableRow>
             <TableRow key="3">
               <TableCell className="text-md font-medium">
@@ -160,28 +135,12 @@ const Users = () => {
                   <SelectItem key={4}>Salas de Juntas</SelectItem>
                 </Select>
               </TableCell>
-              <TableCell>
-                <Select
-                  aria-label="permiso"
-                  placeholder="Seleccionar Permisos"
-                  size="sm"
-                  radius="lg"
-                  className="max-w-xs outline-none"
-                  variant="faded"
-                  classNames={{
-                    trigger: "bg-[#ffffff]",
-                  }}
-                >
-                  <SelectItem key={1}>Editar</SelectItem>
-                  <SelectItem key={2}>Consulta</SelectItem>
-                </Select>
-              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
     </>
   );
-};
+}
 
 export default Users;

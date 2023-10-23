@@ -4,7 +4,6 @@ export default function Index({ searchParams }: any) {
 	return (
 		<main>
 			<Login searchParams={searchParams} />
-			
 		</main>
 	);
 }

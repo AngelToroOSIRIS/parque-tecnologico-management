@@ -94,7 +94,7 @@ const userstable = [
     role: "Edificio E",
     type: "Salones de Clase",
     status: "Mantenimiento",
-    cowork: "0",
+    cowork: "1",
     fecha_Actual: "03/10/2023"
   },
   {
