@@ -1,18 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import InputForm from "./forms/InputForm";
 import Button from "./Button";
 import { TailSpin } from "react-loader-spinner";
+import fetchFn from "@/libs/fetchFn";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { includesString } from "@/libs/functionsStrings";
 
 const FormUser = ({ site }: { site?: any }) => {
+  const { data: session, status } = useSession();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState<boolean>(false);
+  const [roles, setRoles] = useState<
+    {
+      id: number;
+      descripcion: string;
+      identificador: string;
+    }[]
+  >([]);
+
+  const getData = async () => {
+    const res = await fetchFn(`/getRoles`);
+    if (res.code !== 200) {
+      return toast.error("No se han podido obtener los datos", {
+        id: "1",
+      });
+    }
+    console.log(res.data);
+    setRoles(res.data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
+      {!loading && (
         <form>
-          <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
             <InputForm
               type="text"
               name="usuario"
@@ -23,37 +52,41 @@ const FormUser = ({ site }: { site?: any }) => {
               validations={{
                 required: "Se requiere un nombre de usuario",
                 maxLength: {
-                    value: 50,
-                    message: "El nombre debe contener máximo 50 caracteres.",
+                  value: 50,
+                  message: "El nombre debe contener máximo 50 caracteres.",
                 },
-            }}
-              onChange={()=>{}}
+              }}
+              onChange={() => {}}
             />
-            </div>
-            <div className="w-[95%] justify-between mx-auto gap-3 flex py-1 px-5">
             <Select
-                  placeholder="Asignar Rol"
-                  aria-label="rol"
-                  label="Rol"
-                  labelPlacement="outside"
-                  radius="full"
-                  size="lg"
-                  className="outline-none"
-                  variant="faded"
-                  classNames={{
-                    label: "text-base ml-3",
-                    errorMessage: "text-sm font-medium",
-                    value: "text-base",
-                    trigger: "bg-[#ffffff]"
-                }}
-                >
-                  <SelectItem key={1}>Auditorios</SelectItem>
-                  <SelectItem key={2}>Espacios Deportivos</SelectItem>
-                  <SelectItem key={3}>Laboratorios</SelectItem>
-                  <SelectItem key={4}>Salas de Juntas</SelectItem>
-                </Select>
-          </div>
-          <div className="flex items-center mx-auto w-[30%] justify-center mt-8 gap-5">
+              placeholder="Asignar Rol"
+              aria-label="rol"
+              label="Rol"
+              labelPlacement="outside"
+              radius="full"
+              selectionMode="multiple"
+              size="lg"
+              className="outline-none"
+              variant="faded"
+              disabledKeys={
+                includesString(session?.user.rols ?? [], ["superadmin"])
+                  ? undefined
+                  : ["1"]
+              }
+              classNames={{
+                label: "text-base ml-3",
+                errorMessage: "text-sm font-medium",
+                value: "text-base",
+                trigger: "bg-[#ffffff]",
+              }}
+            >
+              {roles.map((rol) => (
+                <SelectItem value={rol.id} key={rol.id}>
+                  {rol.descripcion}
+                </SelectItem>
+              ))}
+            </Select>
+          <div className="flex items-center mx-auto w-[50%] justify-center mt-8 gap-5">
             <Button type="submit" text="Continuar" />
             <Button
               //TODO:CAMBIAR RUTA
@@ -62,6 +95,7 @@ const FormUser = ({ site }: { site?: any }) => {
             />
           </div>
         </form>
+      )}
       {loading && (
         <TailSpin
           height="100"

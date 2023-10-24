@@ -55,7 +55,6 @@ export default function TableComponent({ params }: Props) {
   };
 
   if (includesString(userSession.rols ?? [], ["superadmin", params.category])) {
-    console.log(userSession.rols);
   }
   const [filterValue, setFilterValue] = React.useState("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -216,6 +215,7 @@ export default function TableComponent({ params }: Props) {
                         title="Eliminar sitio"
                         text="¿Esta seguro de eliminar el sitio?"
                         option1="Eliminar"
+                        onClick={()=>router.push("/")}
                       ></Modal>
                     </span>
                   </Tooltip>

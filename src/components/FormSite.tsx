@@ -32,7 +32,7 @@ const FormSite = ({ site }: { site?: any }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("sites");
+  const [content, setContent] = useState<"sites" | "images">("images");
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [dataFilters, setDataFilters] = useState<{
@@ -275,7 +275,7 @@ const FormSite = ({ site }: { site?: any }) => {
               }
             />
           </div>
-          <div className="flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
+          <div className="flex items-center mx-auto w-[30%] justify-center mt-8 gap-5">
             <Button type="submit" text="Continuar" />
             <Button
               //TODO:CAMBIAR RUTA
@@ -286,13 +286,7 @@ const FormSite = ({ site }: { site?: any }) => {
         </form>
       )}
       {content === "images" && (
-        <>
           <SectionImage />
-          <div className="flex items-center mx-auto w-[full] justify-center mt-8 gap-5">
-            <Button text="Guardar" />
-            <Button text="Cancelar" route="/" />
-          </div>
-        </>
       )}
       {loadingData && (
         <TailSpin

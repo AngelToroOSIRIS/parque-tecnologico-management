@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export default async function users() {
   const session = await getServerSession(authOptions)
 
-  if(!includesString(session?.user.rols ?? [], ["superadmin", "user"])) return redirect("/");
+  if(!includesString(session?.user.rols ?? [], ["superadmin", "users"])) return redirect("/");
   return (
     <>
       <Header />

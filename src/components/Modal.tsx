@@ -7,9 +7,10 @@ interface Props {
   title: string;
   text: string;
   option1: string;
+  onClick: any;
 }
 
-export default function Modal({title, text, option1}: Props) {
+export default function Modal({title, text, option1, onClick}: Props) {
   let [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
@@ -74,7 +75,7 @@ export default function Modal({title, text, option1}: Props) {
                       <button
                         type="button"
                         className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
-                        onClick={closeModal}
+                        onClick={onClick}
                       >
                         {option1}
                       </button>
@@ -85,7 +86,7 @@ export default function Modal({title, text, option1}: Props) {
                         className="inline-flex font-base hover:font-bold outline-none border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
                         onClick={closeModal}
                       >
-                        Cerrar
+                        Cancelar
                       </button>
                     </div>
                   </div>

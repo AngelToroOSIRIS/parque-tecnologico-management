@@ -133,19 +133,36 @@ const Header = () => {
           {/* Mostrar nombre del usuario */}
           <div className="hidden w-full flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
             {status === "loading" && (
-              <ContentLoader
-                uniqueKey="user-info-header"
-                speed={0.5}
-                width={120}
-                height={30}
-                title="Cargando usuario..."
-                backgroundColor="#cccccc"
-                foregroundColor="#ecebeb"
-              >
-                <rect x="0" y="1" rx="3" ry="3" width="180" height="11" />
+              <>
+                <ContentLoader
+                  uniqueKey="user-info-header"
+                  speed={0.5}
+                  width={120}
+                  height={45}
+                  title="Cargando usuario..."
+                  backgroundColor="#cccccc"
+                  foregroundColor="#ecebeb"
+                >
+                  <rect x="0" y="1" rx="3" ry="3" width="180" height="11" />
+                
+                  <rect x="0" y="18" rx="3" ry="3" width="110" height="8" />
+                </ContentLoader>
+                <ContentLoader
+                  uniqueKey="user-info-header"
+                  speed={0.5}
+                  width={120}
+                  height={45}
+                  title="Cargando usuario..."
+                  backgroundColor="#cccccc"
+                  foregroundColor="#ecebeb"
+                >
+                  <rect x="0" y="1" rx="3" ry="3" width="180" height="11" />
+                
+                  <rect x="0" y="18" rx="3" ry="3" width="110" height="8" />
+                </ContentLoader>
 
-                <rect x="0" y="18" rx="3" ry="3" width="110" height="8" />
-              </ContentLoader>
+              </>
+              
             )}
 
             {status === "authenticated" && (
@@ -154,7 +171,6 @@ const Header = () => {
 
                 <p className="text-xs select-text">
                   {/* {user.email?.substring(0, user.email?.search("@"))}{" "} */}
-                  Super Admin
                   {JSON.stringify(user.rols)}
                 </p>
               </>
