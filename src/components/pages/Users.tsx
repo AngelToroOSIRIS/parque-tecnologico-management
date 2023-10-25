@@ -72,7 +72,7 @@ const Users = () => {
       </h1>
       {!loading && (
         <>
-          <div className="w-[95%] max-w-5xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+          <div className="w-[95%] mb-10 max-w-5xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/users/add")}
@@ -98,7 +98,10 @@ const Users = () => {
                 {dataUsers.map((item, i) => {
                   return (
                     <TableRow key="1">
-                      <TableCell>{item.email}</TableCell>
+                      <TableCell className="text-lg">
+                        {item.email?.substring(0, item.email?.search('@'))}
+                        <p className="text-sm text-default-400">{item.email}</p>
+                      </TableCell>
                       <TableCell>
                         <Select
                           aria-label="rol"
@@ -145,15 +148,15 @@ const Users = () => {
                           className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
                           content="Eliminar usuario"
                         >
-                          <span className="text-lg m-3 text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
-                            <i className="bi bi-trash3 text-xl"></i>
-                             {/* <Modal
+                          <button className="text-lg m-3 text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                            <Modal
                         title="Eliminar usuario"
                         text="¿Esta seguro de eliminar el usuario?"
                         option1="Eliminar"
                         onClick={()=>router.push("/")}
-                      ></Modal> */}
-                          </span>
+                      ></Modal>
+                            <i className="bi bi-trash3 text-xl"></i>
+                          </button>
                         </Tooltip>
                       </TableCell>
                       {/* <TableCell>{item.roles[0].descripcion}</TableCell> */}

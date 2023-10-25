@@ -22,7 +22,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="h-[65px] flex justify-between">
-          <div className="w-[260px]">
+          <div className="flex w-[130px] lg:w-[260px]">
             <Image
               src="/images/ecijg60.png"
               width={105}
@@ -33,17 +33,15 @@ const Header = () => {
             />
           </div>
         </section>
-        <section className="h-[65px]  flex justify-start">
-          <ul className="lg:flex grid grid-cols-5 items-center justify-center font-medium md:flex-row">
-            <li>
-              <button
-                onClick={() => router.push(`/`)}
-                className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-              >
-                <i className="bi bi-house-door text-primary text-xl"></i>
-                <p className="ml-2 hidden lg:block">Inicio</p>
-              </button>
-            </li>
+        <section className="h-[65px] w-full items-center flex justify-center">
+          <ul className="lg:flex lg:w-full grid grid-cols-3 items-center justify-center font-medium md:flex-row">
+          <Link
+                      href="/"
+                      className="flex p-2 items-center w-[40px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                    >
+                      <i className="bi bi-house-door text-primary text-xl"></i>
+                      <p className="ml-2 hidden lg:block">Inicio</p>
+                    </Link>
             {/* <li>
               <button
                 onClick={() => router.push(`/financial`)}
@@ -119,7 +117,7 @@ const Header = () => {
                   includesString(user.rols ?? [], ["superadmin", "users"]) && (
                     <Link
                       href="/users"
-                      className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                      className="flex p-2 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
                     >
                       <i className="bi bi-people text-primary text-xl"></i>
                       <p className="ml-2 hidden lg:block">Usuarios</p>
@@ -129,7 +127,7 @@ const Header = () => {
             )}
           </ul>
         </section>
-        <section className="flex w-[260px]">
+        <section className="flex w-[130px] lg:w-[260px]">
           {/* Mostrar nombre del usuario */}
           <div className="hidden w-full flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
             {status === "loading" && (

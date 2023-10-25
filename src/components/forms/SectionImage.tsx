@@ -19,7 +19,7 @@ export default function ModalImage() {
   const sendImages = async () => {
     const form = new FormData();
 
-    form.append("images", images.map((image) => image.file)[0]);
+    // form.append("images", images.map((image) => image.file)[0]);
 
     const response = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
