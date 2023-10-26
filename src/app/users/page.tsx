@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/auth";
 import { includesString } from "@/libs/functionsStrings";
 import { redirect } from "next/navigation";
+import UsersEdit from "@/components/pages/UsersEdit";
 
 export default async function users() {
   const session = await getServerSession(authOptions)
@@ -13,6 +14,7 @@ export default async function users() {
     <>
       <Header />
       <Table />
+      <UsersEdit/>
     </>
   );
 }

@@ -42,7 +42,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "status",
   "fecha_Actual",
   "actions",
-  "cowork",
 ];
 
 type User = (typeof userstable)[0];
