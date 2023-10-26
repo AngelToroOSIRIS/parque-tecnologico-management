@@ -21,3 +21,11 @@ export interface Enlace{
   id: number
   llave: string
 }
+
+export interface ReservationDateDetails {
+  dateTimeStart: string;
+  dateTimeEnd: string;
+  totalTime: string;
+  valid: boolean;
+}
+ 

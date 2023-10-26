@@ -21,10 +21,15 @@ import { includesString } from "@/libs/functionsStrings";
 import LoadingPage from "./LoadingPage";
 import Modal from "../Modal";
 
-const Users = () => {
+interface Props {
+  disabled?: boolean;
+}
+
+const Users = ({ disabled }: Props) => {
+  const classbtn =
+    "text-lg m-3 text-soft-gray hover:text-soft-blue cursor-pointer transform transition-all";
   const router = useRouter();
   const { data: session, status } = useSession();
-
   const [loading, setLoading] = useState<boolean>(true);
   const [roles, setRoles] = useState<
     {
@@ -67,7 +72,7 @@ const Users = () => {
 
   return (
     <>
-      <h1 className="margin-header mx-auto text-3xl text-center rounded-lg font-semibold m-6 text-primary">
+      <h1 className="margin-header mx-auto text-3xl text-center font-semibold m-6 text-primary">
         Usuarios
       </h1>
       {!loading && (
@@ -76,7 +81,7 @@ const Users = () => {
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/users/add")}
-                className="bg-borders-light px-2 py-1 border-2 items-center justify-center font-medium border-borders-light hover:border-borders transition-all text-borders rounded-lg"
+                className="bg-borders-light px-2 py-1 border-2 items-center justify-center font-medium border-borders-light hover:border-default-400 transition-all text-borders rounded-xl"
               >
                 Añadir usuario
                 <i className="bi bi-person-plus-fill ml-2 text-xl "></i>
@@ -99,7 +104,7 @@ const Users = () => {
                   return (
                     <TableRow key="1">
                       <TableCell className="text-lg">
-                        {item.email?.substring(0, item.email?.search('@'))}
+                        {item.email?.substring(0, item.email?.search("@"))}
                         <p className="text-sm text-default-400">{item.email}</p>
                       </TableCell>
                       <TableCell>
@@ -137,24 +142,29 @@ const Users = () => {
                           className="font-semibold rounded-lg shadow-xl bg-off-white"
                           content="Guardar cambios"
                         >
-                          <span
+                          <button
+                            disabled={disabled}
                             onClick={() => router.push("/")}
-                            className="text-lg m-3 text-soft-gray hover:text-soft-blue cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                            className={
+                              disabled
+                                ? "text-lg m-3 text-default-500 cursor-pointer transform transition-all"
+                                : classbtn
+                            }
                           >
                             <i className="bi bi-floppy text-xl"></i>
-                          </span>
+                          </button>
                         </Tooltip>
                         <Tooltip
                           className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
                           content="Eliminar usuario"
                         >
-                          <button className="text-lg m-3 text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                          <button className="text-lg m-3 text-soft-gray hover:text-primary cursor-pointer transform transition-all">
                             <Modal
-                        title="Eliminar usuario"
-                        text="¿Esta seguro de eliminar el usuario?"
-                        option1="Eliminar"
-                        onClick={()=>router.push("/")}
-                      ></Modal>
+                              title="Eliminar usuario"
+                              text="¿Esta seguro de eliminar el usuario?"
+                              option1="Eliminar"
+                              onClick={() => router.push("/")}
+                            ></Modal>
                             <i className="bi bi-trash3 text-xl"></i>
                           </button>
                         </Tooltip>

@@ -87,7 +87,7 @@ const FormUser = ({ site }: { site?: any }) => {
               ))}
             </Select>
           <div className="flex items-center mx-auto w-[50%] justify-center mt-8 gap-5">
-            <Button type="submit" text="Continuar" />
+            <Button type="submit" text="Agregar" />
             <Button
               //TODO:CAMBIAR RUTA
               route="/users"

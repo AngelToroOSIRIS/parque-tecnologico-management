@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Input, SelectItem, Textarea } from "@nextui-org/react";
+import { Checkbox, Input, SelectItem, Textarea } from "@nextui-org/react";
 import Switch from "@/components/Switch";
 import InputForm from "./forms/InputForm";
 import SelectForm from "./forms/SelectForm";
@@ -32,7 +32,7 @@ const FormSite = ({ site }: { site?: any }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("images");
+  const [content, setContent] = useState<"sites" | "images">("sites");
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [dataFilters, setDataFilters] = useState<{
@@ -209,7 +209,7 @@ const FormSite = ({ site }: { site?: any }) => {
             </div>
             <div className=" w-[50%] -mt-12 grid grid-rows-2 mx-auto">
               <div className="flex  p-2 gap-10 items-center">
-                <div className="pt-5 mx-auto">
+                <div className="mx-auto">
                   <Input
                     radius="full"
                     size="lg"
@@ -219,7 +219,7 @@ const FormSite = ({ site }: { site?: any }) => {
                     name="capacity"
                     type="number"
                     placeholder="0"
-                    description="* personas"
+                    description="* Personas"
                     className="mt-1 mb-[10px] outline-none select-none "
                     classNames={{
                       inputWrapper: "bg-[#ffff]",
@@ -236,6 +236,7 @@ const FormSite = ({ site }: { site?: any }) => {
                     label="Precio:"
                     labelPlacement="outside-left"
                     placeholder="0.000"
+                    description="* Hora"
                     className="mt-1 mb-[10px] outline-none select-none "
                     classNames={{
                       inputWrapper: "bg-[#ffff]",
@@ -247,18 +248,18 @@ const FormSite = ({ site }: { site?: any }) => {
                       </div>
                     }
                   />
+                </div>
               </div>
+              <div className="grid grid-cols-2 gap-5 justify-center px-52 items-center">
+                <p>Wifi:</p>
+                <Checkbox />
+                <p>Cafe:</p>
+                <Checkbox />
+                <p>Proyector:</p>
+                <Checkbox />
+                <p>PC:</p>
+                <Checkbox />
               </div>
-                    <div className="grid grid-cols-2 gap-5 justify-center px-52 items-center">
-                      <p>Wifi:</p>
-                      <Switch onChange={() => {}} />
-                      <p>Cafe:</p>
-                      <Switch onChange={() => {}} />
-                      <p>Proyector:</p>
-                      <Switch onChange={() => {}} />
-                      <p>PC:</p>
-                      <Switch onChange={() => {}} />
-                    </div>
             </div>
           </div>
           <div className="flex mx-auto m-10 px-[470px] gap-2 justify-center items-center">
@@ -285,9 +286,7 @@ const FormSite = ({ site }: { site?: any }) => {
           </div>
         </form>
       )}
-      {content === "images" && (
-          <SectionImage />
-      )}
+      {content === "images" && <SectionImage />}
       {loadingData && (
         <TailSpin
           height="100"
