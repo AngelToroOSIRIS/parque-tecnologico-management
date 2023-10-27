@@ -9,7 +9,7 @@ const Select: React.FC<{
 	defaultValue?: string;
 	className?: string;
 	error?: string;
-	onChange?: any;
+	onChange?: ({ name, value }: { name: string; value: string | null }) => any;
 	children?: any;
 }> = ({
 	name,
@@ -40,12 +40,14 @@ const Select: React.FC<{
 			className={"mt-1 mb-[10px] outline-none select-none " + className}
 			variant="faded"
 			onChange={(e) => {
-				const value = String(e.target.value).trim();
-				onChange({
+				if (onChange) {
+				  const value = String(e.target.value).trim();
+				  onChange({
 					name: String(e.target.name).trim(),
 					value: value !== "" ? value : null,
-				});
-			}}
+				  });
+				}
+			  }}
 			name={name}
 			defaultSelectedKeys={defaultValue ? [defaultValue] : undefined}
 		>

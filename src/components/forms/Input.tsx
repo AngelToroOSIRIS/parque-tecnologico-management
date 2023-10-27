@@ -10,7 +10,7 @@ const Input: React.FC<{
 	className?: string;
 	defaultValue?: string;
 	error?: string;
-	onChange?: any;
+	onChange?: ({ name, value }: { name: string; value: string | null }) => any;
 	disabled?: boolean;
 	description?: string;
 }> = ({

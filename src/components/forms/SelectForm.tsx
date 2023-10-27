@@ -1,10 +1,10 @@
 "use client";
-
+ 
 import { useState } from "react";
 import Select from "./Select";
 import GraySubtitle from "../Subtitle";
 import { emptyValue } from "@/libs/functionsStrings";
-
+ 
 const SelectForm = ({
   name,
   placeholder,
@@ -26,17 +26,17 @@ const SelectForm = ({
   defaultValue?: string;
 }) => {
   const [error, setError] = useState<string | undefined>(undefined);
-
-  const handleChange = ({ name, value }: { name: string; value: string }) => {
+ 
+  const handleChange = ({ name, value }: { name: string; value: string | null }) => {
     if (onChange) onChange({ name, value });
-
+ 
     if (required && emptyValue(value)) {
-      setError("Debe seleccionar una opción");
+      setError("Debe seleccionar una opción.");
     } else if (required && !emptyValue(value)) {
       setError(undefined);
     }
   };
-
+ 
   return (
     <div className="text-start w-full">
       <GraySubtitle
@@ -46,7 +46,6 @@ const SelectForm = ({
         }
         required={label?.required ?? true}
       />
-
       <Select
         name={name}
         placeholder={placeholder ?? "Seleccionar " + name}
@@ -60,5 +59,5 @@ const SelectForm = ({
     </div>
   );
 };
-
+ 
 export default SelectForm;

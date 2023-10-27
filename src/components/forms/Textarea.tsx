@@ -9,7 +9,7 @@ interface Props {
 	defaultValue?: string;
 	minRows?: number
 	error?: string;
-	onChange?: any;
+	onChange?: ({ name, value }: { name: string; value: string | null }) => any;
 	disabled?: boolean;
 	description?: string;
 }

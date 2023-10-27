@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import Table from "@/components/pages/Users";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/auth";
 import { includesString } from "@/libs/functionsStrings";
@@ -13,7 +12,6 @@ export default async function users() {
   return (
     <>
       <Header />
-      <Table />
       <UsersEdit/>
     </>
   );

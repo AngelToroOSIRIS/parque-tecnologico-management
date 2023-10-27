@@ -12,9 +12,8 @@ import { includesString } from "@/libs/functionsStrings";
 
 const FormUser = ({ site }: { site?: any }) => {
   const { data: session, status } = useSession();
-
   const [loading, setLoading] = useState<boolean>(false);
-  const [newUser, setNewUser] = useState<boolean>(false);
+  const [dataNew, setDataNew] = useState<string>("")
   const [roles, setRoles] = useState<
     {
       id: number;
@@ -24,6 +23,15 @@ const FormUser = ({ site }: { site?: any }) => {
   >([]);
 
   const getData = async () => {
+    // const response = await fetchFn("/createUser", {
+    //   method: "POST",
+    //   body: {
+    //     email: idSite,
+    //     roles: [
+
+    //     ]
+    //   },
+    // });
     const res = await fetchFn(`/getRoles`);
     if (res.code !== 200) {
       return toast.error("No se han podido obtener los datos", {
@@ -56,7 +64,8 @@ const FormUser = ({ site }: { site?: any }) => {
                   message: "El nombre debe contener máximo 50 caracteres.",
                 },
               }}
-              onChange={() => {}}
+              //@ts-ignore
+              onChange={({name, value}) => setDataNew(value)}
             />
             <Select
               placeholder="Asignar Rol"
@@ -86,7 +95,7 @@ const FormUser = ({ site }: { site?: any }) => {
                 </SelectItem>
               ))}
             </Select>
-          <div className="flex items-center mx-auto w-[50%] justify-center mt-8 gap-5">
+          <div className="flex items-center mx-auto w-[65%] justify-center mt-8 gap-5">
             <Button type="submit" text="Agregar" />
             <Button
               //TODO:CAMBIAR RUTA
