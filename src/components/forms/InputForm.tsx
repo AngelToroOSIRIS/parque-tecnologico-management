@@ -40,7 +40,7 @@ const InputForm = ({
   defaultValue?: string;
   label?: { value?: string; required?: boolean };
   validations?: Validations;
-  onChange: any;
+  onChange: ({ name, value }: { name: string; value: string | null }) => any;
 }) => {
   const [error, setError] = useState<string | undefined>(undefined);
  

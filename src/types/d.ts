@@ -28,4 +28,15 @@ export interface ReservationDateDetails {
   totalTime: string;
   valid: boolean;
 }
+
+export interface Rol{
+  descripcion: string;
+  id: number;
+  identificador: string;
+}
+
+export interface UsersAndRoles{
+  email: string;
+  roles: Rol[];
+}
  

@@ -32,7 +32,7 @@ const FormSite = ({ site }: { site?: any }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("sites");
+  const [content, setContent] = useState<"sites" | "images">("images");
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [dataFilters, setDataFilters] = useState<{
@@ -110,7 +110,7 @@ const FormSite = ({ site }: { site?: any }) => {
                   message: "El nombre debe contener máximo 50 caracteres.",
                 },
               }}
-              onChange={setField}
+              // onChange={({ value }) => {setField})}
             />
             <SelectForm
               name="id_identificador_enlace"
