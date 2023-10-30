@@ -97,6 +97,7 @@ const FormSite = ({ site }: { site?: any }) => {
           </h1>
           <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
             <InputForm
+            onChange={()=>{}}
               type="text"
               name="nombre"
               label={{

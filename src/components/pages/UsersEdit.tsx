@@ -71,7 +71,7 @@ const UsersEdit = () => {
               <div className="w-full text-center">OPCIONES</div>
             </article>
             {dataUsers.map((user) => {
-              return <UserRow user={user} key={user.email} roles={roles} />;
+              return <UserRow getData={getData} user={user} key={user.email} roles={roles} />;
             })}
           </section>
         </div>

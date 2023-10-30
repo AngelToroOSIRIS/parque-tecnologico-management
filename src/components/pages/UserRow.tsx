@@ -8,7 +8,7 @@ import { Rol, UsersAndRoles } from "@/types/d";
 import Select from "../forms/Select";
 import toast from "react-hot-toast";
 
-const UserRow = ({ user, roles }: { user: UsersAndRoles; roles: Rol[] }) => {
+const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; getData:any }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -21,12 +21,25 @@ const UserRow = ({ user, roles }: { user: UsersAndRoles; roles: Rol[] }) => {
   );
 
   const deleteUser = async () => {
-    const response = await fetchFn(`/deleteUser${session?.user.emailHash}`, 
-    {
-      method: "DELETE",
-      body: user.email,
-    });
-    console.log(response);
+    const response = await fetchFn(
+      `/deleteUser?email=${session?.user.emailHash}`,
+      {
+        method: "DELETE",
+        body: {
+          email: user.email,
+        },
+      }
+    );
+    console.log(response)
+    if (response.code !== 200) {
+      return toast.error("No se ha podido eliminar el usuario.", {
+        id: "1",
+      });
+    }
+    getData()
+    if(response.data.message){
+      return toast.success(response.data.message, {id:"4"})
+    }
   };
   const saveRols = async () => {
     const response = await fetchFn(
@@ -41,9 +54,11 @@ const UserRow = ({ user, roles }: { user: UsersAndRoles; roles: Rol[] }) => {
     );
     if (response.code !== 200) {
       return toast.error("No se ha podido actualizar el usuario.", {
-        id: "1",
+        id: "2",
       });
     }
+    getData()
+      return toast.success(("Usuario actualizado correctamente "), {id:"5"})
   };
   useEffect(() => {
     setChangedRoles(String(selectedRols.sort()) !== String(asignedRols.sort()));
@@ -104,17 +119,19 @@ const UserRow = ({ user, roles }: { user: UsersAndRoles; roles: Rol[] }) => {
             <i className="bi bi-floppy text-xl"></i>
           </button>
         </Tooltip>
-        <Tooltip
+        {/* <Tooltip
           className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
           content="Eliminar usuario"
+        > */}
+        <button
+          onClick={() => {
+            deleteUser();
+          }}
+          className="mx-1 text-borders outline-none hover:text-primary transition-all"
         >
-          <button
-            onClick={deleteUser}
-            className="mx-1 text-borders outline-none hover:text-primary transition-all"
-          >
-            <i className="bi bi-trash3 text-xl"></i>
-          </button>
-        </Tooltip>
+          <i className="bi bi-trash3 text-xl"></i>
+        </button>
+        {/* </Tooltip> */}
       </div>
     </article>
   );

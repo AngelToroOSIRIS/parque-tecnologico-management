@@ -10,10 +10,12 @@ import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 import { includesString } from "@/libs/functionsStrings";
 import Select from "./forms/Select";
-import { Rol, UsersAndRoles } from "@/types/d";
+import { Rol } from "@/types/d";
 import GraySubtitle from "./Subtitle";
+import { useRouter } from "next/navigation";
 
 const FormUser = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedRols, setSelectedRols] = useState<string[]>([]);
@@ -32,28 +34,32 @@ const FormUser = () => {
 
   const newUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // validar
+    if(selectedRols.length === 0 ) return toast.error("Se necesita minimo un rol para crear el usuario");
     if (!emailUser) {
       return toast.error("Se necesita un correo para crear el usuario", {
-        id: "1",
+        id: "2",
       });
     }
 
-    const response = await fetchFn(`/createUser${session?.user.emailHash}`, {
+    const response = await fetchFn(`/createUser?email=${session?.user.emailHash}`, {
       method: "POST",
       body: {
         email: emailUser,
         roles: selectedRols.map((rol) => Number(rol)),
       },
     });
-    console.log(response.code);
+
+    
     if (response.code !== 200) {
-      return toast.error("No se han podido obtener los filtros", {
-        id: "1",
+      if(response.data.message){
+        return toast.error(response.data.message, {id:"4"})
+      }
+      return toast.error("No se ha podido crear el usuario", {
+        id: "3",
       });
     }
-    setLoading(false);
-    toast.success("usuario creado exitosamente!", { id: "2" });
+    toast.success("Usuario creado exitosamente!", { id: "2" });
+    router.push("/users")
   };
 
   useEffect(() => {
@@ -109,7 +115,7 @@ const FormUser = () => {
             ))}
           </Select>
           <div className="flex items-center mx-auto w-[65%] justify-center mt-8 gap-5">
-            <Button type="submit" text="Agregar" disabled={!emailUser || !selectedRols["0"]} />
+            <Button type="submit" text="Agregar" disabled={!emailUser} />
             <Button route="/users" text="Cancelar" />
           </div>
         </form>
