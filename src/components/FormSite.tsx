@@ -32,7 +32,7 @@ const FormSite = ({ site }: { site?: any }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("images");
+  const [content, setContent] = useState<"sites" | "images">("sites");
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [dataFilters, setDataFilters] = useState<{
@@ -90,14 +90,14 @@ const FormSite = ({ site }: { site?: any }) => {
 
   return (
     <>
+      <h1 className="mx-auto text-3xl text-center  font-semibold m-6 text-primary">
+        Datos:
+      </h1>
       {!loadingData && content === "sites" && (
         <form onSubmit={handleSubmit}>
-          <h1 className="mx-auto text-3xl text-center font-semibold m-6 text-primary">
-            Datos:
-          </h1>
-          <div className="w-[95%] items-center justify-center mx-auto gap-x-10 flex py-1 px-5">
+          <div className="w-[95%] items-center min-w-[60%]  justify-center mx-auto gap-x-10 lg:flex py-1 px-5">
             <InputForm
-            onChange={()=>{}}
+              onChange={() => {}}
               type="text"
               name="nombre"
               label={{
@@ -128,7 +128,7 @@ const FormSite = ({ site }: { site?: any }) => {
               ))}
             </SelectForm>
           </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-1 px-5">
+          <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-1 px-5">
             <SelectForm
               name="id_categoria"
               placeholder="Seleccionar categoria"
@@ -159,8 +159,8 @@ const FormSite = ({ site }: { site?: any }) => {
               ))}
             </SelectForm>
           </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-10 flex py-5 px-5">
-            <div className="mx-auto w-[50%] justify-center items-center">
+          <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-5 px-5">
+            <div className="mx-auto lg:w-[50%] justify-center items-center">
               <TextareaForm
                 name="descripcion_corta"
                 placeholder="Ingresar descripción corta completa"
@@ -208,7 +208,7 @@ const FormSite = ({ site }: { site?: any }) => {
                 }}
               />
             </div>
-            <div className=" w-[50%] -mt-12 grid grid-rows-2 mx-auto">
+            <div className=" lg:w-[50%] lg:-mt-12 grid grid-rows-2 mx-auto">
               <div className="flex  p-2 gap-10 items-center">
                 <div className="mx-auto">
                   <Input
@@ -251,7 +251,7 @@ const FormSite = ({ site }: { site?: any }) => {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-5 justify-center px-52 items-center">
+              <div className="grid grid-cols-2 gap-5 mx-auto items-center">
                 <p>Wifi:</p>
                 <Checkbox />
                 <p>Cafe:</p>
@@ -263,7 +263,7 @@ const FormSite = ({ site }: { site?: any }) => {
               </div>
             </div>
           </div>
-          <div className="flex mx-auto m-10 px-[470px] gap-2 justify-center items-center">
+          <div className="flex mx-auto m-10 px-10 lg:px-[470px] gap-2 justify-center items-center">
             <p className="mr-5 "> Visible Coworking: </p>
             <Switch
               onChange={(value: boolean) =>
@@ -277,7 +277,7 @@ const FormSite = ({ site }: { site?: any }) => {
               }
             />
           </div>
-          <div className="flex items-center mx-auto w-[30%] justify-center mt-8 gap-5">
+          <div className="flex items-center mx-auto w-full md:w-[50%] justify-center mt-8 gap-5">
             <Button type="submit" text="Continuar" />
             <Button
               //TODO:CAMBIAR RUTA

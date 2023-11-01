@@ -34,32 +34,35 @@ const FormUser = () => {
 
   const newUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(selectedRols.length === 0 ) return toast.error("Se necesita minimo un rol para crear el usuario");
+    if (selectedRols.length === 0)
+      return toast.error("Se necesita minimo un rol para crear el usuario");
     if (!emailUser) {
       return toast.error("Se necesita un correo para crear el usuario", {
         id: "2",
       });
     }
 
-    const response = await fetchFn(`/createUser?email=${session?.user.emailHash}`, {
-      method: "POST",
-      body: {
-        email: emailUser,
-        roles: selectedRols.map((rol) => Number(rol)),
-      },
-    });
+    const response = await fetchFn(
+      `/createUser?email=${session?.user.emailHash}`,
+      {
+        method: "POST",
+        body: {
+          email: emailUser,
+          roles: selectedRols.map((rol) => Number(rol)),
+        },
+      }
+    );
 
-    
     if (response.code !== 200) {
-      if(response.data.message){
-        return toast.error(response.data.message, {id:"4"})
+      if (response.data.message) {
+        return toast.error(response.data.message, { id: "4" });
       }
       return toast.error("No se ha podido crear el usuario", {
         id: "3",
       });
     }
     toast.success("Usuario creado exitosamente!", { id: "2" });
-    router.push("/users")
+    router.push("/users");
   };
 
   useEffect(() => {

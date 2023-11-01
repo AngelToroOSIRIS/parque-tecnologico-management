@@ -170,7 +170,7 @@ export default function TableComponent({ params }: Props) {
               <a
                 target="_blank"
                 href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/${user.id}`}
-                className="text-lg outline-none text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
               >
                 <i className="bi bi-eye text-2xl"></i>
               </a>
@@ -181,7 +181,7 @@ export default function TableComponent({ params }: Props) {
             >
               <span
                 onClick={() => router.push(`/sites/${user.id}/calendar`)}
-                className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
               >
                 <i className="bi bi-calendar2-check text-xl"></i>
               </span>
@@ -199,7 +199,7 @@ export default function TableComponent({ params }: Props) {
                   >
                     <span
                       onClick={() => router.push(`/sites/${user.id}/edit`)}
-                      className="text-lg text-soft-gray cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                      className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
                     >
                       <i className="bi bi-pen text-xl"></i>
                     </span>
@@ -208,14 +208,14 @@ export default function TableComponent({ params }: Props) {
                     className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
                     content="Eliminar sitio"
                   >
-                    <span className="text-lg text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0">
+                    <span className="text-lg outline-none text-borders hover:text-primary cursor-pointer transition-all">
                       <i className="bi bi-trash3 text-xl"></i>
-                      <Modal
+                      {/* <Modal
                         title="Eliminar sitio"
                         text="¿Esta seguro de eliminar el sitio?"
                         option1="Eliminar"
                         onClick={()=>router.push("/")}
-                      ></Modal>
+                      ></Modal> */}
                     </span>
                   </Tooltip>
                 </>
@@ -264,7 +264,11 @@ export default function TableComponent({ params }: Props) {
           onClear={() => setFilterValue("")}
           onValueChange={onSearchChange}
         />
-
+        {status === "authenticated" &&
+              includesString(userSession.rols ?? [], [
+                "superadmin",
+                params.category,
+              ]) && (
         <div className="flex gap-4">
           <button
             onClick={() => router.push("/sites/add")}
@@ -275,6 +279,7 @@ export default function TableComponent({ params }: Props) {
             <i className="bi bi-plus-lg text-xl "></i>
           </button>
         </div>
+      )}
       </div>
     );
   }, [

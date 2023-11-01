@@ -45,7 +45,6 @@ const UsersEdit = () => {
       getRols();
     }
   }, [status]);
-
   const router = useRouter();
   return (
     <>

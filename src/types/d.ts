@@ -40,3 +40,9 @@ export interface UsersAndRoles{
   roles: Rol[];
 }
  
+export interface PlaceCard {
+	id: number;
+	nombre: string;
+	descripcion_corta: string;
+	img_card: string;
+}

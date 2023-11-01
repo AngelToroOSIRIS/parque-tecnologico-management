@@ -119,10 +119,10 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
             <i className="bi bi-floppy text-xl"></i>
           </button>
         </Tooltip>
-        {/* <Tooltip
+        <Tooltip
           className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
           content="Eliminar usuario"
-        > */}
+        >
         <button
           onClick={() => {
             deleteUser();
@@ -131,7 +131,7 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
         >
           <i className="bi bi-trash3 text-xl"></i>
         </button>
-        {/* </Tooltip> */}
+        </Tooltip>
       </div>
     </article>
   );

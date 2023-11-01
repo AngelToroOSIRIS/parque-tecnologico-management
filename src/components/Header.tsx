@@ -21,7 +21,7 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
-        <section className="h-[65px] w-[130px] md:w-[260px] flex justify-between">
+        <section className="flex h-[65px] w-[130px] md:w-[230px]">
           <div>
             <Image
               src="/images/ecijg60.png"
@@ -129,7 +129,7 @@ const Header = () => {
         </section>
         <section className="flex w-[130px] md:w-[260px]">
           {/* Mostrar nombre del usuario */}
-          <div className="hidden w-full flex-col items-start justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
+          <div className="hidden w-full flex-col items-start transition-all justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
             {status === "loading" && (
               <>
                 <ContentLoader
@@ -141,30 +141,16 @@ const Header = () => {
                   backgroundColor="#cccccc"
                   foregroundColor="#ecebeb"
                 >
-                  <rect x="0" y="18" rx="3" ry="3" width="110" height="10" />
-                </ContentLoader>
-                <ContentLoader
-                  uniqueKey="user-info-header"
-                  speed={0.5}
-                  width={120}
-                  height={5}
-                  title="Cargando usuario..."
-                  backgroundColor="#cccccc"
-                  foregroundColor="#ecebeb"
-                >
-                  <rect x="10" y="1" rx="3" ry="3" width="100" height="50" />
+                  <rect x="0" y="8" rx="5" ry="3" width="110" height="28" />
                 </ContentLoader>
               </>
             )}
 
             {status === "authenticated" && (
               <>
-                <p className="text-xs font-semibold select-text">{user.name}</p>
-
-                <p className="text-xs select-text">
-                  {/* {user.email?.substring(0, user.email?.search("@"))}{" "} */}
-                  {JSON.stringify(user.rols)}
-                </p>
+                    <p className="text-xs mx-auto text-center border-b-2 w-[85%] border-borders-light hover:border-primary hover:font-semibold transition-all">
+                      {user.name}
+                    </p>
               </>
             )}
           </div>

@@ -35,7 +35,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   Mantenimiento: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["username", "type", "status", "hour"];
+const INITIAL_VISIBLE_COLUMNS = ["username", "type", "hour"];
 
 type User = (typeof userstable)[0];
 

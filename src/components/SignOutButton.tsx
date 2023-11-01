@@ -9,7 +9,7 @@ export default function SignOutButton() {
       className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
       content="Cerrar sesión"
     >
-      <span className="text-lg p-2 text-soft-gray hover:text-primary cursor-pointer active:opacity-50 transition ease-in duration-200 transform">
+      <span className="text-lg p-2 text-soft-gray hover:text-primary cursor-pointer transform">
         <i className="bi bi-box-arrow-right text-xl"></i>
         <Modal
           title="Cerrar sesión"

@@ -7,7 +7,6 @@ const columns = [
   {name: "ESTADO", uid: "status", sortable: true},
   {name: "VISIBLE CO-WORKING", uid: "cowork"},
   {name: "ACTUALIZACIÓN", uid: "fecha_Actual", sortable: true},
-  {name: "ACTUALIZACIÓN", uid: "fecha_Actual", sortable: true},
   {name: "OPCIONES", uid: "actions"},
   {name: "HORA RESERVADA", uid: "hour", sortable: true},
 ];

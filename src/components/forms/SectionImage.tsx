@@ -11,35 +11,36 @@ export default function ModalImage() {
   const onChange = (
     imageList: ImageListType,
     addUpdateIndex: number[] | undefined
-  ) => {
-    // data for submit
-    setImages(imageList as never[]);
-  };
+    ) => {
 
-  const sendImages = async () => {
-    const form = new FormData();
+      // data for submit
+      const sendImages = async () => {
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_API_URL +
+          `/imagesPlace?email=${session?.user.emailHash}`,
+          {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              Accept:
+              "application/json, application/xml, text/plain, text/html, *.*",
+              "Content-Type": "multipart/form-data",
+            },
+            body: JSON.stringify({ id_espacio: 1 }),
+          }
+          );
+          
+          const res = await response.json();
+          console.log(res);
+        };
 
-    // form.append("images", images.map((image) => image.file)[0]);
+      setImages(imageList as never[]);
+      console.log(imageList)
+    };
+      
+      // form.append("images", images.map((image) => image.file)[0]);
 
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL +
-        `/imagesPlace?email=${session?.user.emailHash}`,
-      {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          Accept:
-            "application/json, application/xml, text/plain, text/html, *.*",
-          "Content-Type": "multipart/form-data",
-        },
-        body: JSON.stringify({ id_espacio: 1 }),
-      }
-    );
-
-    const res = await response.json();
-    console.log(res);
-  };
-
+      
   return (
     <>
       <ImageUploading
@@ -47,7 +48,7 @@ export default function ModalImage() {
         value={images}
         onChange={onChange}
         maxNumber={10}
-      >
+        >
         {({
           imageList,
           onImageUpload,
@@ -64,13 +65,13 @@ export default function ModalImage() {
             </h1>
             <div className="text-center">
               {imageList.length === 0 && (
-              <div className="w-[60%] p-10 m-2 justify-center rounded-lg mx-auto">
-                <p className="w-[50%] font-normal text-default-400 select-none justify-center text-xl mx-auto">
-                  * Puede subir mínimo 3 fotos, máximo 10 resolución recomendada:
-                  1920 x 1080 *
-                </p>
-              </div>
-            )}
+                <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
+                  <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
+                    * Puede subir mínimo 3 fotos, máximo 10 <br /> resolución
+                    recomendada: 1920 x 1080 *
+                  </p>
+                </div>
+              )}
               <button
                 className="bg-default-white font-medium border-3 hover:font-semibold hover:text-soft-blue hover:border-soft-blue border-borders-light border-dotted rounded-lg m-2 p-2 transition-all"
                 style={isDragging ? { color: "blue" } : undefined}
@@ -135,8 +136,8 @@ export default function ModalImage() {
           </div>
         )}
       </ImageUploading>
-      <div className="flex items-center mx-auto w-[15%] justify-center mt-8 gap-5">
-        <Button text="Guardar" onClick={sendImages} />
+      <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
+        <Button text="Guardar" type="submit" />
       </div>
     </>
   );
