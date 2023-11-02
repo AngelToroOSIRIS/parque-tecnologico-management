@@ -1,7 +1,8 @@
 "use client";
+
 import { signOut } from "next-auth/react";
-import Modal from "./Modal";
 import { Tooltip } from "@nextui-org/react";
+import ModalComponent from "./ModalComponent";
 
 export default function SignOutButton() {
   return (
@@ -9,15 +10,17 @@ export default function SignOutButton() {
       className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
       content="Cerrar sesión"
     >
-      <span className="text-lg p-2 text-soft-gray hover:text-primary cursor-pointer transform">
-        <i className="bi bi-box-arrow-right text-xl"></i>
-        <Modal
+      <div>
+        <ModalComponent
+          button1="Cerrar sesión"
+          onClick={() => {
+            signOut();
+          }}
+          icon="box-arrow-right"
+          text="¿Seguro que quiere cerrar sesión?"
           title="Cerrar sesión"
-          text="¿Esta seguro de Cerrar sesión?"
-          option1="Cerrar sesión"
-          onClick={()=>signOut({ callbackUrl: "/" })}
-        ></Modal>
-      </span>
+        />
+      </div>
     </Tooltip>
   );
 }

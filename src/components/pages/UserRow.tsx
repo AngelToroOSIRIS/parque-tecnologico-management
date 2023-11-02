@@ -1,6 +1,6 @@
 import fetchFn from "@/libs/fetchFn";
 import { includesString } from "@/libs/functionsStrings";
-import { SelectItem, Tooltip } from "@nextui-org/react";
+import { Avatar, Chip, SelectItem, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,17 @@ import { Rol, UsersAndRoles } from "@/types/d";
 import Select from "../forms/Select";
 import toast from "react-hot-toast";
 
-const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; getData:any }) => {
+const UserRow = ({
+  user,
+  roles,
+  getData,
+  onDeleteClick,
+}: {
+  user: UsersAndRoles;
+  roles: Rol[];
+  getData: any;
+  onDeleteClick: (email: string) => void;
+}) => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -20,27 +30,6 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
     user.roles.map((rol) => String(rol.id))
   );
 
-  const deleteUser = async () => {
-    const response = await fetchFn(
-      `/deleteUser?email=${session?.user.emailHash}`,
-      {
-        method: "DELETE",
-        body: {
-          email: user.email,
-        },
-      }
-    );
-    console.log(response)
-    if (response.code !== 200) {
-      return toast.error("No se ha podido eliminar el usuario.", {
-        id: "1",
-      });
-    }
-    getData()
-    if(response.data.message){
-      return toast.success(response.data.message, {id:"4"})
-    }
-  };
   const saveRols = async () => {
     const response = await fetchFn(
       `/updateUser?email=${session?.user.emailHash}`,
@@ -57,20 +46,42 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
         id: "2",
       });
     }
-    getData()
-      return toast.success(("Usuario actualizado correctamente "), {id:"5"})
+    getData();
+    return toast.success("Usuario actualizado correctamente ", { id: "5" });
   };
+
+  const Name = user.email.toString().toUpperCase();
+
   useEffect(() => {
     setChangedRoles(String(selectedRols.sort()) !== String(asignedRols.sort()));
   }, [selectedRols]);
 
   return (
-    <article className="my-5 grid grid-cols-3 items-center">
-      <div className="wfull text-lg">
-        {user.email?.substring(0, user.email?.search("@"))}
-        <p className="text-sm text-default-400">{user.email}</p>
+    <article className="my-5 flex w-auto items-center overflow-x-auto">
+      {/* celda 1 */}
+      <div className=" w-[40%] items-center justify-center">
+        <Chip
+          variant="light"
+          size="lg"
+          classNames={{
+            avatar: "text-lg w-[40px] h-[40px]",
+            base: "",
+            content: "m-2 text-lg",
+          }}
+          avatar={
+            <Avatar
+              name={Name}
+              size="lg"
+              getInitials={(name) => name.charAt(0)}
+            />
+          }
+        >
+          {user.email?.substring(0, user.email?.search("@"))}
+          <p className="text-sm text-default-400">{user.email}</p>
+        </Chip>
       </div>
-      <div>
+      {/* celda 2 */}
+      <div className="w-[40%]">
         <Select
           name="rol"
           placeholder="Seleccionar rol"
@@ -80,7 +91,7 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
               ? undefined
               : ["1"]
           }
-          className="max-w-xs outline-none"
+          className="max-w-lg outline-none"
           disallowEmptySelection={true}
           defaultValues={selectedRols}
           onChange={({ value }) => {
@@ -99,7 +110,8 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
           ))}
         </Select>
       </div>
-      <div className="mx-auto">
+      {/* celda 3 */}
+      <div className="text-center justify-between w-[20%]">
         <Tooltip
           className={`mx-1 outline-none ${
             changedRols
@@ -123,14 +135,14 @@ const UserRow = ({ user, roles, getData }: { user: UsersAndRoles; roles: Rol[]; 
           className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
           content="Eliminar usuario"
         >
-        <button
-          onClick={() => {
-            deleteUser();
-          }}
-          className="mx-1 text-borders outline-none hover:text-primary transition-all"
-        >
-          <i className="bi bi-trash3 text-xl"></i>
-        </button>
+          <button
+            onClick={() => {
+              onDeleteClick(user.email);
+            }}
+            className="mx-1 text-borders outline-none hover:text-primary transition-all"
+          >
+            <i className="bi bi-trash3 text-xl"></i>
+          </button>
         </Tooltip>
       </div>
     </article>

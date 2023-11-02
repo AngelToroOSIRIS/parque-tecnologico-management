@@ -6,11 +6,8 @@ import { useEffect, useState } from "react";
 const useValidateForm = (
   requiredFields: {
     name: string;
-
     value?: string | number;
-
     type: "str" | "int";
-
     required: boolean;
   }[]
 ) => {
@@ -62,15 +59,12 @@ const useValidateForm = (
         }
       }
     }
-
     setValidData(totalInvalidFields.length < 1);
   }, [data]);
 
   return {
     setField,
-
     getData: data,
-
     validData,
   };
 };

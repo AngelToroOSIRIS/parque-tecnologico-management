@@ -7,12 +7,38 @@ import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { Rol, UsersAndRoles } from "@/types/d";
 import { TailSpin } from "react-loader-spinner";
+import ModalComponent from "../ModalComponent";
 
 const UsersEdit = () => {
   const { data: session, status } = useSession();
   const [loading, setloading] = useState<boolean>(true);
   const [roles, setRoles] = useState<Rol[]>([]);
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
   const [dataUsers, setDataUsers] = useState<UsersAndRoles[]>([]);
+
+  const deleteUser = async () => {
+    const response = await fetchFn(
+      `/deleteUser?email=${session?.user.emailHash}`,
+      {
+        method: "DELETE",
+        body: {
+          email: selectedUserEmail,
+        },
+      }
+    );
+    console.log(response);
+    if (response.code !== 200) {
+      return toast.error("No se ha podido eliminar el usuario.", {
+        id: "1",
+      });
+    }
+
+    getData();
+    if (response.data.message) {
+      return toast.success(response.data.message, { id: "4" });
+    }
+  };
 
   const getRols = async () => {
     const response = await fetchFn(`/getRoles`);
@@ -27,7 +53,7 @@ const UsersEdit = () => {
   };
 
   const getData = async () => {
-    setloading(true)
+    setloading(true);
     const response = await fetchFn(
       `/getUsersAndRoles?email=${session?.user.emailHash}`
     );
@@ -37,7 +63,7 @@ const UsersEdit = () => {
       });
     }
     setDataUsers(response.data);
-    setloading(false)
+    setloading(false);
   };
 
   useEffect(() => {
@@ -48,12 +74,18 @@ const UsersEdit = () => {
   const router = useRouter();
   return (
     <>
+      <ModalComponent
+        button1="Eliminar usuario"
+        onClick={()=>{}}
+        text={`¿Seguro que quiere eliminar el usuario ${selectedUserEmail} ?`}
+        title="Eliminar usuario"
+      />
       <h1 className="margin-header mx-auto text-3xl text-center font-semibold m-6 text-primary">
         Usuarios
       </h1>
-
       {!loading && (
-        <div className="w-[95%] mb-10 max-w-5xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+        <>
+        <div className="w-[75%] mb-10 max-w-6xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
           <div className="p-3 flex justify-end">
             <button
               onClick={() => router.push("/users/add")}
@@ -65,15 +97,27 @@ const UsersEdit = () => {
           </div>
           <section className="w-full mx-auto p-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#ffffff] rounded-xl">
             <article className="flex h-10 rounded-lg p-2 items-center justify-center bg-borders-light text-borders text-md font-semibold">
-              <div className="w-full">CORREO</div>
-              <div className="w-full text-center">ROL</div>
-              <div className="w-full text-center">OPCIONES</div>
+              <div className="w-[40%]">CORREO</div>
+              <div className="w-[40%] text-center">ROL</div>
+              <div className="w-[20%] text-center">OPCIONES</div>
             </article>
             {dataUsers.map((user) => {
-              return <UserRow getData={getData} user={user} key={user.email} roles={roles} />;
+              return (
+                <UserRow
+                  getData={getData}
+                  user={user}
+                  key={user.email}
+                  roles={roles}
+                  onDeleteClick={(email) => {
+                    setSelectedUserEmail(email);
+                    setOpenModal(true);
+                  }}
+                />
+              );
             })}
           </section>
         </div>
+        </>
       )}
       {loading && (
         <TailSpin

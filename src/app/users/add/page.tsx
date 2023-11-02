@@ -1,6 +1,10 @@
 import FormUser from "@/components/FormUser";
 import Header from "@/components/Header";
 
+export const metadata = {
+  title: "Añadir usuarios",
+};
+
 export default function () {
   return (
     <>
