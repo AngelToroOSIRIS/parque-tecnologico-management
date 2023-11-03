@@ -16,7 +16,7 @@ interface Props {
   text: string;
   button1: string;
   icon?: string;
-  onClick: any;
+  onClick?: () => {};
 }
 
 const ModalComponent = ({ title, text, button1, icon, onClick }: Props) => {
@@ -33,6 +33,7 @@ const ModalComponent = ({ title, text, button1, icon, onClick }: Props) => {
         <i className={`bi bi-${icon} text-xl`}></i>
       </Button>
       <Modal
+        className="z-50"
         isDismissable={false}
         backdrop="blur"
         isOpen={isOpen}

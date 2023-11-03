@@ -76,8 +76,8 @@ const UsersEdit = () => {
     <>
       <ModalComponent
         button1="Eliminar usuario"
-        onClick={()=>{}}
-        text={`¿Seguro que quiere eliminar el usuario ${selectedUserEmail} ?`}
+        onClick={deleteUser}
+        text={`¿Seguro que quiere eliminar el usuario?`}
         title="Eliminar usuario"
       />
       <h1 className="margin-header mx-auto text-3xl text-center font-semibold m-6 text-primary">

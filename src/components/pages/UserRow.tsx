@@ -2,11 +2,11 @@ import fetchFn from "@/libs/fetchFn";
 import { includesString } from "@/libs/functionsStrings";
 import { Avatar, Chip, SelectItem, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Rol, UsersAndRoles } from "@/types/d";
 import Select from "../forms/Select";
 import toast from "react-hot-toast";
+import ModalComponent from "../ModalComponent";
 
 const UserRow = ({
   user,
@@ -19,9 +19,7 @@ const UserRow = ({
   getData: any;
   onDeleteClick: (email: string) => void;
 }) => {
-  const router = useRouter();
   const { data: session } = useSession();
-
   const [changedRols, setChangedRoles] = useState<boolean>(false);
   const [asignedRols, setasignedRols] = useState<string[]>(
     user.roles.map((rol) => String(rol.id))
@@ -49,6 +47,25 @@ const UserRow = ({
     getData();
     return toast.success("Usuario actualizado correctamente ", { id: "5" });
   };
+  const deleteUser = async () => {
+    const res = await fetchFn(`/deleteUser?email=${session?.user.emailHash}`, {
+      method: "DELETE",
+      body: {
+        email: user.email,
+      },
+    });
+    console.log(res);
+    if (res.code !== 200) {
+      return toast.error("No se ha podido eliminar el usuario.", {
+        id: "1",
+      });
+    }
+
+    getData();
+    if (res.data.message) {
+      return toast.success(res.data.message, { id: "4" });
+    }
+  };
 
   const Name = user.email.toString().toUpperCase();
 
@@ -64,7 +81,7 @@ const UserRow = ({
           variant="light"
           size="lg"
           classNames={{
-            avatar: "text-lg w-[40px] h-[40px]",
+            avatar: "text-lg w-[40px] h-[40px] text-gray",
             base: "",
             content: "m-2 text-lg",
           }}
@@ -141,7 +158,14 @@ const UserRow = ({
             }}
             className="mx-1 text-borders outline-none hover:text-primary transition-all"
           >
-            <i className="bi bi-trash3 text-xl"></i>
+            <ModalComponent
+              button1="Eliminar usuario"
+              onClick={deleteUser}
+              text={`¿Seguro que quiere eliminar el usuario?`}
+              title="Eliminar usuario"
+              icon="trash3"
+            />
+            {/* <i className="bi bi-trash3 text-xl"></i> */}
           </button>
         </Tooltip>
       </div>

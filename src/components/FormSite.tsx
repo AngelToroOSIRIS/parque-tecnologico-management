@@ -56,7 +56,7 @@ const FormSite = ({ site }: { site?: any }) => {
     e.preventDefault();
 
     if (!validData)
-      return toast.error("Por favor complete el formulario", { id: "empty" });
+    return toast.error("Por favor complete el formulario", { id: "empty" });
     setLoading(true);
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
@@ -69,10 +69,10 @@ const FormSite = ({ site }: { site?: any }) => {
         activo_interno: "0",
         id_estado_espacio: dataFilters.estadoEspacios.find(
           (estado) => estado.descripcion === "Inactivo"
-        )?.id,
-      },
-    });
-    setLoading(false);
+          )?.id,
+        },
+      });
+      setLoading(false);
 
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
@@ -236,7 +236,7 @@ const FormSite = ({ site }: { site?: any }) => {
                     type="number"
                     label="Precio:"
                     labelPlacement="outside-left"
-                    placeholder="0.000"
+                    placeholder="0"
                     description="* Hora"
                     className="mt-1 mb-[10px] outline-none select-none "
                     classNames={{

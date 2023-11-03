@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { Tooltip } from "@nextui-org/react";
 import ModalComponent from "./ModalComponent";
 
@@ -13,9 +13,7 @@ export default function SignOutButton() {
       <div>
         <ModalComponent
           button1="Cerrar sesión"
-          onClick={() => {
-            signOut();
-          }}
+          onClick={()=>signOut({ callbackUrl: "/" })}
           icon="box-arrow-right"
           text="¿Seguro que quiere cerrar sesión?"
           title="Cerrar sesión"

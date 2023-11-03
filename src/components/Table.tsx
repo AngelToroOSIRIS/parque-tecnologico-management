@@ -17,7 +17,6 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { columns, userstable, statusOptions } from "@/components/table/data";
-import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
 import Switch from "./Switch";
 import { includesString } from "@/libs/functionsStrings";
@@ -210,12 +209,6 @@ export default function TableComponent({ params }: Props) {
                   >
                     <span className="text-lg outline-none text-borders hover:text-primary cursor-pointer transition-all">
                       <i className="bi bi-trash3 text-xl"></i>
-                      {/* <Modal
-                        title="Eliminar sitio"
-                        text="¿Esta seguro de eliminar el sitio?"
-                        option1="Eliminar"
-                        onClick={()=>router.push("/")}
-                      ></Modal> */}
                     </span>
                   </Tooltip>
                 </>
