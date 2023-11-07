@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DtCalendar } from "./react-calendar-datetime-picker/dist";
 import Button from "./Button";
 import Input from "@/components/forms/Input";
-import GraySubtitle from "./Subtitle";
+import GraySubtitle from "./GraySubtitle";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import moment from "moment";

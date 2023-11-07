@@ -17,7 +17,7 @@ export default function ModalImage() {
       const sendImages = async () => {
         const response = await fetch(
           process.env.NEXT_PUBLIC_API_URL +
-          `/imagesPlace?email=${session?.user.emailHash}`,
+          `/imagesPlace`,
           {
             method: "POST",
             mode: "no-cors",

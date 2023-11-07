@@ -3,39 +3,25 @@
 import Header from "@/components/Header";
 import Input from "@/components/forms/Input";
 import fetchFn from "@/libs/fetchFn";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-const sendImages = async () => {
-  const { data: session } = useSession();
-
-  var form = document.forms.namedItem("form");
-  form?.addEventListener(
-    "submit",
-    function (ev) {
-      var oOutput = document.getElementById("output"),
-        //@ts-ignore
-        oData = new FormData(document.forms.namedItem("form"));
-
-      var oReq = new XMLHttpRequest();
-      oReq.open("POST", `http://10.10.1.220:8070/admin/imagesPlace?email=${session?.user.emailHash}`, true);
-      oReq.onload = function (oEvent) {};
-      oReq.send(oData);
-      ev.preventDefault();
-    },
-    false
-  );
-
-  const response = await fetchFn(
-    `/imagesPlace?email=${session?.user.emailHash}`,
-    {
-      method: "POST",
-      body: JSON.stringify({ id_espacio: 1 }),
-    }
-  );
-  console.log(response);
-};
 
 export default function Prueba() {
+  const [images, setImages] = useState<[]>([])
+  console.log(images)
+  const sendImages = async () => {
+    const { data: session } = useSession();
+  
+    // FORM DATA
+    const formData = new FormData();
+    // HTML file input, chosen by user
+    formData.append("images", fileInputElement.files[0]);
+    // JavaScript file-like object
+    const request = new XMLHttpRequest();
+    request.open("POST", "http://10.10.1.220:8070/admin/imagesPlace");
+    request.send(formData);
+  };
   return (
     <>
       <Header />
@@ -44,16 +30,17 @@ export default function Prueba() {
           encType="multipart/form-data"
           method="post"
           name="form"
-          action=""
           className="w-[95%] justify-center my-10 grid grid-cols-1 items-center"
         >
-          <Input type="number" placeholder="Id del Sitio" />
           <input
+            name="images"
             id="images"
             type="file"
             placeholder="Imagenes"
             aria-label="imagenes"
             multiple
+            //@ts-ignore
+            onChange={(e)=>{setImages(e.target.files)}}
             accept="image/png, .jpeg, .jpg, image/gif"
             className="w-[95%] mx-auto bg-default-white font-medium border-3 hover:font-semibold hover:text-soft-blue hover:border-soft-blue border-borders-light border-dotted rounded-lg m-2 p-2 transition-all"
           />

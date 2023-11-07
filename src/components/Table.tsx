@@ -347,7 +347,7 @@ export default function TableComponent({ params }: Props) {
   if (!loading) {
     return (
       <Table
-        className=" bg-default-white mb-36 w-full rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
+        className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         aria-label="table"

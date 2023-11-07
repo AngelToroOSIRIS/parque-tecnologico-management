@@ -2,7 +2,7 @@
  
 import { useState } from "react";
 import Select from "./Select";
-import GraySubtitle from "../Subtitle";
+import GraySubtitle from "../GraySubtitle";
 import { emptyValue } from "@/libs/functionsStrings";
  
 const SelectForm = ({

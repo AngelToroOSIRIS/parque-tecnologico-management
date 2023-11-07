@@ -2,7 +2,7 @@
  
 import { emptyValue } from "@/libs/functionsStrings";
 import { useState } from "react";
-import GraySubtitle from "../Subtitle";
+import GraySubtitle from "../GraySubtitle";
 import Textarea from "./Textarea";
  
 interface Validations {

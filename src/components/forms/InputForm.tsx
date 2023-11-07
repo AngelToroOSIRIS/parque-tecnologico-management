@@ -2,7 +2,7 @@
  
 import { useState } from "react";
 import Input from "./Input";
-import GraySubtitle from "../Subtitle";
+import GraySubtitle from "../GraySubtitle";
 import { emptyValue, validateString } from "@/libs/functionsStrings";
  
 interface Validations {

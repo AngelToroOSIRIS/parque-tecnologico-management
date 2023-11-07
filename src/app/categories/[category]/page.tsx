@@ -34,7 +34,7 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <>
       <Header/>
-      <main className="margin-header w-[95%] mx-auto">
+      <main className="margin-header mx-auto">
       <h1 className="mt-[7%] md:mt-[5%] pt-5 lg:mt-[2%] mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
         Administración de {categoryFound.name}
       </h1>

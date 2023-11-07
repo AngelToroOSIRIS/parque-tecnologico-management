@@ -9,10 +9,16 @@ const useValidateForm = (
     value?: string | number;
     type: "str" | "int";
     required: boolean;
-  }[]
+  }[],
+  defaultValues: {
+    loadData: boolean;
+    status: "charged" | "loading";
+  } = {
+    loadData: false,
+    status: "charged",
+  }
 ) => {
   const [validData, setValidData] = useState<boolean>(false);
-
   const [data, setData] = useState<any>(null);
 
   const setField = ({ name, value }: { name: string; value: string }) => {
@@ -24,7 +30,6 @@ const useValidateForm = (
 
     setData({
       ...data,
-
       [name]: validatedValue
         ? validatedValue
         : detailsField.type === "str"
@@ -33,25 +38,25 @@ const useValidateForm = (
     });
   };
 
-  useEffect(() => {
-    if (!data) {
-      const objInitialState: any = {};
+  const createInitialState = () => {
+    if (defaultValues.status === "loading") return;
 
-      for (let field of requiredFields) {
-        objInitialState[field.name] = !emptyValue(field.value)
-          ? field.value
-          : field.type === "str"
-          ? ""
-          : 0;
-      }
+    const objInitialState: any = {};
 
-      setData(objInitialState);
-
-      return;
+    for (let field of requiredFields) {
+      objInitialState[field.name] = !emptyValue(field.value)
+        ? field.value
+        : field.type === "str"
+        ? ""
+        : 0;
     }
+    setData(objInitialState);
+  };
+
+  useEffect(() => {
+    if (!data) return createInitialState();
 
     const totalInvalidFields = [];
-
     for (let field of requiredFields) {
       if (field.required) {
         if (emptyValue(data[field.name], field.type)) {
@@ -59,8 +64,9 @@ const useValidateForm = (
         }
       }
     }
+
     setValidData(totalInvalidFields.length < 1);
-  }, [data]);
+  }, [requiredFields, data]);
 
   return {
     setField,

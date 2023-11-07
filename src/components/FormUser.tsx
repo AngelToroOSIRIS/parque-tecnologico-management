@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { includesString } from "@/libs/functionsStrings";
 import Select from "./forms/Select";
 import { Rol } from "@/types/d";
-import GraySubtitle from "./Subtitle";
+import GraySubtitle from "./GraySubtitle";
 import { useRouter } from "next/navigation";
 
 const FormUser = () => {
