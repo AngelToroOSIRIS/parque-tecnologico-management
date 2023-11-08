@@ -15,7 +15,7 @@ export default function SignOutButton() {
           button1="Cerrar sesión"
           onClick={()=>signOut({ callbackUrl: "/" })}
           icon="box-arrow-right"
-          text="¿Seguro que quiere cerrar sesión?"
+          text="¿Está seguro de cerrar sesión?"
           title="Cerrar sesión"
         />
       </div>

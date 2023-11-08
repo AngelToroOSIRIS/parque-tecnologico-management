@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ModalComponent from "./ModalComponent";
-import { Button, useDisclosure } from "@nextui-org/react";
+import { Button, Modal, ModalBody, useDisclosure } from "@nextui-org/react";
 
 const RequestCard = ({
   name,
@@ -23,7 +23,7 @@ const RequestCard = ({
 }) => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   return (
-    <article className="relative flex justify-between items-center mb-8 px-4 h-[150px] box">
+    <article className="relative flex justify-between items-center mb-6 px-4 h-[150px] box">
       <section className="w-[400px]">
         <p>
           <strong>Nombre: </strong>
@@ -37,8 +37,8 @@ const RequestCard = ({
           <strong> Teléfono: </strong>
           {phone}
         </p>
-        <p>
-          <strong> Estado de la reservación: </strong>
+        <p className="text-primary">
+          <strong> Estado de la solicitud: </strong>
           {status}
         </p>
       </section>
@@ -56,34 +56,39 @@ const RequestCard = ({
           {paid}
         </p>
         <p className="mt-2 text-blue text-sm hover:underline select-none cursor-pointer transition-all">
-          <i className="bi bi-clock-history"></i> Historial de actualizaciones
+          <i className="bi bi-clock-history"></i>
+          Historial de actualizaciones
         </p>
       </section>
-      <section className="w-[400px] pl-36 grid grid-cols-1">
-        <Button
-          onPress={onOpen}
-          className="rounded-xl  p-1 m-1 font-normal hover:font-semibold border-2 text-green hover:opacity-100 opacity-70 hover:shadow-xl border-green bg-default-white transition-all"
-        >
-          Aceptar
-          <i className="bi bi-check-circle mx-2"></i>
-          <>
-            <ModalComponent
-              type="datetime"
-              closeModal={onClose}
-              onClick={()=>{}}
-              isOpen={isOpen}
-              button1="Aceptar Solicitud"
-              title="Aceptar solicitud"
-            />
-          </>
-        </Button>
-        <button className="rounded-xl p-1 m-1 font-medium hover:font-semibold border-2 text-primary hover:opacity-100 opacity-70 hover:shadow-xl border-primary bg-default-white transition-all">
-          Rechazar
-          <i className="bi bi-x-circle mx-2"></i>
-        </button>
+      <section className="w-[400px] pl-28 grid grid-cols-1">
+        <div className="flex text-center mx-1 mb-5 justify-between items-center gap-4">
+          <Button
+            onPress={onOpen}
+            className="rounded-xl text-base font-normal hover:font-semibold border-2 text-green hover:opacity-100 opacity-70 hover:shadow-xl border-green bg-default-white transition-all"
+          >
+            Aceptar
+            <i className="bi bi-check-circle text-lg mx-2"></i>
+            <>
+              <ModalComponent
+                type="options"
+                closeModal={onClose}
+                onClick={() => {}}
+                isOpen={isOpen}
+                button1="Aceptar Solicitud"
+                title="Aceptar solicitud"
+              />
+            </>
+          </Button>
+          <Button
+            className="rounded-xl text-base font-normal border-2 hover:font-semibold text-primary hover:opacity-100 opacity-70 hover:shadow-xl border-primary bg-default-white transition-all"
+          >
+            Rechazar
+            <i className="bi bi-x-circle text-lg mx-2"></i>
+          </Button>
+        </div>
         <button className="rounded-xl p-1 m-1 font-medium border-2 text-blue hover:opacity-100 opacity-70 hover:shadow-xl border-blue bg-default-white transition-all">
           Detalles de solicitud
-          <i className="bi bi-calendar-week mx-2"></i>
+          <i className="bi bi-calendar-week text-lg mx-2"></i>
         </button>
       </section>
     </article>
