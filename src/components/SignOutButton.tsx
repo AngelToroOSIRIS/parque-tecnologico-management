@@ -2,7 +2,7 @@
 
 import { signIn, signOut } from "next-auth/react";
 import { Tooltip } from "@nextui-org/react";
-import ModalComponent from "./ModalComponent";
+import ModalComponent from "./ModalIcon";
 
 export default function SignOutButton() {
   return (

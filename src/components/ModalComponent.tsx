@@ -7,71 +7,206 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  button,
   useDisclosure,
 } from "@nextui-org/react";
+import React, { useState } from "react";
+import TextareaForm from "./forms/TextareaForm";
+import { DtCalendar } from "./react-calendar-datetime-picker/dist";
+import moment from "moment";
+import InputForm from "./forms/InputForm";
 
 interface Props {
+  isOpen: any;
   title: string;
-  text: string;
+  text?: string;
   button1: string;
-  icon?: string;
-  onClick?: () => {};
+  onClick?: any;
+  closeModal: any;
+  type: "options" | "form" | "datetime";
 }
-
-const ModalComponent = ({ title, text, button1, icon, onClick }: Props) => {
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-  const closeModal = onClose;
-
+const ModalComponent = ({
+  isOpen,
+  title,
+  text,
+  button1,
+  onClick,
+  closeModal,
+  type,
+}: Props) => {
+  const { onOpenChange } = useDisclosure();
+  const [date, setDate] = useState<{
+    year: number;
+    month: number;
+    day: number;
+  } | null>(null);
+  const minDate = {
+    year: moment().year(),
+    month: moment().month() + 1,
+    day: moment().date(),
+  };
   return (
     <>
-      <Button
-        className="bg-default-white hover:text-primary bg-opacity-0"
-        isIconOnly
-        onPress={onOpen}
-      >
-        <i className={`bi bi-${icon} text-xl`}></i>
-      </Button>
+      {/* <Button onPress={onOpen}>Open Modal</Button> */}
       <Modal
-        className="z-50"
+        size={type === "datetime" ? "3xl" : "md"}
+        classNames={{
+          closeButton: "hidden",
+          base: "w-full",
+        }}
         isDismissable={false}
-        backdrop="blur"
+        backdrop="opaque"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          {(closeModal) => (
+          {(onClose) => (
             <>
               <ModalHeader className="flex flex-col text-center gap-1 outline-none">
                 {title}
               </ModalHeader>
-              <ModalBody>
-                <div>
-                  <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
-                    {text}
-                  </p>
-                </div>
-              </ModalBody>
-              <div className="flex items-center pb-3 justify-center text-center">
-                <div className="mt-2">
-                  <button
-                    onClick={onClick}
-                    type="button"
-                    className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
-                  >
-                    {button1}
-                  </button>
-                </div>
-                <div className="mt-2">
-                  <button
-                    type="button"
-                    className="inline-flex font-base hover:font-bold outline-none border-none transition-all ml-7 justify-center rounded-lg px-4 py-2 text-lg"
-                    onClick={closeModal}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </div>
+
+              {type === "options" && (
+                <ModalBody>
+                  <div>
+                    <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+                      {text}
+                    </p>
+                  </div>
+                  <ModalFooter>
+                    <div className="flex items-center mx-auto text-center">
+                      <div>
+                        <button
+                          onClick={onClick}
+                          type="button"
+                          className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                        >
+                          {button1}
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                          onClick={closeModal}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </ModalFooter>
+                </ModalBody>
+              )}
+
+              {type === "form" && (
+                <ModalBody>
+                  <div>
+                    <TextareaForm
+                      onChange={() => {}}
+                      name="observation"
+                      label={{
+                        required: true,
+                        value: "Observación del proceso:",
+                      }}
+                      validations={{
+                        required: "Es necesaria la observación",
+                        minLength: {
+                          value: 10,
+                          message:
+                            "La observación debe tener minimo 10 caracteres.",
+                        },
+                        maxLength: {
+                          value: 250,
+                          message:
+                            "La observación debe contener máximo 250 caracteres.",
+                        },
+                      }}
+                      placeholder="Observación sobre el proceso de la solicitud"
+                      minRows={5}
+                    />
+                  </div>
+                  <ModalFooter>
+                    <div className="flex items-center mx-auto text-center">
+                      <div>
+                        <button
+                          onClick={onClick}
+                          type="button"
+                          className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                        >
+                          {button1}
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                          onClick={closeModal}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </ModalFooter>
+                </ModalBody>
+              )}
+
+              {type === "datetime" && (
+                <ModalBody>
+                  <div className="flex px-10 justify-between font-medium items-center gap-3 ">
+                    <DtCalendar
+                      onChange={setDate}
+                      type="single"
+                      placeholder="Filtrar por día"
+                      local="en"
+                      minDate={minDate}
+                    />
+                    <div>
+                      <InputForm
+                        name="dateInit"
+                        type="datetime-local"
+                        onChange={() => {}}
+                        label={{
+                          required: true,
+                          value: "Fecha actual del usuario:",
+                        }}
+                        className="mb-14"
+                      />
+                      <InputForm
+                        name="dateEnd"
+                        type="datetime-local"
+                        onChange={() => {
+                          date;
+                        }}
+                        label={{
+                          required: true,
+                          value: "Seleccionar nueva fecha:"
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <ModalFooter>
+                    <div className="flex items-center mx-auto text-center">
+                      <div>
+                        <button
+                          onClick={onClick}
+                          type="button"
+                          className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                        >
+                          {button1}
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 py-2 text-lg"
+                          onClick={closeModal}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </ModalFooter>
+                </ModalBody>
+              )}
             </>
           )}
         </ModalContent>

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Rol, UsersAndRoles } from "@/types/d";
 import Select from "../forms/Select";
 import toast from "react-hot-toast";
-import ModalComponent from "../ModalComponent";
+import ModalIcon from "../ModalIcon";
 
 const UserRow = ({
   user,
@@ -142,7 +142,7 @@ const UserRow = ({
               if (changedRols) saveRols();
             }}
             className={`mx-1 outline-none ${
-              changedRols ? "text-borders" : "text-borders-light cursor-default"
+              changedRols ? "text-borders transition-all" : "text-borders-light transition-all cursor-default"
             }`}
           >
             <i className="bi bi-floppy text-xl"></i>
@@ -158,10 +158,10 @@ const UserRow = ({
             }}
             className="mx-1 text-borders outline-none hover:text-primary transition-all"
           >
-            <ModalComponent
+            <ModalIcon
               button1="Eliminar usuario"
               onClick={deleteUser}
-              text={`¿Seguro que quiere eliminar el usuario?`}
+              text={`¿Seguro que quiere eliminar el usuario ${user.email}?`}
               title="Eliminar usuario"
               icon="trash3"
             />

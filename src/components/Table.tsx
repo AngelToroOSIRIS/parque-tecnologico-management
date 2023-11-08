@@ -15,6 +15,7 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
+  Badge,
 } from "@nextui-org/react";
 import { columns, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
@@ -258,21 +259,31 @@ export default function TableComponent({ params }: Props) {
           onValueChange={onSearchChange}
         />
         {status === "authenticated" &&
-              includesString(userSession.rols ?? [], [
-                "superadmin",
-                params.category,
-              ]) && (
-        <div className="flex gap-4">
-          <button
-            onClick={() => router.push("/sites/add")}
-            aria-label="button"
-            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-          >
-            Añadir sitio
-            <i className="bi bi-plus-lg text-xl "></i>
-          </button>
-        </div>
-      )}
+          includesString(userSession.rols ?? [], [
+            "superadmin",
+            params.category,
+          ]) && (
+            <div className="flex gap-4">
+              <Badge content="5" color="primary" size="lg">
+                <button
+                  onClick={() => router.push(`${params.category}/requests`)}
+                  aria-label="button"
+                  className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
+                >
+                  Solicitudes
+                  <i className="bi bi-exclamation-circle mx-1 text-xl"></i>
+                </button>
+              </Badge>
+              <button
+                onClick={() => router.push("/sites/add")}
+                aria-label="button"
+                className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
+              >
+                Añadir sitio
+                <i className="bi bi-plus-circle mx-1 text-xl"></i>
+              </button>
+            </div>
+          )}
       </div>
     );
   }, [
@@ -342,7 +353,7 @@ export default function TableComponent({ params }: Props) {
   );
   useEffect(() => {
     router.refresh();
-    setLoading(false)
+    setLoading(false);
   }, []);
   if (!loading) {
     return (
