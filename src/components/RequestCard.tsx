@@ -23,7 +23,7 @@ const RequestCard = ({
 }) => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   return (
-    <article className="relative flex justify-between items-center mb-6 px-4 h-[150px] box">
+    <article className="relative overflow-x-auto min-w-max flex justify-between items-center mb-6 px-4 h-[150px] box">
       <section className="w-[400px]">
         <p>
           <strong>Nombre: </strong>
@@ -61,16 +61,16 @@ const RequestCard = ({
         </p>
       </section>
       <section className="w-[400px] pl-28 grid grid-cols-1">
-        <div className="flex text-center mx-1 mb-5 justify-between items-center gap-4">
+        <div className="flex text-center mx-1 mb-5 justify-between items-center gap-2">
           <Button
             onPress={onOpen}
-            className="rounded-xl text-base font-normal hover:font-semibold border-2 text-green hover:opacity-100 opacity-70 hover:shadow-xl border-green bg-default-white transition-all"
+            className="rounded-xl px-7 text-base font-normal hover:font-semibold border-2 text-green hover:opacity-100 opacity-70 hover:shadow-xl border-green bg-default-white transition-all"
           >
             Aceptar
             <i className="bi bi-check-circle text-lg mx-2"></i>
             <>
               <ModalComponent
-                type="options"
+                type="form"
                 closeModal={onClose}
                 onClick={() => {}}
                 isOpen={isOpen}
@@ -80,7 +80,7 @@ const RequestCard = ({
             </>
           </Button>
           <Button
-            className="rounded-xl text-base font-normal border-2 hover:font-semibold text-primary hover:opacity-100 opacity-70 hover:shadow-xl border-primary bg-default-white transition-all"
+            className="rounded-xl px-7 text-base font-normal border-2 hover:font-semibold text-primary hover:opacity-100 opacity-70 hover:shadow-xl border-primary bg-default-white transition-all"
           >
             Rechazar
             <i className="bi bi-x-circle text-lg mx-2"></i>

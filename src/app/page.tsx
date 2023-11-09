@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 export default function Home() {
   const router = useRouter();
   const { data: session, status, update } = useSession();
-  const [coworking, setCoworking] = useState<boolean>(true);
+  const [coworking, setCoworking] = useState<boolean>(false);
   const updateSession = async (email: string) => {
     const response = await fetchFn(`/login?email=${email}`);
     if (response.code !== 200) {
@@ -117,11 +117,11 @@ export default function Home() {
               <h2 className="text-center justify-center text-lg items-center mx-auto">
                 Bienvenido a la administración de Tienda Virtual:
               </h2>
-                <div className="w-[60%] min-w-lg lg:flex grid grid-cols-1 mx-auto m-8 gap-7">
-                  <Button text="Inventario" icon="box2"/> 
-                  <Button text="Crear productos" icon="plus-circle"/>
-                  <Button text="Editar productos" icon="pencil"/>
-                  <Button text="PQR's" icon="question-circle"/>
+                <div className="w-[65%] min-w-lg lg:flex grid grid-cols-1 mx-auto m-8 gap-7">
+                  <Button text="Inventario" icon="box2 mr-3"/> 
+                  <Button text="Crear productos" icon="plus-circle mr-3"/>
+                  <Button text="Editar productos" icon="pencil mr-3"/>
+                  <Button text="PQR's" icon="question-circle mr-3"/>
                 </div>
               </>
             )}

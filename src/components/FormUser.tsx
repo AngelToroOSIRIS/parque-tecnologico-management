@@ -117,7 +117,7 @@ const FormUser = () => {
               </SelectItem>
             ))}
           </Select>
-          <div className="flex items-center mx-auto w-[65%] justify-center mt-8 gap-5">
+          <div className="flex items-center mx-auto w-[70%] justify-center mt-8 gap-5">
             <Button type="submit" text="Agregar" disabled={!emailUser} />
             <Button route="/users" text="Cancelar" />
           </div>

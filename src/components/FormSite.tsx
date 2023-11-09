@@ -10,12 +10,19 @@ import Button from "./Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { Category, Enlace, States } from "@/types/d";
+import { Category, CategoryTextShort, Enlace, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
 import TextareaForm from "./forms/TextareaForm";
+import { categoriesObj } from "@/libs/staticData";
+import { redirect } from "next/navigation";
 
-const FormSite = ({ site }: { site?: any }) => {
+
+interface Props {
+  params: { category: CategoryTextShort };
+}
+
+const FormSite = ({ params }: Props) => {
   const { data: session, status } = useSession();
   const {
     validData,
@@ -87,7 +94,6 @@ const FormSite = ({ site }: { site?: any }) => {
   useEffect(() => {
     if (status === "authenticated") getData();
   }, [status]);
-
   return (
     <>
       <h1 className="mx-auto text-3xl text-center  font-semibold m-6 text-primary">

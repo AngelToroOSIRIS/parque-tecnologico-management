@@ -74,7 +74,7 @@ const UserRow = ({
   }, [selectedRols]);
 
   return (
-    <article className="my-5 flex w-auto items-center overflow-x-auto">
+    <article className="my-5 flex w-auto items-center">
       {/* celda 1 */}
       <div className=" w-[40%] items-center justify-center">
         <Chip
