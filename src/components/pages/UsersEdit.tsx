@@ -80,7 +80,7 @@ const UsersEdit = () => {
       </h1>
       {!loading && (
         <>
-          <div className="w-full overflow-x mb-10 max-w-6xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+          <div className="w-full overflow-x mb-10 max-w-5xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/users/add")}

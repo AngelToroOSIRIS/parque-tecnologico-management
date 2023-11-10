@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 export default function Home() {
   const router = useRouter();
   const { data: session, status, update } = useSession();
-  const [coworking, setCoworking] = useState<boolean>(false);
+  const [coworking, setCoworking] = useState<boolean>(true);
   const updateSession = async (email: string) => {
     const response = await fetchFn(`/login?email=${email}`);
     if (response.code !== 200) {

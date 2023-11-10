@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,
@@ -11,18 +10,18 @@ import {
 } from "@nextui-org/react";
 import React, { useState } from "react";
 import TextareaForm from "./forms/TextareaForm";
-import { DtCalendar } from "./react-calendar-datetime-picker/dist";
 import moment from "moment";
 import InputForm from "./forms/InputForm";
+import Button from "./Button";
 
 interface Props {
   isOpen: any;
-  title: string;
+  title: "Aceptar Solicitud" | "Rechazar solicitud";
   text?: string;
   button1: string;
   onClick?: any;
   closeModal: any;
-  type: "options" | "form" | "datetime";
+  type: "options" | "form" | "aceptedDate" | "CancelDate";
 }
 const ModalComponent = ({
   isOpen,
@@ -48,12 +47,11 @@ const ModalComponent = ({
     <>
       {/* <Button onPress={onOpen}>Open Modal</Button> */}
       <Modal
-        size={type === "datetime" ? "3xl" : "md"}
+        size={type === "aceptedDate" ? "3xl" : "md"}
         classNames={{
           closeButton: "hidden",
           base: "w-full",
         }}
-        isDismissable={false}
         backdrop="opaque"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -61,7 +59,7 @@ const ModalComponent = ({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col text-center gap-1 outline-none">
+              <ModalHeader className="flex flex-col text-primary text-center gap-1 outline-none">
                 {title}
               </ModalHeader>
 
@@ -97,23 +95,21 @@ const ModalComponent = ({
                 </ModalBody>
               )}
 
-              {type === "form" && (
+              {type === "CancelDate" && (
                 <ModalBody>
-                  <div>
+                  <div className="px-5 font-medium items-center gap-3 ">
+                    <p className="pb-7 text-center">
+                      <strong> Fecha actual de reserva:</strong> 25/11/2023
+                      10:00 am
+                    </p>
                     <TextareaForm
                       onChange={() => {}}
                       name="observation"
                       label={{
-                        required: true,
+                        required: false,
                         value: "Observación del proceso:",
                       }}
                       validations={{
-                        required: "Es necesaria la observación",
-                        minLength: {
-                          value: 10,
-                          message:
-                            "La observación debe tener minimo 10 caracteres.",
-                        },
                         maxLength: {
                           value: 250,
                           message:
@@ -121,7 +117,7 @@ const ModalComponent = ({
                         },
                       }}
                       placeholder="Observación sobre el proceso de la solicitud"
-                      minRows={5}
+                      minRows={6}
                     />
                   </div>
                   <ModalFooter>
@@ -149,39 +145,52 @@ const ModalComponent = ({
                 </ModalBody>
               )}
 
-              {type === "datetime" && (
+              {type === "aceptedDate" && (
                 <ModalBody>
-                  <div className="flex px-10 justify-between font-medium items-center gap-3 ">
-                    <DtCalendar
-                      onChange={setDate}
-                      type="single"
-                      placeholder="Filtrar por día"
-                      local="en"
-                      minDate={minDate}
-                    />
-                    <div>
-                      <InputForm
-                        name="dateInit"
-                        type="datetime-local"
-                        onChange={() => {}}
-                        label={{
-                          required: true,
-                          value: "Fecha actual del usuario:",
-                        }}
-                        className="mb-14"
-                      />
-                      <InputForm
-                        name="dateEnd"
-                        type="datetime-local"
-                        onChange={() => {
-                          date;
-                        }}
-                        label={{
-                          required: true,
-                          value: "Seleccionar nueva fecha:"
-                        }}
-                      />
+                  <div className="px-10 font-medium items-center gap-3 ">
+                    <div className="flex justify-between px-10">
+                      <p className="pb-7 text-center">
+                        <strong> Fecha inicio</strong> 25/11/2023
+                        10:00 am
+                      </p>
+                      <p className="pb-7 text-center">
+                        <strong> Fecha final</strong> 25/11/2023
+                        10:00 am
+                      </p>
                     </div>
+
+                    <div className="py-4 items-center text-center mb-7">
+                      <p>
+                        <strong>Fecha de peticíon: </strong>
+                        29/11/2023
+                        11:00 am
+                      </p>
+                      <div className="w-[40%] mx-auto p-4">
+                        <Button text="Consultar disponibilidad" />
+                      </div>
+                    </div>
+                    <TextareaForm
+                      onChange={() => {}}
+                      name="observation"
+                      label={{
+                        value: "Observación del proceso:",
+                      }}
+                      validations={{
+                        required: "Es necesaria la observación",
+                        minLength: {
+                          value: 10,
+                          message:
+                            "La observación debe tener minimo 10 caracteres.",
+                        },
+                        maxLength: {
+                          value: 250,
+                          message:
+                            "La observación debe contener máximo 250 caracteres.",
+                        },
+                      }}
+                      placeholder="Observación sobre el proceso de la solicitud"
+                      minRows={5}
+                    />
                   </div>
                   <ModalFooter>
                     <div className="flex items-center mx-auto text-center">

@@ -4,43 +4,58 @@ import React from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Button from "../Button";
 import { useSession } from "next-auth/react";
+import fetchFileFn from "@/libs/fetchFileFn";
+import useFormData from "@/hooks/UseFormData";
+import toast from "react-hot-toast";
+import { redirect, useRouter } from "next/navigation";
 
-export default function ModalImage() {
-  const [images, setImages] = React.useState([]);
-  const { data: session } = useSession();
-  const onChange = (
-    imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
-    ) => {
+export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
+  const [images, setImages] = React.useState<{ dataURL: string; file: File }[]>(
+    []
+  );
+  const { data: session, status } = useSession();
+  const router = useRouter()
+  const { setFilesField, setData } = useFormData({
+    minFiles: 3,
+    maxFiles: 10,
+  });
 
-      // data for submit
-      const sendImages = async () => {
-        const response = await fetch(
-          process.env.NEXT_PUBLIC_API_URL +
-          `/imagesPlace`,
-          {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              Accept:
-              "application/json, application/xml, text/plain, text/html, *.*",
-              "Content-Type": "multipart/form-data",
-            },
-            body: JSON.stringify({ id_espacio: 1 }),
-          }
-          );
-          
-          const res = await response.json();
-          console.log(res);
-        };
+  const onChange = (imageList: ImageListType) =>
+    setImages(imageList as never[]);
 
-      setImages(imageList as never[]);
-      console.log(imageList)
-    };
-      
-      // form.append("images", images.map((image) => image.file)[0]);
+  const sendImages = async () => {
+    if (status === "loading") {
+      return toast.error("Cargando información del usuario...");
+    }
+    if (images.length < 3 || images.length > 10) {
+      return toast.error("Seleccione la cantidad necesaria de imágenes");
+    }
 
-      
+    setFilesField(images.map((image) => image.file));
+    const fd = setData({
+      id_espacio: 18,
+      id_estado_espacio: "1",
+      activo_coworking: "1",
+      activo_interno: "1",
+      email: session?.user.emailHash,
+    });
+
+    const response = await fetchFileFn(`/imagesPlace`, {
+      method: "POST",
+      formData: fd,
+    });
+    console.log(response);
+    if (response.code !== 200) {
+      return toast.error("Ha ocurrido un error");
+    }
+    return(
+      toast.success("Sitio creado correctamente"),
+      redirect("/")
+    );
+  };
+
+  // form.append("images", images.map((image) => image.file)[0]);
+
   return (
     <>
       <ImageUploading
@@ -48,7 +63,7 @@ export default function ModalImage() {
         value={images}
         onChange={onChange}
         maxNumber={10}
-        >
+      >
         {({
           imageList,
           onImageUpload,
@@ -61,13 +76,13 @@ export default function ModalImage() {
         }) => (
           <div>
             <h1 className="mx-auto text-3xl text-center font-semibold m-6 text-primary">
-              Subir imagenes
+              Subir imágenes
             </h1>
             <div className="text-center">
               {imageList.length === 0 && (
                 <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
                   <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                    * Puede subir mínimo 3 fotos, máximo 10 <br /> resolución
+                    * Puede subir mínimo 3 fotos, máximo 10. <br /> Resolución
                     recomendada: 1920 x 1080 *
                   </p>
                 </div>
@@ -87,14 +102,14 @@ export default function ModalImage() {
                 onClick={onImageRemoveAll}
               >
                 <i className="bi bi-trash3 text-xl mr-2 font-medium"></i>
-                Eliminar todas las fotos
+                Eliminar todas las imágenes
               </button>
             </div>
             {errors && (
               <div className="text-center m-2">
                 {errors.maxNumber && (
                   <span className="text-primary font-semibold">
-                    Solo puede agregar hasta 10 imagenes.
+                    Solo puede agregar hasta 10 imágenes.
                   </span>
                 )}
                 {errors.acceptType && (
@@ -111,7 +126,7 @@ export default function ModalImage() {
                   <div key={index} className="mx-auto">
                     <img
                       src={image.dataURL}
-                      className="border-3 text-xl shadow-xl object-cover border-borders-light rounded-lg h-[400px]"
+                      className="border-3 text-xl shadow-xl border-borders-light rounded-lg h-[400px]"
                       alt=""
                       width="800px"
                     />
@@ -137,7 +152,11 @@ export default function ModalImage() {
         )}
       </ImageUploading>
       <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
-        <Button text="Guardar" type="submit" />
+        <Button
+          text="Guardar"
+          onClick={sendImages}
+          disabled={images.length < 3}
+        />
       </div>
     </>
   );

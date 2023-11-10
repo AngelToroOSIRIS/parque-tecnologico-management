@@ -21,7 +21,7 @@ const SelectForm = ({
   icon?: string;
   required?: boolean;
   label?: { value?: string; required?: boolean };
-  onChange: any;
+  onChange: ({ name, value }: { name: string; value: string | null }) => any;
   children?: any;
   defaultValue?: string;
 }) => {

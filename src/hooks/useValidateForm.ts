@@ -21,7 +21,7 @@ const useValidateForm = (
   const [validData, setValidData] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
-  const setField = ({ name, value }: { name: string; value: string }) => {
+  const setField = ({ name, value }: { name: string; value: string | null }) => {
     const detailsField = requiredFields.find((field) => field.name === name);
 
     if (!detailsField) return;

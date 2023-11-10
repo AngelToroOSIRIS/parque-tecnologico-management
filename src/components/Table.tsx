@@ -47,14 +47,13 @@ const INITIAL_VISIBLE_COLUMNS = [
 type User = (typeof userstable)[0];
 
 export default function TableComponent({ params }: Props) {
+  const [rolAdmin, setRolAdmin] = useState<boolean>(false);
   const { data, status } = useSession();
   const userSession = data?.user ?? {
     name: "default",
     email: "useremail",
   };
 
-  if (includesString(userSession.rols ?? [], ["superadmin", params.category])) {
-  }
   const [filterValue, setFilterValue] = React.useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
@@ -122,6 +121,17 @@ export default function TableComponent({ params }: Props) {
   }, [sortDescriptor, items]);
   const router = useRouter();
 
+  useEffect(() => {
+    if (status === "authenticated") {
+      const result = includesString(userSession.rols ?? [], [
+        "superadmin",
+        params.category,
+      ]);
+      setRolAdmin(result);
+    }
+  }, [status]);
+  console.log(rolAdmin)
+
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
     switch (columnKey) {
@@ -152,12 +162,6 @@ export default function TableComponent({ params }: Props) {
             {cellValue}
           </Chip>
         );
-      case "cowork":
-        if (user.cowork === "1") {
-          return <Switch defaultEnabled onChange={() => {}} />;
-        } else {
-          return <Switch onChange={() => {}} />;
-        }
       case "fecha_Actual":
         return <div>{user.fecha_Actual}</div>;
       case "actions":
@@ -187,11 +191,7 @@ export default function TableComponent({ params }: Props) {
               </span>
             </Tooltip>
 
-            {status === "authenticated" &&
-              includesString(userSession.rols ?? [], [
-                "superadmin",
-                params.category,
-              ]) && (
+            {rolAdmin && (
                 <>
                   <Tooltip
                     className="font-semibold rounded-lg shadow-xl bg-off-white"
@@ -258,13 +258,14 @@ export default function TableComponent({ params }: Props) {
           onClear={() => setFilterValue("")}
           onValueChange={onSearchChange}
         />
-        {status === "authenticated" &&
-          includesString(userSession.rols ?? [], [
-            "superadmin",
-            params.category,
-          ]) && (
+        {rolAdmin && (
             <div className="flex gap-4">
-              <Badge content="5" color="primary" size="lg">
+              <Badge
+                content={<i className="bi bi-bell-fill text-sm"></i>}
+                color="primary"
+                size="lg"
+                className="animate-pulse"
+              >
                 <button
                   onClick={() => router.push(`${params.category}/requests`)}
                   aria-label="button"

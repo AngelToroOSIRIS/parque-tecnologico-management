@@ -45,7 +45,7 @@ const ModalIcon = ({ title, text, button1, icon, onClick }: Props) => {
         <ModalContent>
           {(closeModal) => (
             <>
-              <ModalHeader className="flex flex-col text-center gap-1 outline-none">
+              <ModalHeader className="flex flex-col text-primary text-center gap-1 outline-none">
                 {title}
               </ModalHeader>
               <ModalBody>

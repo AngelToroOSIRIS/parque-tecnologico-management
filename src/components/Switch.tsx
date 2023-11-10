@@ -11,7 +11,7 @@ const Switch = ({
 }: {
   defaultEnabled?: boolean;
 
-  onChange: any;
+  onChange: (value:boolean) => any;
 }) => {
   const [enabled, setEnabled] = useState<boolean>(defaultEnabled);
 

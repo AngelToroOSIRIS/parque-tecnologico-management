@@ -17,7 +17,6 @@ import TextareaForm from "./forms/TextareaForm";
 import { categoriesObj } from "@/libs/staticData";
 import { redirect } from "next/navigation";
 
-
 interface Props {
   params: { category: CategoryTextShort };
 }
@@ -41,6 +40,7 @@ const FormSite = ({ params }: Props) => {
 
   const [content, setContent] = useState<"sites" | "images">("sites");
   const [loading, setLoading] = useState<boolean>(false);
+  const [additionalInfo, setAdditionalInfo] = useState<{"activo_coworking": boolean, "activo_interno": boolean, "id_estado_espacio": string}>({id_estado_espacio: "", activo_coworking: false, activo_interno: false});
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const [dataFilters, setDataFilters] = useState<{
     categorias: Category[];
@@ -61,9 +61,11 @@ const FormSite = ({ params }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+console.log(dataForm)
+    if (!validData) {
+      return toast.error("Por favor complete el formulario", { id: "empty" });
+    }
 
-    if (!validData)
-    return toast.error("Por favor complete el formulario", { id: "empty" });
     setLoading(true);
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
@@ -76,10 +78,10 @@ const FormSite = ({ params }: Props) => {
         activo_interno: "0",
         id_estado_espacio: dataFilters.estadoEspacios.find(
           (estado) => estado.descripcion === "Inactivo"
-          )?.id,
-        },
-      });
-      setLoading(false);
+        )?.id,
+      },
+    });
+    setLoading(false);
 
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
@@ -96,204 +98,207 @@ const FormSite = ({ params }: Props) => {
   }, [status]);
   return (
     <>
-      <h1 className="mx-auto text-3xl text-center  font-semibold m-6 text-primary">
-        Datos:
-      </h1>
       {!loadingData && content === "sites" && (
-        <form onSubmit={handleSubmit}>
-          <div className="w-[95%] items-center min-w-[60%]  justify-center mx-auto gap-x-10 lg:flex py-1 px-5">
-            <InputForm
-              onChange={() => {}}
-              type="text"
-              name="nombre"
-              label={{
-                required: true,
-                value: "Nombre:",
-              }}
-              validations={{
-                required: "Se requiere un nombre",
-                maxLength: {
-                  value: 50,
-                  message: "El nombre debe contener máximo 50 caracteres.",
-                },
-              }}
-              // onChange={({ value }) => {setField})}
-            />
-            <SelectForm
-              name="id_identificador_enlace"
-              placeholder="Seleccionar Identificador de enlace"
-              label={{
-                value: "Identificador de Enlace:",
-              }}
-              onChange={setField}
-            >
-              {dataFilters.identificadoresEnlace.map((enlace) => (
-                <SelectItem key={enlace.id} value={enlace.id}>
-                  {enlace.llave}
-                </SelectItem>
-              ))}
-            </SelectForm>
-          </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-1 px-5">
-            <SelectForm
-              name="id_categoria"
-              placeholder="Seleccionar categoria"
-              label={{
-                value: "Categoria:",
-              }}
-              onChange={setField}
-            >
-              {dataFilters.categorias.map((categoria) => (
-                <SelectItem key={categoria.id} value={categoria.id}>
-                  {categoria.descripcion}
-                </SelectItem>
-              ))}
-            </SelectForm>
-            <SelectForm
-              name="id_estado_espacio"
-              placeholder="Seleccionar el estado"
-              label={{
-                required: true,
-                value: "Estado:",
-              }}
-              onChange={setField}
-            >
-              {dataFilters.estadoEspacios.map((estado) => (
-                <SelectItem key={estado.id} value={estado.id}>
-                  {estado.descripcion}
-                </SelectItem>
-              ))}
-            </SelectForm>
-          </div>
-          <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-5 px-5">
-            <div className="mx-auto lg:w-[50%] justify-center items-center">
-              <TextareaForm
-                name="descripcion_corta"
-                placeholder="Ingresar descripción corta completa"
-                minRows={2}
+        <>
+          <h1 className="mx-auto text-3xl text-center  font-semibold m-6 text-primary">
+            Datos
+          </h1>
+          <form onSubmit={handleSubmit}>
+            <div className="w-[95%] items-center min-w-[60%]  justify-center mx-auto gap-x-10 lg:flex py-1 px-5">
+              <InputForm
+                onChange={setField}
+                type="text"
+                name="nombre"
                 label={{
                   required: true,
-                  value: "Descripción corta:",
+                  value: "Nombre:",
                 }}
                 validations={{
-                  required: "Se requiere descripción corta",
-                  minLength: {
-                    value: 15,
-                    message:
-                      "La descripción corta debe contener minimo 15 caracteres.",
-                  },
+                  required: "Se requiere un nombre",
                   maxLength: {
-                    value: 250,
-                    message:
-                      "La descripción corta debe contener máximo 250 caracteres.",
+                    value: 50,
+                    message: "El nombre debe contener máximo 50 caracteres.",
                   },
                 }}
-                onChange={setField}
+                // onChange={({ value }) => {setField})}
               />
-              <TextareaForm
-                name="descripcion"
+              <SelectForm
+                name="id_identificador_enlace"
+                placeholder="Seleccionar Identificador de enlace"
+                label={{
+                  value: "Identificador de Enlace:",
+                }}
                 onChange={setField}
-                placeholder="Ingresar descripción completa"
-                minRows={8}
+              >
+                {dataFilters.identificadoresEnlace.map((enlace) => (
+                  <SelectItem key={enlace.id} value={enlace.id}>
+                    {enlace.llave}
+                  </SelectItem>
+                ))}
+              </SelectForm>
+            </div>
+            <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-1 px-5">
+              <SelectForm
+                name="id_categoria"
+                placeholder="Seleccionar categoria"
+                label={{
+                  value: "Categoria:",
+                }}
+                onChange={setField}
+              >
+                {dataFilters.categorias.map((categoria) => (
+                  <SelectItem key={categoria.id} value={categoria.id}>
+                    {categoria.descripcion}
+                  </SelectItem>
+                ))}
+              </SelectForm>
+              <SelectForm
+                name="id_estado_espacio"
+                placeholder="Seleccionar el estado"
                 label={{
                   required: true,
-                  value: "Descripción:",
+                  value: "Estado:",
                 }}
-                validations={{
-                  required: "Se requiere descripción",
-                  minLength: {
-                    value: 15,
-                    message:
-                      "La descripción debe contener minimo 20 caracteres.",
-                  },
-                  maxLength: {
-                    value: 32000,
-                    message:
-                      "La descripción debe contener máximo 32000 caracteres.",
-                  },
-                }}
+                onChange={({name, value}) => {setField({name, value});setAdditionalInfo({...additionalInfo, [name]: value})}}
+              >
+                {dataFilters.estadoEspacios.map((estado) => (
+                  <SelectItem key={estado.id} value={estado.id}>
+                    {estado.descripcion}
+                  </SelectItem>
+                ))}
+              </SelectForm>
+            </div>
+            <div className="w-[95%] items-center justify-center mx-auto gap-10 lg:flex py-5 px-5">
+              <div className="mx-auto lg:w-[50%] justify-center items-center">
+                <TextareaForm
+                  name="descripcion_corta"
+                  placeholder="Ingresar descripción corta completa"
+                  minRows={2}
+                  label={{
+                    required: true,
+                    value: "Descripción corta:",
+                  }}
+                  validations={{
+                    required: "Se requiere descripción corta",
+                    minLength: {
+                      value: 15,
+                      message:
+                        "La descripción corta debe contener minimo 15 caracteres.",
+                    },
+                    maxLength: {
+                      value: 250,
+                      message:
+                        "La descripción corta debe contener máximo 250 caracteres.",
+                    },
+                  }}
+                  onChange={setField}
+                />
+                <TextareaForm
+                  name="descripcion"
+                  onChange={setField}
+                  placeholder="Ingresar descripción completa"
+                  minRows={8}
+                  label={{
+                    required: true,
+                    value: "Descripción:",
+                  }}
+                  validations={{
+                    required: "Se requiere descripción",
+                    minLength: {
+                      value: 15,
+                      message:
+                        "La descripción debe contener minimo 20 caracteres.",
+                    },
+                    maxLength: {
+                      value: 32000,
+                      message:
+                        "La descripción debe contener máximo 32000 caracteres.",
+                    },
+                  }}
+                />
+              </div>
+              <div className=" lg:w-[50%] lg:-mt-12 grid grid-rows-2 mx-auto">
+                <div className="flex  p-2 gap-10 items-center">
+                  <div className="mx-auto">
+                    <Input
+                      radius="full"
+                      size="lg"
+                      variant="faded"
+                      label="Capacidad:"
+                      labelPlacement="outside-left"
+                      name="capacity"
+                      type="number"
+                      placeholder="0"
+                      description="* Personas"
+                      className="mt-1 mb-[10px] outline-none select-none "
+                      classNames={{
+                        inputWrapper: "bg-[#ffff]",
+                        errorMessage: "text-sm font-medium",
+                      }}
+                    />
+                  </div>
+                  <div className=" mx-auto">
+                    <Input
+                      radius="full"
+                      size="lg"
+                      variant="faded"
+                      type="number"
+                      label="Precio:"
+                      labelPlacement="outside-left"
+                      placeholder="0"
+                      description="* Hora"
+                      className="mt-1 mb-[10px] outline-none select-none "
+                      classNames={{
+                        inputWrapper: "bg-[#ffff]",
+                        errorMessage: "text-sm font-medium",
+                      }}
+                      startContent={
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-small">$</span>
+                        </div>
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-5 mx-auto items-center">
+                  <p>Wifi:</p>
+                  <Checkbox />
+                  <p>Cafe:</p>
+                  <Checkbox />
+                  <p>Proyector:</p>
+                  <Checkbox />
+                  <p>PC:</p>
+                  <Checkbox />
+                </div>
+              </div>
+            </div>
+            <div className="flex mx-auto m-10 px-10 lg:px-[470px] gap-2 justify-center items-center">
+              <p className="mr-5 "> Visible Coworking: </p>
+              <Switch
+                onChange={(value: boolean) =>
+                  setField({
+                    name: "activo_coworking",
+                    value: value ? "1" : "0",
+                  })
+                }
+              />
+              <p className="ml-5 mr-5">Visible Internos: </p>
+              <Switch
+                onChange={(value) => {setAdditionalInfo({...additionalInfo, activo_interno: value})}}
               />
             </div>
-            <div className=" lg:w-[50%] lg:-mt-12 grid grid-rows-2 mx-auto">
-              <div className="flex  p-2 gap-10 items-center">
-                <div className="mx-auto">
-                  <Input
-                    radius="full"
-                    size="lg"
-                    variant="faded"
-                    label="Capacidad:"
-                    labelPlacement="outside-left"
-                    name="capacity"
-                    type="number"
-                    placeholder="0"
-                    description="* Personas"
-                    className="mt-1 mb-[10px] outline-none select-none "
-                    classNames={{
-                      inputWrapper: "bg-[#ffff]",
-                      errorMessage: "text-sm font-medium",
-                    }}
-                  />
-                </div>
-                <div className=" mx-auto">
-                  <Input
-                    radius="full"
-                    size="lg"
-                    variant="faded"
-                    type="number"
-                    label="Precio:"
-                    labelPlacement="outside-left"
-                    placeholder="0"
-                    description="* Hora"
-                    className="mt-1 mb-[10px] outline-none select-none "
-                    classNames={{
-                      inputWrapper: "bg-[#ffff]",
-                      errorMessage: "text-sm font-medium",
-                    }}
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">$</span>
-                      </div>
-                    }
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-5 mx-auto items-center">
-                <p>Wifi:</p>
-                <Checkbox />
-                <p>Cafe:</p>
-                <Checkbox />
-                <p>Proyector:</p>
-                <Checkbox />
-                <p>PC:</p>
-                <Checkbox />
-              </div>
+            <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
+              <Button type="submit" text="Continuar" />
+              <Button
+                //TODO:CAMBIAR RUTA
+                route="/"
+                text="Cancelar"
+              />
             </div>
-          </div>
-          <div className="flex mx-auto m-10 px-10 lg:px-[470px] gap-2 justify-center items-center">
-            <p className="mr-5 "> Visible Coworking: </p>
-            <Switch
-              onChange={(value: boolean) =>
-                setField({ name: "activo_coworking", value: value ? "1" : "0" })
-              }
-            />
-            <p className="ml-5 mr-5">Visible Internos: </p>
-            <Switch
-              onChange={(value: boolean) =>
-                setField({ name: "activo_interno", value: value ? "1" : "0" })
-              }
-            />
-          </div>
-          <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
-            <Button type="submit" text="Continuar" />
-            <Button
-              //TODO:CAMBIAR RUTA
-              route="/"
-              text="Cancelar"
-            />
-          </div>
-        </form>
+          </form>
+        </>
       )}
-      {content === "images" && <SectionImage />}
+      {content === "images" && <SectionImage additionalInfo={additionalInfo} />}
       {loadingData && (
         <TailSpin
           height="100"

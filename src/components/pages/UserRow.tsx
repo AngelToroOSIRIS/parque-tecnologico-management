@@ -35,7 +35,9 @@ const UserRow = ({
         method: "PUT",
         body: {
           email: user.email,
-          roles: selectedRols.map((rol) => Number(rol)),
+          roles: includesString(selectedRols, ["1"])
+            ? [1]
+            : selectedRols.map((rol) => Number(rol)),
         },
       }
     );
@@ -45,7 +47,14 @@ const UserRow = ({
       });
     }
     getData();
-    return toast.success("Usuario actualizado correctamente ", { id: "5" });
+
+    if (includesString(selectedRols, ["1"])) {
+      toast("Superadmin concede permisos globales", {
+        icon: "💡",
+      });
+    }
+    toast.success("Usuario actualizado correctamente");
+    return;
   };
   const deleteUser = async () => {
     const res = await fetchFn(`/deleteUser?email=${session?.user.emailHash}`, {
@@ -54,7 +63,6 @@ const UserRow = ({
         email: user.email,
       },
     });
-    console.log(res);
     if (res.code !== 200) {
       return toast.error("No se ha podido eliminar el usuario.", {
         id: "1",
@@ -142,32 +150,30 @@ const UserRow = ({
               if (changedRols) saveRols();
             }}
             className={`mx-1 outline-none ${
-              changedRols ? "text-borders transition-all" : "text-borders-light transition-all cursor-default"
+              changedRols
+                ? "text-borders transition-all"
+                : "text-borders-light transition-all cursor-default"
             }`}
           >
             <i className="bi bi-floppy text-xl"></i>
           </button>
         </Tooltip>
-        <Tooltip
-          className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
-          content="Eliminar usuario"
+
+        <button
+          onClick={() => {
+            onDeleteClick(user.email);
+          }}
+          className="mx-1 text-borders outline-none hover:text-primary transition-all"
         >
-          <button
-            onClick={() => {
-              onDeleteClick(user.email);
-            }}
-            className="mx-1 text-borders outline-none hover:text-primary transition-all"
-          >
-            <ModalIcon
-              button1="Eliminar usuario"
-              onClick={deleteUser}
-              text={`¿Seguro que quiere eliminar el usuario ${user.email}?`}
-              title="Eliminar usuario"
-              icon="trash3"
-            />
-            {/* <i className="bi bi-trash3 text-xl"></i> */}
-          </button>
-        </Tooltip>
+          <ModalIcon
+            button1="Eliminar usuario"
+            onClick={deleteUser}
+            text={`¿Seguro que quiere eliminar el usuario ${user.email}?`}
+            title="Eliminar usuario"
+            icon="trash3"
+          />
+          {/* <i className="bi bi-trash3 text-xl"></i> */}
+        </button>
       </div>
     </article>
   );
