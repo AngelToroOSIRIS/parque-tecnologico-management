@@ -16,28 +16,6 @@ const UsersEdit = () => {
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
   const [dataUsers, setDataUsers] = useState<UsersAndRoles[]>([]);
 
-  const deleteUser = async () => {
-    const response = await fetchFn(
-      `/deleteUser?email=${session?.user.emailHash}`,
-      {
-        method: "DELETE",
-        body: {
-          email: selectedUserEmail,
-        },
-      }
-    );
-    console.log(response);
-    if (response.code !== 200) {
-      return toast.error("No se ha podido eliminar el usuario.", {
-        id: "1",
-      });
-    }
-
-    getData();
-    if (response.data.message) {
-      return toast.success(response.data.message, { id: "4" });
-    }
-  };
 
   const getRols = async () => {
     const response = await fetchFn(`/getRoles`);
@@ -92,11 +70,12 @@ const UsersEdit = () => {
                 <i className="bi bi-person-plus-fill ml-2 text-xl "></i>
               </button>
             </div>
-            <section className="w-full mx-auto p-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#ffffff] rounded-xl">
-              <article className="flex h-10 rounded-lg p-2 items-center justify-center bg-borders-light text-borders text-md font-semibold">
-                <div className="w-[40%]">CORREO</div>
-                <div className="w-[40%]">ROL</div>
-                <div className="w-[20%] text-center">OPCIONES</div>
+            <section className="w-full p-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#ffffff] rounded-xl">
+              <article className="flex h-10 rounded-lg p-2 items-center justify-between bg-borders-light text-borders text-md font-semibold">
+                <div className="w-[30%]">CORREO</div>
+                <div className="w-[30%] text-center">ROL</div>
+                <div className="w-[10%] text-center">ESTADO</div>
+                <div className="w-[10%] text-center">OPCIONES</div>
               </article>
               {dataUsers.map((user) => {
                 return (

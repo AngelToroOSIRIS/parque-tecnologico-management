@@ -138,7 +138,7 @@ export default function ModalImage(
                 )}
               </div>
             )}
-
+            
             {imageList.length > 0 && (
               <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-5 p-5 gap-7">
                 {imageList.map((image, index) => (
@@ -167,6 +167,13 @@ export default function ModalImage(
                 ))}
               </div>
             )}
+            {images.length < 3 &&(
+                    <div className="w-full mt-3 text-center">
+                      <span className="text-primary font-semibold">
+                      Se necesita mínimo 3 imágenes
+                      </span>
+                    </div>
+                )}
             <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
               <Button
                 text="Guardar"

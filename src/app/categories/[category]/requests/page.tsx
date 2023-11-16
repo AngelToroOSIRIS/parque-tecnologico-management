@@ -36,7 +36,7 @@ export default function RequestPage({ params }: Props) {
         <h1 className="mt-[7%] md:mt-[5%] pt-5 lg:mt-[2%] mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
           Solicitudes de {categoryFound.name}
         </h1>
-        <Request />
+        <Request params={params} />
       </main>
     </>
   );

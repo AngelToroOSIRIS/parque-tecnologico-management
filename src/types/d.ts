@@ -37,6 +37,7 @@ export interface Rol {
 
 export interface UsersAndRoles {
   email: string;
+  estado: string;
   roles: Rol[];
 }
 

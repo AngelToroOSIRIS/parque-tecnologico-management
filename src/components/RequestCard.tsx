@@ -4,6 +4,7 @@ import {
   RequestData,
 } from "@/types/d";
 import Button from "./Button";
+import { formatDate } from "@/libs/functionsStrings";
 
 const RequestCard = ({
   request,
@@ -19,43 +20,43 @@ const RequestCard = ({
             <div className="w-auto m-4">
               <p>
                 <strong>Nombre: </strong>
-                {/* {persona.nombre} */}
+                {request.info_persona.nombre}
               </p>
               <p>
                 <strong> Correo: </strong>
-                {/* {persona.email} */}
+                {request.info_persona.email}
               </p>
               <p>
                 <strong> Teléfono: </strong>
-                {/* {persona.telefono} */}
+                {request.info_persona.telefono}
               </p>
               <p className="text-primary">
                 <strong> Tipo de la solicitud: </strong>
-                {/* {requestData.estado} */}
+                {request.estado_reservacion}
               </p>
             </div>
             <div className="w-auto m-4 my-auto">
               <p>
                 <strong> Valor: </strong>
-                {/* {request.valor} */}
+                {request.reservacion.valor}
               </p>
               <p>
                 <strong> Valor con descuento: </strong>
-                {/* {request.valor_descuento} */}
+                {request.reservacion.valor_descuento}
               </p>
               <p>
                 <strong> Valor Pagado: </strong>
-                {/* {request.valor_pagado} */}
+                {request.reservacion.valor_pagado}
               </p>
             </div>
             <div className="w-auto m-4 my-auto">
               <p>
                 <strong>Última actualización: </strong>
-                {/* {request.fecha_actualizacion} */}
+                {formatDate(request.reservacion.fecha_actualizacion, true)}
               </p>
               <p>
                 <strong> Fecha creación: </strong>
-                  {/* {request.reservacion.fecha_creacion} */}
+                {formatDate(request.reservacion.fecha_creacion, true)}
               </p>
               <p onClick={() => {
                   onClickAction(request, "history");

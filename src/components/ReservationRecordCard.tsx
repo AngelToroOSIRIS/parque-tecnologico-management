@@ -16,6 +16,8 @@ const ReservationRecordCard = ({ record }: { record: HistoryRequest }) => {
       </div>
       <p className="mt-2 font-bold">Observaciones:</p>
       <p>{record.observaciones ?? "No registra."}</p>
+      <p className="mt-2 font-bold">Creado por:</p>
+      <p>{record.creado_por ?? "No registra."}</p>
     </article>
   );
 };

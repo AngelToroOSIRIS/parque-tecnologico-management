@@ -46,7 +46,7 @@ export default function TableComponent({ params }: Props) {
   }>({ categorias: []});
 
   const getData = async () => {
-    const response = await fetchFn(`/places`);
+    const response = await fetchFn(`/places?categoria=${params.category}`);
     if (response.code !== 200) {
       return toast.error("No se ha podido obtener la información.", {
         id: "1",
@@ -439,7 +439,7 @@ export default function TableComponent({ params }: Props) {
         emptyContent={"No se han encontrado sitios"}
       >
 
-        {dataSite.map((site) => {site.categoria === categoryFound?.name
+        {dataSite.map((site) => {
           return(
             <TableRow key={site.id}>
               {(columnKey) => (

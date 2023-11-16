@@ -1,6 +1,6 @@
 import fetchFn from "@/libs/fetchFn";
 import { includesString } from "@/libs/functionsStrings";
-import { Avatar, Chip, SelectItem, Tooltip } from "@nextui-org/react";
+import { Avatar, Chip, ChipProps, SelectItem, Tooltip } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { Rol, UsersAndRoles } from "@/types/d";
@@ -57,16 +57,16 @@ const UserRow = ({
     return;
   };
   const deleteUser = async () => {
-    const res = await fetchFn(`/deleteUser?email=${session?.user.emailHash}`, {
-      method: "DELETE",
-      body: {
-        email: user.email,
-      },
+    const res = await fetchFn(`/disableUser?email=${session?.user.emailHash}&emailUser=${user.email}`, {
+      method: "PUT",
     });
     if (res.code !== 200) {
-      return toast.error("No se ha podido eliminar el usuario.", {
+      return toast.error("No se ha podido inactivar el usuario.", {
         id: "1",
       });
+    }
+    if (res.data.message) {
+      return toast.success(res.data.message, { id: "4" });
     }
 
     getData();
@@ -81,10 +81,15 @@ const UserRow = ({
     setChangedRoles(String(selectedRols.sort()) !== String(asignedRols.sort()));
   }, [selectedRols]);
 
+  const statusColorMap: Record<string, ChipProps["color"]> = {
+    Activo: "success",
+    Inactivo: "danger",
+  };
+
   return (
-    <article className="my-5 flex w-auto items-center">
+    <article className="my-5 flex w-auto justify-between items-center">
       {/* celda 1 */}
-      <div className=" w-[40%] items-center justify-center">
+      <div className=" w-[30%] items-center justify-center">
         <Chip
           variant="light"
           size="lg"
@@ -106,9 +111,10 @@ const UserRow = ({
         </Chip>
       </div>
       {/* celda 2 */}
-      <div className="w-[40%]">
+      <div className="w-[30%]">
         <Select
           name="rol"
+          isDisabled={user.estado === "Inactivo"}
           placeholder="Seleccionar rol"
           selectionMode="multiple"
           disabledKeys={
@@ -135,9 +141,28 @@ const UserRow = ({
           ))}
         </Select>
       </div>
+
       {/* celda 3 */}
-      <div className="text-center justify-between w-[20%]">
-        <Tooltip
+
+      <div className="w-[10%] text-center">
+          <Chip
+          className="capitalize border-none gap-1"
+          color={statusColorMap[user.estado]}
+          size="lg"
+          variant="dot"
+          >
+        <p className="text-lg font-medium text-borders contrast-50">
+            {user.estado}
+        </p>
+            </Chip>
+      </div>
+
+      {/* celda 4 */}
+      <div className="w-[10%] text-center justify-between ">
+        
+        {user.estado === "Activo" &&
+          <>
+          <Tooltip
           className={`mx-1 outline-none ${
             changedRols
               ? "font-semibold rounded-lg shadow-xl bg-off-white"
@@ -179,6 +204,8 @@ const UserRow = ({
             {/* <i className="bi bi-trash3 text-xl"></i> */}
           </button>
         </Tooltip>
+        </>
+        }
       </div>
     </article>
   );
