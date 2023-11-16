@@ -23,6 +23,7 @@ import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { formatDate, includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
+import { CSVLink, CSVDownload } from "react-csv";
 import { Category, CategoryTextShort, Site } from "@/types/d";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
@@ -43,7 +44,7 @@ export default function TableComponent({ params }: Props) {
   };
   const [dataFilters, setDataFilters] = useState<{
     categorias: Category[];
-  }>({ categorias: []});
+  }>({ categorias: [] });
 
   const getData = async () => {
     const response = await fetchFn(`/places?categoria=${params.category}`);
@@ -238,27 +239,32 @@ export default function TableComponent({ params }: Props) {
               <i className="bi bi-calendar2-check text-xl"></i>
             </span>
           </Tooltip>
-          <>
-            <Tooltip
-              className="font-semibold rounded-lg shadow-xl bg-off-white"
-              content="Editar sitio"
-            >
-              <span
-                onClick={() => router.push(`/sites/${site.id}/edit`)}
-                className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+          {includesString(userSession.rols ?? [], [
+            "superadmin",
+            params.category,
+          ]) && (
+            <>
+              <Tooltip
+                className="font-semibold rounded-lg shadow-xl bg-off-white"
+                content="Editar sitio"
               >
-                <i className="bi bi-pen text-xl"></i>
-              </span>
-            </Tooltip>
-            <Tooltip
-              className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
-              content="Inhabilitar sitio"
-            >
-              <span className="text-lg outline-none text-borders hover:text-primary cursor-pointer transition-all">
-                <i className="bi bi-dash-circle text-xl"></i>
-              </span>
-            </Tooltip>
-          </>
+                <span
+                  onClick={() => router.push(`/sites/${site.id}/edit`)}
+                  className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                >
+                  <i className="bi bi-pen text-xl"></i>
+                </span>
+              </Tooltip>
+              <Tooltip
+                className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+                content="Inhabilitar sitio"
+              >
+                <span className="text-lg outline-none text-borders hover:text-primary cursor-pointer transition-all">
+                  <i className="bi bi-dash-circle text-xl"></i>
+                </span>
+              </Tooltip>
+            </>
+          )}
         </div>
       );
     }
@@ -281,6 +287,19 @@ export default function TableComponent({ params }: Props) {
     }
   }, []);
 
+  const csvData = [
+    [columns.map((column) => column.label)],
+    dataSite.map((site) => [
+      site.id,
+      site.nombre,
+      site.estado_espacio,
+      site.categoria,
+      formatDate(site.fecha_creacion, true),
+      formatDate(site.fecha_actualizacion, true),
+      "NO APLICA",
+    ]),
+  ];
+
   const topContent = React.useMemo(() => {
     return (
       <div className="flex justify-between font-medium items-center gap-3 ">
@@ -302,6 +321,13 @@ export default function TableComponent({ params }: Props) {
           onValueChange={onSearchChange}
         />
         <div className="flex gap-4">
+          <CSVLink
+            separator=";"
+            filename={`REPORTE ${new Date().toJSON().slice(0, 10)}`}
+            data={csvData}
+          >
+            Download me
+          </CSVLink>
           <button
             onClick={() => router.push("/sites/add")}
             aria-label="button"
@@ -318,29 +344,37 @@ export default function TableComponent({ params }: Props) {
             Agenda general
             <i className="bi bi-calendar2-check mx-1 text-xl"></i>
           </button>
-          <Badge
-            content={<i className="bi bi-bell-fill text-sm"></i>}
-            color="primary"
-            size="lg"
-            className="animate-pulse"
-          >
-            <button
-              onClick={() => router.push(`${params.category}/requests`)}
-              aria-label="button"
-              className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-            >
-              Solicitudes
-              <i className="bi bi-exclamation-circle mx-1 text-xl"></i>
-            </button>
-          </Badge>
-          <button
-            onClick={() => router.push("/sites/add")}
-            aria-label="button"
-            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-          >
-            Añadir sitio
-            <i className="bi bi-plus-circle mx-1 text-xl"></i>
-          </button>
+
+          {includesString(userSession.rols ?? [], [
+            "superadmin",
+            params.category,
+          ]) && (
+            <>
+              <Badge
+                content={<i className="bi bi-bell-fill text-sm"></i>}
+                color="primary"
+                size="lg"
+                className="animate-pulse"
+              >
+                <button
+                  onClick={() => router.push(`${params.category}/requests`)}
+                  aria-label="button"
+                  className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
+                >
+                  Solicitudes
+                  <i className="bi bi-exclamation-circle mx-1 text-xl"></i>
+                </button>
+              </Badge>
+              <button
+                onClick={() => router.push("/sites/add")}
+                aria-label="button"
+                className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
+              >
+                Añadir sitio
+                <i className="bi bi-plus-circle mx-1 text-xl"></i>
+              </button>
+            </>
+          )}
         </div>
       </div>
     );
@@ -356,36 +390,40 @@ export default function TableComponent({ params }: Props) {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="p-2 flex text-center justify-between font-medium text-md gap-x-4 items-center transition-all">
-        <Pagination
-          showControls
-          aria-label="Pagination"
-          showShadow
-          size="lg"
-          classNames={{
-            cursor:
-              "bg-primary text-default-white font-medium text-md transition-all rounded-lg",
-          }}
-          isDisabled={hasSearchFilter}
-          page={page}
-          total={pages}
-          variant="light"
-          onChange={setPage}
-        />
-        <div className="flex gap-4">
-          <div className="flex gap-3 text-borders rounded-xl p-2">
-            <label className="justify-center items-center">
-              Sitios por página:
-              <select
-                className="outline-none h-7 text-base bg-primary rounded-md ml-2 text-default-white"
-                onChange={onRowsPerPageChange}
-              >
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
-            </label>
-          </div>
-        </div>
+        {pages > 2 && (
+          <>
+            <Pagination
+              showControls
+              aria-label="Pagination"
+              showShadow
+              size="lg"
+              classNames={{
+                cursor:
+                  "bg-primary text-default-white font-medium text-md transition-all rounded-lg",
+              }}
+              isDisabled={hasSearchFilter}
+              page={page}
+              total={pages}
+              variant="light"
+              onChange={setPage}
+            />
+            <div className="flex gap-4">
+              <div className="flex gap-3 text-borders rounded-xl p-2">
+                <label className="justify-center items-center">
+                  Sitios por página:
+                  <select
+                    className="outline-none h-7 text-base bg-primary rounded-md ml-2 text-default-white"
+                    onChange={onRowsPerPageChange}
+                  >
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
@@ -438,9 +476,8 @@ export default function TableComponent({ params }: Props) {
         aria-label="Body table"
         emptyContent={"No se han encontrado sitios"}
       >
-
         {dataSite.map((site) => {
-          return(
+          return (
             <TableRow key={site.id}>
               {(columnKey) => (
                 <TableCell>{renderCell(site, columnKey)}</TableCell>
@@ -448,7 +485,6 @@ export default function TableComponent({ params }: Props) {
             </TableRow>
           );
         })}
-        
       </TableBody>
     </Table>
   );

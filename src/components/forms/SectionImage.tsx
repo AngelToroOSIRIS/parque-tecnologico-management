@@ -167,7 +167,7 @@ export default function ModalImage(
                 ))}
               </div>
             )}
-            {images.length < 3 &&(
+            {images.length < 3  &&(
                     <div className="w-full mt-3 text-center">
                       <span className="text-primary font-semibold">
                       Se necesita mínimo 3 imágenes

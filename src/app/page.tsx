@@ -65,8 +65,6 @@ export default function Home() {
                   Acceso Rápido:
               </h2>
             </div>
-            {coworking && (
-             <>
               <h2 className="text-center justify-center text-lg items-center mx-auto">
                 Bienvenido a la administración de Co-working, Sitios Activos:
               </h2>
@@ -110,21 +108,6 @@ export default function Home() {
                    />
                  </div>
                </div>
-             </>
-            )}
-            {!coworking && (
-              <>
-              <h2 className="text-center justify-center text-lg items-center mx-auto">
-                Bienvenido a la administración de Tienda Virtual:
-              </h2>
-                <div className="w-[65%] min-w-lg lg:flex grid grid-cols-1 mx-auto m-8 gap-7">
-                  <Button text="Inventario" icon="box2 mr-3"/> 
-                  <Button text="Crear productos" icon="plus-circle mr-3"/>
-                  <Button text="Editar productos" icon="pencil mr-3"/>
-                  <Button text="PQR's" icon="question-circle mr-3"/>
-                </div>
-              </>
-            )}
           </div>
         </main>
       </>
