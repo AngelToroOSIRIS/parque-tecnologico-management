@@ -27,6 +27,7 @@ const InputForm = ({
   className,
   placeholder,
   onlyInput,
+  description,
   label,
   validations,
   onChange,
@@ -34,6 +35,7 @@ const InputForm = ({
   type?: string;
   name: string;
   icon?: string;
+  description?: string;
   className?: string;
   placeholder?: string;
   onlyInput?: boolean;
@@ -174,6 +176,7 @@ const InputForm = ({
         type={type}
         name={name}
         icon={icon}
+        description={description}
         className={className}
         defaultValue={defaultValue}
         placeholder={placeholder ?? "Ingresar " + name}
@@ -195,6 +198,7 @@ const InputForm = ({
       <Input
         type={type}
         name={name}
+        description={description}
         icon={icon}
         className={className}
         defaultValue={defaultValue}

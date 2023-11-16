@@ -76,6 +76,7 @@ const FormUser = () => {
           <InputForm
             type="text"
             name="email"
+            description="* Solo se permiten correos @escuelaing.edu.co"
             label={{
               required: true,
               value: "Email:",

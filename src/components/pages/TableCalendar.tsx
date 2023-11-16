@@ -17,7 +17,7 @@ import {
   SortDescriptor,
   Modal,
 } from "@nextui-org/react";
-import { columns, userstable, statusOptions } from "@/components/table/data";
+import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
@@ -30,12 +30,11 @@ interface Props {
 }
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  Activo: "success",
-  Inactivo: "danger",
-  Mantenimiento: "warning",
+  Pagado: "success",
+  Pendiente: "danger",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["username", "type", "hour"];
+const INITIAL_VISIBLE_COLUMNS = ["username", "name", "type", "hour", "paid"];
 
 type User = (typeof userstable)[0];
 
@@ -80,9 +79,9 @@ export default function TableComponent({ params }: Props) {
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (visibleColumns === "all") return columnsOld;
 
-    return columns.filter((column) =>
+    return columnsOld.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
@@ -150,11 +149,11 @@ export default function TableComponent({ params }: Props) {
             <p className="text-bold text-base capitalize">{cellValue}</p>
           </div>
         );
-      case "status":
+      case "paid":
         return (
           <Chip
             className="capitalize border-none gap-1"
-            color={statusColorMap[user.status]}
+            color={statusColorMap[user.paid]}
             size="lg"
             variant="dot"
           >
@@ -186,7 +185,7 @@ export default function TableComponent({ params }: Props) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex justify-between font-medium items-center gap-3 ">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center text-center gap-2">
           <DtPicker
             onChange={setDate}
             type="single"
@@ -194,6 +193,10 @@ export default function TableComponent({ params }: Props) {
             local="en"
             minDate={minDate}
           />
+          <button className="bg-soft-white w-full px-2 text-base py-1 h-12 border-2 items-center justify-center font-medium border-borders-light hover:border-primary transition-all hover:text-primary text-borders rounded-xl">
+              Filtrar
+              <i className="bi bi-funnel text-lg ml-2"></i>
+            </button>
           </div>
           <div className="flex items-center justify-center text-center">
             <button className="bg-soft-white px-2 text-base py-1 h-12 border-2 items-center justify-center font-medium border-borders-light hover:border-primary transition-all hover:text-primary text-borders rounded-xl">

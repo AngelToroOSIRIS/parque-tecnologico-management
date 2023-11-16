@@ -7,7 +7,6 @@ import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { Rol, UsersAndRoles } from "@/types/d";
 import { TailSpin } from "react-loader-spinner";
-import ModalComponent from "../ModalComponent";
 import { useDisclosure } from "@nextui-org/react";
 
 const UsersEdit = () => {
@@ -61,6 +60,9 @@ const UsersEdit = () => {
       return toast.error("No se han podido obtener los filtros", {
         id: "1",
       });
+    }
+    if(response.data.message){
+      return toast.error(response.data.message , {id:"2"})
     }
     setDataUsers(response.data);
     setloading(false);

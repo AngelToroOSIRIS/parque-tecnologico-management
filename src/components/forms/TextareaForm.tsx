@@ -19,6 +19,7 @@ interface Validations {
  
 const TextareaForm = ({
   name,
+  classContainer,
   defaultValue,
   placeholder,
   minRows,
@@ -27,6 +28,7 @@ const TextareaForm = ({
   onChange,
 }: {
   name: string;
+  classContainer?: string;
   defaultValue?: string;
   placeholder?: string;
   minRows?: number;
@@ -136,7 +138,7 @@ const TextareaForm = ({
   };
  
   return (
-    <div className="text-start w-full">
+    <div className={"text-start w-full " + classContainer } >
       <GraySubtitle
         text={
           label?.value ??

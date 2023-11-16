@@ -159,21 +159,26 @@ const UserRow = ({
           </button>
         </Tooltip>
 
-        <button
-          onClick={() => {
-            onDeleteClick(user.email);
-          }}
-          className="mx-1 text-borders outline-none hover:text-primary transition-all"
+        <Tooltip
+          className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+          content="Inactivar usuario"
         >
-          <ModalIcon
-            button1="Eliminar usuario"
-            onClick={deleteUser}
-            text={`¿Seguro que quiere eliminar el usuario ${user.email}?`}
-            title="Eliminar usuario"
-            icon="trash3"
-          />
-          {/* <i className="bi bi-trash3 text-xl"></i> */}
-        </button>
+          <button
+            onClick={() => {
+              onDeleteClick(user.email);
+            }}
+            className="mx-1 text-borders outline-none hover:text-primary transition-all"
+          >
+            <ModalIcon
+              button1="Inactivar usuario"
+              onClick={deleteUser}
+              text={`¿Seguro que quiere Inhabilitar el usuario ${user.email}?`}
+              title="Inactivar usuario"
+              icon="dash-circle"
+            />
+            {/* <i className="bi bi-trash3 text-xl"></i> */}
+          </button>
+        </Tooltip>
       </div>
     </article>
   );

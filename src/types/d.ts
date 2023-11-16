@@ -47,17 +47,72 @@ export interface PlaceCard {
   img_card: string;
 }
 
-export interface Request {
+export interface RequestInfo {
+  id: number,
+	fecha_inicio: string,
+	fecha_fin: string,
+	factura: string,
+	cuenta_bancaria: string,
+	fecha_creacion: string
+}
+
+export interface HistoryRequest {
   id: number;
-  nombre: string;
-  correo: string;
-  telefono: string;
-  estado: string;
-  valor: string;
-  valor_descuento: string;
-  valor_pagado: string;
-  fecha_inicio: string;
-  fecha_fin: string;
-  fecha_actualizacion: string;
+  id_reservacion: number;
+  creado_por: string;
+  estado_reservacion: string;
   fecha_creacion: string;
+  observaciones: string;
+}
+
+export interface PersonRequest{
+  direccion: string;
+  email:string;
+  email_facturacion: string;
+  id_persona: number;
+  nombre: string;
+  telefono: string;
+}
+
+export interface ReservationRequest{
+  fecha_actualizacion:string;
+  fecha_creacion:string;
+  id:number;
+  id_espacio: number;
+  valor: number;
+  valor_descuento: number;
+  valor_pagado: number;
+}
+
+export interface RequestData{
+  solicitud_reservacion: RequestInfo;
+  estado_reservacion: string;
+  historial: HistoryRequest[];
+  reservacion: ReservationRequest;
+  info_persona :PersonRequest;
+}
+
+export interface Reservation{
+  fecha_actualizacion:string;
+  fecha_creacion:string;
+  id:number;
+  id_espacio: number;
+  valor: number;
+  valor_descuento: number;
+  valor_pagado: number;
+}
+
+export interface Site {
+  id: number;
+  categoria: string;
+  id_tarifas_espacio: any;
+  estado_espacio: string;
+  id_identificador_enlace: number;
+  nombre: string;
+  descripcion: string;
+  descripcion_corta: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+  activo_coworking: boolean;
+  activo_interno: boolean;
 }

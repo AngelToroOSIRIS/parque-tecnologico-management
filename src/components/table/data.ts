@@ -1,4 +1,4 @@
-const columns = [
+const columnsOld = [
   {name: "ID", uid: "id", sortable: true},
   {name: "NOMBRE SITIO", uid: "name", sortable: true},
   {name: "UBICACION", uid: "role", sortable: true},
@@ -9,6 +9,7 @@ const columns = [
   {name: "ACTUALIZACIÓN", uid: "fecha_Actual", sortable: true},
   {name: "OPCIONES", uid: "actions"},
   {name: "HORA RESERVADA", uid: "hour", sortable: true},
+  {name: "RESERVADO", uid: "paid", sortable: true}
 ];
 
 const statusOptions = [
@@ -27,7 +28,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "04/10/2023",
-    hour: "17:00"
+    hour: "17:00",
+    paid: "Pagado"
   },
   {
     id: 2,
@@ -38,7 +40,8 @@ const userstable = [
     status: "Inactivo",
     cowork: "0",
     fecha_Actual: "10/10/2023",
-    hour: "08:00"
+    hour: "08:00",
+    paid: "Pagado"
   },
   {
     id: 3,
@@ -49,7 +52,8 @@ const userstable = [
     cowork: "1",
     status: "Activo",
     fecha_Actual: "05/10/2023",
-    hour: "10:00"
+    hour: "10:00",
+    paid: "Pendiente"
   },
   {
     id: 4,
@@ -60,7 +64,8 @@ const userstable = [
     username: "paulina.alvarado@escuelaing.edu.co",
     cowork: "0",
     fecha_Actual: "30/09/2023",
-    hour: "19:00"
+    hour: "19:00",
+    paid: "Pendiente"
   },
   {
     id: 5,
@@ -71,7 +76,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "09/10/2023",
-    hour: "12:00"
+    hour: "12:00",
+    paid: "Pendiente"
   },
   {
     id: 6,
@@ -82,7 +88,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "11/10/2023",
-    hour: "07:00"
+    hour: "07:00",
+    paid: "Pendiente"
   },
   {
     id: 7,
@@ -93,7 +100,8 @@ const userstable = [
     status: "Inactivo",
     cowork: "0",
     fecha_Actual: "04/10/2023",
-    hour: "16:00"
+    hour: "16:00",
+    paid: "Pagado"
   },
   {
     id: 8,
@@ -104,7 +112,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "09/10/2023",
-    hour: "17:00"
+    hour: "17:00",
+    paid: "Pagado"
   },
   {
     id: 9,
@@ -115,7 +124,8 @@ const userstable = [
     status: "Mantenimiento",
     cowork: "1",
     fecha_Actual: "03/10/2023",
-    hour: "13:00"
+    hour: "13:00",
+    paid: "Pendiente"
   },
   {
     id: 10,
@@ -126,7 +136,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "05/10/2023",
-    hour: "15:00"
+    hour: "15:00",
+    paid: "Pagado"
   },
   {
     id: 11,
@@ -137,6 +148,7 @@ const userstable = [
     username: "angel.toro@mail.com",
     cowork: "1",
     fecha_Actual: "07/10/2023",
+    paid: "Pagado",
     hour: "08:00"
   },
   {
@@ -148,7 +160,8 @@ const userstable = [
     status: "Inactivo",
     cowork: "0",
     fecha_Actual: "02/10/2023",
-    hour: "07:00"
+    hour: "07:00",
+    paid: "Pendiente"
   },
   {
     id: 13,
@@ -159,7 +172,8 @@ const userstable = [
     cowork: "1",
     username: "camilo.galindo-r@escuelaing.edu.co",
     fecha_Actual: "03/10/2023",
-    hour: "14:00"
+    hour: "14:00",
+    paid: "Pagado"
   },
   {
     id: 14,
@@ -170,7 +184,8 @@ const userstable = [
     status: "Activo",
     cowork: "0",
     fecha_Actual: "09/10/2023",
-    hour: "10:00"
+    hour: "10:00",
+    paid: "Pendiente"
   },
   {
     id: 15,
@@ -181,7 +196,8 @@ const userstable = [
     status: "Inactivo",
     cowork: "0",
     fecha_Actual: "11/10/2023",
-    hour: "14:00"
+    hour: "14:00",
+    paid: "Pagado"
   },
   {
     id: 16,
@@ -192,7 +208,8 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "30/09/2023",
-    hour: "10:00"
+    hour: "10:00",
+    paid: "Pagado"
   },
   {
     id: 17,
@@ -203,7 +220,8 @@ const userstable = [
     status: "Mantenimiento",
     cowork: "0",
     fecha_Actual: "10/10/2023",
-    hour: "16:00"
+    hour: "16:00",
+    paid: "Pendiente"
   },
   {
     id: 18,
@@ -214,7 +232,8 @@ const userstable = [
     status: "Activo",
     cowork: "0",
     fecha_Actual: "03/10/2023",
-    hour: "20:00"
+    hour: "20:00",
+    paid: "Pendiente"
   },
   {
     id: 19,
@@ -225,7 +244,8 @@ const userstable = [
     status: "Inactivo",
     cowork: "0",
     fecha_Actual: "02/10/2023",
-    hour: "12:00"
+    hour: "12:00",
+    paid: "Pendiente"
   },
   {
     id: 20,
@@ -236,8 +256,9 @@ const userstable = [
     status: "Activo",
     cowork: "1",
     fecha_Actual: "07/10/2023",
-    hour: "10:00"
+    hour: "10:00",
+    paid: "Pagado"
   },
 ];
 
-export {columns, userstable, statusOptions};
+export {columnsOld, userstable, statusOptions};

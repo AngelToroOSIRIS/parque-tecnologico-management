@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Button from "../Button";
 import { useSession } from "next-auth/react";
@@ -9,17 +9,32 @@ import useFormData from "@/hooks/UseFormData";
 import toast from "react-hot-toast";
 import { redirect, useRouter } from "next/navigation";
 
-export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
-  const [images, setImages] = React.useState<{ dataURL: string; file: File }[]>(
-    []
-  );
+export default function ModalImage(
+  {
+    additionalInfo,
+  }: {
+    additionalInfo: {
+      id_estado_espacio: string;
+      activo_coworking: boolean;
+      activo_interno: boolean;
+    };
+  },
+  {
+    siteId,
+  }: {
+    siteId: {
+      id: string;
+    };
+  }
+) {
+  const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
   const { data: session, status } = useSession();
-  const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const { setFilesField, setData } = useFormData({
     minFiles: 3,
     maxFiles: 10,
   });
-
   const onChange = (imageList: ImageListType) =>
     setImages(imageList as never[]);
 
@@ -33,25 +48,27 @@ export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
 
     setFilesField(images.map((image) => image.file));
     const fd = setData({
-      id_espacio: 18,
+      id_espacio: 28,
       id_estado_espacio: "1",
-      activo_coworking: "1",
-      activo_interno: "1",
+      activo_coworking: 1,
+      activo_interno: 1,
       email: session?.user.emailHash,
     });
+
+    setLoading(true);
+    const toastLoading = toast.loading("Guardando imágenes...");
 
     const response = await fetchFileFn(`/imagesPlace`, {
       method: "POST",
       formData: fd,
     });
-    console.log(response);
     if (response.code !== 200) {
-      return toast.error("Ha ocurrido un error");
+      setLoading(false);
+      return toast.error("Ha ocurrido un error", { id: toastLoading });
     }
-    return(
-      toast.success("Sitio creado correctamente"),
-      redirect("/")
-    );
+    toast.success("Imágenes guardadas", { id: toastLoading });
+    router.push("/");
+    return;
   };
 
   // form.append("images", images.map((image) => image.file)[0]);
@@ -74,8 +91,8 @@ export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
           dragProps,
           errors,
         }) => (
-          <div>
-            <h1 className="mx-auto text-3xl text-center font-semibold m-6 text-primary">
+          <div className="w-[80%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
+            <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
               Subir imágenes
             </h1>
             <div className="text-center">
@@ -84,6 +101,8 @@ export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
                   <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
                     * Puede subir mínimo 3 fotos, máximo 10. <br /> Resolución
                     recomendada: 1920 x 1080 *
+                    <br />
+                    extensiones de archivo: jpg, png, jpeg
                   </p>
                 </div>
               )}
@@ -148,16 +167,16 @@ export default function ModalImage({additionalInfo}: {additionalInfo:[]}) {
                 ))}
               </div>
             )}
+            <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
+              <Button
+                text="Guardar"
+                onClick={sendImages}
+                disabled={images.length < 3 || loading}
+              />
+            </div>
           </div>
         )}
       </ImageUploading>
-      <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
-        <Button
-          text="Guardar"
-          onClick={sendImages}
-          disabled={images.length < 3}
-        />
-      </div>
     </>
   );
 }

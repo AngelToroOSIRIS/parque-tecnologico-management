@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import Request from "@/components/pages/Request";
+import Request from "@/components/pages/Requests";
 import { categoriesObj } from "@/libs/staticData";
 import { CategoryTextShort } from "@/types/d";
 import { redirect } from "next/navigation";
@@ -17,9 +17,9 @@ interface Props {
       (item) => item.route);
   
     return {
-      title: `${
+      title: `Solicitudes | ${
         categoryFound?.name ?? "Categoría no encontrada"
-      } | Parque Tecnólogico ECIJG`,
+      }`,
     };
   }
   
