@@ -42,15 +42,6 @@ const Header = () => {
               <i className="bi bi-house-door text-primary text-xl"></i>
               <p className="ml-2 hidden lg:block">Inicio</p>
             </Link>
-            {/* <li>
-              <button
-                onClick={() => router.push(`/financial`)}
-                className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-              >
-                <i className="bi bi-currency-dollar text-[#CCA400] text-xl"></i>
-                <p className="ml-2 hidden lg:block">Financiera</p>
-              </button>
-            </li> */}
             {status === "loading" && (
               <ContentLoader
                 uniqueKey="category-info-header"

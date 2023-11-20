@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 
 import {
@@ -7,38 +9,37 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
-  Tooltip,
   Chip,
   User,
   Pagination,
   Selection,
   ChipProps,
   SortDescriptor,
-  Modal,
 } from "@nextui-org/react";
 import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
-import { CategoryTextShort } from "@/types/d";
-import { DtPicker } from "../react-calendar-datetime-picker/dist";
+import { CategoryTextShort, ReservationCategory } from "@/types/d";
 import moment from "moment";
+import fetchFn from "@/libs/fetchFn";
+import toast from "react-hot-toast";
 
 interface Props {
-  params: { category: CategoryTextShort };
+  category: CategoryTextShort;
 }
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Pagado: "success",
-  Pendiente: "danger",
+  "No pago": "danger",
 };
 
 const INITIAL_VISIBLE_COLUMNS = ["username", "name", "type", "hour", "paid"];
 
 type User = (typeof userstable)[0];
 
-export default function TableComponent({ params }: Props) {
+export default function TableComponent({ category }: Props) {
+  const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
   const [date, setDate] = useState<{
     year: number;
     month: number;
@@ -49,13 +50,56 @@ export default function TableComponent({ params }: Props) {
     month: moment().month() + 1,
     day: moment().date(),
   };
-  const { data, status } = useSession();
-  const userSession = data?.user ?? {
+  const { data: session, status } = useSession();
+  const userSession = session?.user ?? {
     name: "default",
     email: "useremail",
   };
+  const getData = async () => {
+    const response = await fetchFn(
+      `/reservationsUsers?email=${session?.user.emailHash}&categoria=${category}`
+    );
+    if (response.code !== 200) {
+      return toast.error("No se ha podido obtener la información.", {
+        id: "1",
+      });
+    }
+    setReserCategory(response.data);
+  };
 
-  if (includesString(userSession.rols ?? [], ["superadmin", params.category])) {
+  useEffect(() => {
+    if (status === "authenticated") getData();
+  }, [status]);
+
+  const columns = [
+    {
+      key: "nombre_espacio",
+      label: "ESPACIO",
+      sortable: true,
+    },
+    {
+      key: "nombre_usuario",
+      label: "NOMBRE USUARIO",
+      sortable: false,
+    },
+    {
+      key: "estado_reservacion",
+      label: "ESTADO",
+      sortable: true,
+    },
+    {
+      key: "fecha_actualizacion",
+      label: "FECHA",
+      sortable: true,
+    },
+    {
+      key: "estado_pago",
+      label: "ESTADO",
+      sortable: true,
+    },
+  ];
+
+  if (includesString(userSession.rols ?? [], ["superadmin", category])) {
   }
   const [filterValue, setFilterValue] = React.useState("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -124,46 +168,54 @@ export default function TableComponent({ params }: Props) {
   }, [sortDescriptor, items]);
   const router = useRouter();
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
-    switch (columnKey) {
-      case "username":
+  const renderCell = React.useCallback(
+    (reservation: ReservationCategory, columnKey: React.Key) => {
+      if (columnKey == "nombre_espacio") {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-base font-semibold">
-              {cellValue}
+              {reservation.nombre_espacio}
             </p>
           </div>
         );
-        case "name":
+      }
+      if (columnKey === "nombre_usuario") {
         return (
           <div className="flex flex-col">
-            <p>
-              {cellValue}
+            <p>{reservation.persona_info.nombre}</p>
+            <p className="text-sm text-default-400">
+              {reservation.persona_info.email}
             </p>
           </div>
         );
-      case "role":
+      }
+      if (columnKey === "estado_reservacion") {
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-base capitalize">{cellValue}</p>
+            <p className="text-bold text-base capitalize">
+              {reservation.estado_reservacion}
+            </p>
           </div>
         );
-      case "paid":
+      }
+      if (columnKey === "fecha_actualizacion") {
+        <p>{reservation.fecha_actualizacion}antonio</p>;
+      }
+      if (columnKey === "estado_pago") {
         return (
           <Chip
             className="capitalize border-none gap-1"
-            color={statusColorMap[user.paid]}
+            color={statusColorMap[reservation.estado_pago]}
             size="lg"
             variant="dot"
           >
-            {cellValue}
+            {reservation.estado_pago}
           </Chip>
         );
-      default:
-        return cellValue;
-    }
-  }, []);
+      }
+    },
+    []
+  );
 
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -183,33 +235,7 @@ export default function TableComponent({ params }: Props) {
   }, []);
 
   const topContent = React.useMemo(() => {
-    return (
-      <div className="flex justify-between font-medium items-center gap-3 ">
-        <div className="flex justify-center items-center text-center gap-2">
-          <DtPicker
-            onChange={setDate}
-            type="single"
-            placeholder="Filtrar por día"
-            local="en"
-            minDate={minDate}
-          />
-          <button className="bg-soft-white w-full px-2 text-base py-1 h-12 border-2 items-center justify-center font-medium border-borders-light hover:border-primary transition-all hover:text-primary text-borders rounded-xl">
-              Filtrar
-              <i className="bi bi-funnel text-lg ml-2"></i>
-            </button>
-          </div>
-          <div className="flex items-center justify-center text-center">
-            <button className="bg-soft-white px-2 text-base py-1 h-12 border-2 items-center justify-center font-medium border-borders-light hover:border-primary transition-all hover:text-primary text-borders rounded-xl">
-              Reservar espacio
-              <i className="bi bi-calendar-event text-lg ml-2"></i>
-            </button>
-            <button className="bg-soft-white px-2 ml-4 text-base py-1 h-12 border-2 items-center justify-center font-medium border-borders-light hover:border-primary transition-all hover:text-primary text-borders rounded-xl">
-              Gestionar fechas
-              <i className="bi bi-calendar-range text-lg ml-2"></i>
-            </button>
-        </div>
-      </div>
-    );
+    return <p></p>;
   }, [
     filterValue,
     statusFilter,
@@ -294,14 +320,10 @@ export default function TableComponent({ params }: Props) {
         onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
       >
-        <TableHeader columns={headerColumns}>
+        <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-              allowsSorting={column.sortable}
-            >
-              {column.name}
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
+              {column.label}
             </TableColumn>
           )}
         </TableHeader>
@@ -310,13 +332,16 @@ export default function TableComponent({ params }: Props) {
           emptyContent={"No se han encontrado sitios"}
           items={sortedItems}
         >
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
+          {}
+          {reserCategory.map((resevation) => {
+            return (
+              <TableRow key={resevation.id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(resevation, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     );

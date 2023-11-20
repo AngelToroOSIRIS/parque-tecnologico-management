@@ -24,8 +24,10 @@ export interface Enlace {
 
 export interface ReservationDateDetails {
   dateTimeStart: string;
+  id?: number;
   dateTimeEnd: string;
   totalTime: string;
+  value: number;
   valid: boolean;
 }
 
@@ -49,12 +51,12 @@ export interface PlaceCard {
 }
 
 export interface RequestInfo {
-  id: number,
-	fecha_inicio: string,
-	fecha_fin: string,
-	factura: string,
-	cuenta_bancaria: string,
-	fecha_creacion: string
+  id: number;
+  fecha_inicio: string;
+  fecha_fin: string;
+  factura: string;
+  cuenta_bancaria: string;
+  fecha_creacion: string;
 }
 
 export interface HistoryRequest {
@@ -66,41 +68,56 @@ export interface HistoryRequest {
   observaciones: string;
 }
 
-export interface PersonRequest{
+export interface PersonRequest {
   direccion: string;
-  email:string;
+  email: string;
   email_facturacion: string;
   id_persona: number;
   nombre: string;
   telefono: string;
 }
 
-export interface ReservationRequest{
-  fecha_actualizacion:string;
-  fecha_creacion:string;
-  id:number;
+export interface ReservationRequest {
+  fecha_actualizacion: string;
+  fecha_creacion: string;
+  id: number;
   id_espacio: number;
   valor: number;
   valor_descuento: number;
   valor_pagado: number;
 }
 
-export interface RequestData{
+export interface RequestData {
   solicitud_reservacion: RequestInfo;
   estado_reservacion: string;
   historial: HistoryRequest[];
   reservacion: ReservationRequest;
-  info_persona :PersonRequest;
+  info_persona: PersonRequest;
 }
 
-export interface Reservation{
-  fecha_actualizacion:string;
-  fecha_creacion:string;
-  id:number;
+export interface Reservation {
+  fecha_actualizacion: string;
+  fecha_creacion: string;
+  id: number;
   id_espacio: number;
   valor: number;
   valor_descuento: number;
   valor_pagado: number;
+}
+
+export interface ReservationCategory {
+  id: number;
+  id_usuario: number;
+  id_espacio: number;
+  nombre_espacio: string;
+  estado_reservacion: string;
+  valor: number;
+  valor_descuento: number;
+  valor_pagado: number;
+  estado_pago: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+  persona_info: PersonRequest;
 }
 
 export interface Site {

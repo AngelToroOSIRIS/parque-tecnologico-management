@@ -3,21 +3,23 @@
 import { useState } from "react";
 import { DtCalendar } from "./react-calendar-datetime-picker/dist";
 import Button from "./Button";
-import Input from "@/components/forms/Input";
-import GraySubtitle from "./GraySubtitle";
+import Input from "../components/forms/Input";
+import GraySubtitle from "../components/GraySubtitle";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { ReservationDateDetails } from "@/types/d";
  
 const Calendar = ({
-  idSite,
+  idPlace,
   classContainer,
   onSelectDates,
+  customFn,
 }: {
-  idSite: number;
+  idPlace: number;
   classContainer?: string;
   onSelectDates?: ({}: ReservationDateDetails) => void;
+  customFn?: ({}: { time_start: string; time_end: string }) => any;
 }) => {
   const minDate = {
     year: moment().year(),
@@ -52,19 +54,28 @@ const Calendar = ({
     const dateTimeStart = `${stringDate}T${times.time_start}:00.000`;
     const dateTimeEnd = `${stringDate}T${times.time_end}:00.000`;
  
-    if (onSelectDates)
+    if (customFn) {
+      return customFn({
+        time_start: dateTimeStart,
+        time_end: dateTimeEnd,
+      });
+    }
+ 
+    if (onSelectDates) {
       onSelectDates({
-        dateTimeStart,
-        dateTimeEnd,
+        dateTimeStart: "",
+        dateTimeEnd: "",
         totalTime: "",
+        value: 0,
         valid: false,
       });
+    }
     const toastLoading = toast.loading("Verificando disponibilidad...");
     setLoading(true);
     const response = await fetchFn("/spaceAvailability", {
       method: "POST",
       body: {
-        id_espacio: idSite,
+        id_espacio: idPlace,
         fecha_inicio: dateTimeStart,
         fecha_fin: dateTimeEnd,
       },
@@ -83,9 +94,11 @@ const Calendar = ({
     toast.dismiss(toastLoading);
     if (onSelectDates) {
       onSelectDates({
+        id: Date.now(),
         dateTimeStart,
         dateTimeEnd,
         totalTime: response.data.time,
+        value: response.data.value,
         valid: true,
       });
     }
@@ -112,41 +125,34 @@ const Calendar = ({
             <p className="mb-3 text-soft-gray text-xl font-medium">
               Seleccione la hora
             </p>
-            <div className="w-full md:w-40 flex md:block gap-4 justify-center">
+            <div className="w-full md:w-40 block sm:flex md:block gap-4 justify-center">
               <div className="w-full">
                 <GraySubtitle text="Hora inicio:" />
                 <Input
                   type="time"
                   name="time_start"
                   icon="clock"
-                  onChange={({
-                    name,
-                    value,
-                  }: {
-                    name: string;
-                    value: string;
-                  }) => setTimes({ ...times, [name]: value })}
+                  onChange={({ name, value }) =>
+                    setTimes({ ...times, [name]: value })
+                  }
                   defaultValue="05:00"
                 />
               </div>
-              <div className="w-full">
+              <div className="w-full mb-7">
                 <GraySubtitle text="Hora fin:" />
                 <Input
                   type="time"
                   name="time_end"
                   icon="clock-fill"
-                  onChange={({
-                    name,
-                    value,
-                  }: {
-                    name: string;
-                    value: string;
-                  }) => setTimes({ ...times, [name]: value })}
+                  onChange={({ name, value }) =>
+                    setTimes({ ...times, [name]: value })
+                  }
                   defaultValue="06:00"
                 />
               </div>
             </div>
             <Button
+              icon="calendar-check"
               text="Consultar disponibilidad"
               onClick={checkDisponibility}
               disabled={loading}

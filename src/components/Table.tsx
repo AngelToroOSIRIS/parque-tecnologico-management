@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   Table,
@@ -18,6 +18,7 @@ import {
   ChipProps,
   SortDescriptor,
   Badge,
+  MenuItem,
 } from "@nextui-org/react";
 import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,9 @@ import { Category, CategoryTextShort, Site } from "@/types/d";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { categoriesObj } from "@/libs/staticData";
+import { Menu } from "@headlessui/react";
+import ButtonTable from "./ButtonTable";
+import { TailSpin } from "react-loader-spinner";
 
 interface Props {
   params: { category: CategoryTextShort };
@@ -53,41 +57,11 @@ export default function TableComponent({ params }: Props) {
         id: "1",
       });
     }
+    setLoading(false)
     setDataSite(response.data);
   };
 
   type site = (typeof dataSite)[0];
-
-  const columns = [
-    {
-      key: "id",
-      label: "ID",
-    },
-    {
-      key: "nombre",
-      label: "NOMBRE",
-    },
-    {
-      key: "estado_espacio",
-      label: "ESTADO",
-    },
-    {
-      key: "categoria",
-      label: "CATEGORIA",
-    },
-    {
-      key: "fecha_creacion",
-      label: "CREACIÓN",
-    },
-    {
-      key: "fecha_actualizacion",
-      label: "ACTUALIZACIÓN",
-    },
-    {
-      key: "options",
-      label: "OPCIONES",
-    },
-  ];
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     Activo: "success",
@@ -150,6 +124,7 @@ export default function TableComponent({ params }: Props) {
       ]);
       setRolAdmin(result);
       getData();
+      setLoading(true)
     }
   }, [status]);
 
@@ -287,27 +262,68 @@ export default function TableComponent({ params }: Props) {
     }
   }, []);
 
-  const csvData = [
-    [columns.map((column) => column.label)],
-    dataSite.map((site) => [
-      site.id,
-      site.nombre,
-      site.estado_espacio,
-      site.categoria,
-      formatDate(site.fecha_creacion, true),
-      formatDate(site.fecha_actualizacion, true),
-      "NO APLICA",
-    ]),
+  const columns = [
+    {
+      key: "id",
+      label: "ID",
+    },
+    {
+      key: "nombre",
+      label: "NOMBRE",
+    },
+    {
+      key: "estado_espacio",
+      label: "ESTADO",
+    },
+    {
+      key: "categoria",
+      label: "CATEGORIA",
+    },
+    {
+      key: "fecha_creacion",
+      label: "CREACIÓN",
+    },
+    {
+      key: "fecha_actualizacion",
+      label: "ACTUALIZACIÓN",
+    },
+    {
+      key: "options",
+      label: "OPCIONES",
+    },
   ];
 
-  const topContent = React.useMemo(() => {
+  const columnsCsv = [
+    {
+      key: "id",
+      label: "ID",
+    },
+    {
+      key: "nombre",
+      label: "NOMBRE",
+    },
+    {
+      key: "estado_espacio",
+      label: "ESTADO",
+    },
+    {
+      key: "fecha_creacion",
+      label: "CREACIÓN",
+    },
+    {
+      key: "fecha_actualizacion",
+      label: "ACTUALIZACIÓN",
+    },
+  ];
+
+  const topContent = useMemo(() => {
     return (
       <div className="flex justify-between font-medium items-center gap-3 ">
         <Input
           aria-label="Search"
           isClearable
           classNames={{
-            base: "w-full sm:max-w-[40%]",
+            base: "w-full sm:max-w-[30%]",
             input: "rounded-lg",
             inputWrapper:
               "h-[45px] rounded-lg bg-[#ffffff] shadow-none text-custom-black p-2",
@@ -320,31 +336,25 @@ export default function TableComponent({ params }: Props) {
           onClear={() => setFilterValue("")}
           onValueChange={onSearchChange}
         />
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <CSVLink
+            headers={columnsCsv}
+            filename={`REPORTE ${new Date().toJSON().slice(0, 10)} ${
+              categoryFound?.name
+            }`}
             separator=";"
-            filename={`REPORTE ${new Date().toJSON().slice(0, 10)}`}
-            data={csvData}
+            data={dataSite}
+            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
           >
-            Download me
+            Exportar en .CSV
+            <i className="bi bi-file-earmark-spreadsheet text-xl ml-2"></i>
           </CSVLink>
-          <button
-            onClick={() => router.push("/sites/add")}
-            aria-label="button"
-            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-          >
-            Reportes
-            <i className="bi bi-clipboard-data mx-1 text-xl"></i>
-          </button>
-          <button
-            onClick={() => router.push("/sites/add")}
-            aria-label="button"
-            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-          >
-            Agenda general
-            <i className="bi bi-calendar2-check mx-1 text-xl"></i>
-          </button>
-
+          <ButtonTable
+            text="Agenda general"
+            icon="calendar2-check"
+            onClick={() => router.push(`${params.category}/calendary`)}
+            type="button"
+          />
           {includesString(userSession.rols ?? [], [
             "superadmin",
             params.category,
@@ -356,23 +366,19 @@ export default function TableComponent({ params }: Props) {
                 size="lg"
                 className="animate-pulse"
               >
-                <button
+                <ButtonTable
+                  text="Solicitudes"
+                  icon="exclamation-circle"
                   onClick={() => router.push(`${params.category}/requests`)}
-                  aria-label="button"
-                  className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-                >
-                  Solicitudes
-                  <i className="bi bi-exclamation-circle mx-1 text-xl"></i>
-                </button>
+                  type="button"
+                />
               </Badge>
-              <button
+              <ButtonTable
+                text="Añadir sitio"
+                icon="plus-circle"
                 onClick={() => router.push("/sites/add")}
-                aria-label="button"
-                className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all"
-              >
-                Añadir sitio
-                <i className="bi bi-plus-circle mx-1 text-xl"></i>
-              </button>
+                type="button"
+              />
             </>
           )}
         </div>
@@ -451,41 +457,58 @@ export default function TableComponent({ params }: Props) {
     setLoading(false);
   }, []);
   return (
-    <Table
-      className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      aria-label="table"
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.key}
-            align={column.key === "actions" ? "center" : "start"}
+    <>
+      {!loading && (
+        <Table
+          className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
+          bottomContent={bottomContent}
+          bottomContentPlacement="outside"
+          aria-label="table"
+          classNames={classNames}
+          selectedKeys={selectedKeys}
+          topContent={topContent}
+          topContentPlacement="outside"
+          onSelectionChange={setSelectedKeys}
+        >
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn
+                key={column.key}
+                align={column.key === "actions" ? "center" : "start"}
+              >
+                {column.label}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody
+            aria-label="Body table"
+            emptyContent={"No se han encontrado sitios"}
           >
-            {column.label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        aria-label="Body table"
-        emptyContent={"No se han encontrado sitios"}
-      >
-        {dataSite.map((site) => {
-          return (
-            <TableRow key={site.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(site, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+            {dataSite.map((site) => {
+              return (
+                <TableRow key={site.id}>
+                  {(columnKey) => (
+                    <TableCell>{renderCell(site, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+      {loading && (
+        <TailSpin
+          height="100"
+          width="100"
+          color="#990000"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{
+            margin: "20px 0",
+            justifyContent: "center",
+          }}
+        />
+      )}
+    </>
   );
 }

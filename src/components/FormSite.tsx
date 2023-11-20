@@ -60,7 +60,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(dataForm);
     if (!validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }

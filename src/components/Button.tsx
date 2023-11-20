@@ -29,7 +29,7 @@ const Button = ({ route, text, onClick, type, icon, disabled = false }: Props) =
       }}
       type={type ?? "button"}
     >
-      <i className={`bi bi-${icon} text-xl`}></i>
+      <i className={`bi bi-${icon} mr-2 text-xl`}></i>
       {text}
     </button>
   );
