@@ -97,6 +97,10 @@ export default function TableComponent({ category }: Props) {
       label: "ESTADO",
       sortable: true,
     },
+    {
+      key: "info_reservation",
+      sortable: true,
+    },
   ];
 
   if (includesString(userSession.rols ?? [], ["superadmin", category])) {
@@ -199,7 +203,11 @@ export default function TableComponent({ category }: Props) {
         );
       }
       if (columnKey === "fecha_actualizacion") {
-        <p>{reservation.fecha_actualizacion}antonio</p>;
+        <div className="flex flex-col">
+          <p className="text-bold text-base capitalize">
+            {reservation.fecha_actualizacion}
+          </p>
+        </div>;
       }
       if (columnKey === "estado_pago") {
         return (

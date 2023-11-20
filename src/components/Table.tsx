@@ -149,14 +149,14 @@ export default function TableComponent({ params }: Props) {
     }
     if (columnKey == "estado_espacio") {
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
           <Chip
             className="capitalize border-none gap-1"
             color={statusColorMap[site.estado_espacio]}
             size="lg"
             variant="dot"
           >
-            <p className="text-bold  text-base capitalize">
+            <p className="text-bold text-base capitalize">
               {site.estado_espacio}
             </p>
           </Chip>

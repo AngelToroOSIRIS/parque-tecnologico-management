@@ -37,6 +37,26 @@ const Requests = ({ params }: Props) => {
       return toast.error("No se han podido obtener los datos", { id: "1" });
     }
     setRequests(response.data);
+    const res = await fetchFn("/updateReservation", {
+      method: "PUT",
+      body: {
+        email: session?.user.emailHash,
+        id_request: selectedRequest?.reservacion.id,
+        approved: true,
+        observations: "",
+        edit_dates: [
+          {
+            id_reservation_place: selectedRequest?.reservacion.id_espacio,
+            start_date: selectedRequest?.solicitud_reservacion.fecha_inicio,
+            end_date: selectedRequest?.solicitud_reservacion.fecha_fin,
+          },
+        ],
+      },
+    });
+  };
+
+  const updateData = async () => {
+    
   };
 
   useEffect(() => {
@@ -115,24 +135,24 @@ const Requests = ({ params }: Props) => {
           {contentModal === "Solicitud cambio fecha" && (
             <>
               <section className="font-medium gap-3 ">
-                  <p className="my-3 font-semibold text-center text-lg">
-                    Fecha actual reserva
+                <p className="my-3 font-semibold text-center text-lg">
+                  Fecha actual reserva
+                </p>
+                <div className="flex justify-between text-center mb-10">
+                  <p className="text-center">
+                    <strong> Fecha inicio:</strong>{" "}
+                    {formatDate(
+                      selectedRequest?.solicitud_reservacion.fecha_inicio ?? "",
+                      true
+                    )}
                   </p>
-                  <div className="flex justify-between text-center mb-10">
-                    <p className="text-center">
-                      <strong> Fecha inicio:</strong>{" "}
-                      {formatDate(
-                        selectedRequest?.solicitud_reservacion.fecha_inicio ?? "",
-                        true
-                      )}
-                    </p>
-                    <p className="text-center">
-                      <strong> Fecha fin:</strong>{" "}
-                      {formatDate(
-                        selectedRequest?.solicitud_reservacion.fecha_fin ?? "",
-                        true
-                      )}
-                    </p>
+                  <p className="text-center">
+                    <strong> Fecha fin:</strong>{" "}
+                    {formatDate(
+                      selectedRequest?.solicitud_reservacion.fecha_fin ?? "",
+                      true
+                    )}
+                  </p>
                 </div>
 
                 <div className="items-center text-center">

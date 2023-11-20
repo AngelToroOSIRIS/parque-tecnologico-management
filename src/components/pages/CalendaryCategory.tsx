@@ -40,7 +40,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
         <Modal
           isOpen={showModal}
           setIsOpen={setShowModal}
-          classContainer="w-[95%] max-w-xl"
+          classContainer={contentModal === "hour" ? "max-w-[700px]" : "max-w-xl"}
         >
           <div>
             <i
@@ -51,7 +51,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
               {contentModal === "hour" && (
                 <div className="py-2 m-3 justify-between">
                   {" "}
-                  <Calendar idPlace={1} />{" "}
+                  <Calendar idPlace={1} customFn={()=>{}} />{" "}
                 </div>
               )}
 
@@ -91,7 +91,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
             <ButtonTable
               text="Filtrar por dia"
               type="button"
-              icon="calendar-range"
+              icon="calendar-event"
               onClick={() => {
                 setShowModal(true);
                 setContentModal("day");
@@ -100,7 +100,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
             <ButtonTable
               text="Filtrar por rango"
               type="button"
-              icon="calendar-event"
+              icon="calendar-range"
               onClick={() => {
                 setShowModal(true);
                 setContentModal("range");
