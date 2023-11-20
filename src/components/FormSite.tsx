@@ -32,9 +32,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("sites");
+  const [content, setContent] = useState<"sites" | "images">("images");
   const [loading, setLoading] = useState<boolean>(false);
-  const [siteId, setSiteId] = useState<{ id: string }>({ id: "" });
+  const [siteId, setSiteId] = useState<number>(0);
   const [additionalInfo, setAdditionalInfo] = useState<{
     activo_coworking: boolean;
     activo_interno: boolean;
@@ -80,7 +80,8 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       },
     });
     setLoading(false);
-    setSiteId(res.data);
+    console.log(res.data)
+    setSiteId(res.data.id);
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
     }
@@ -96,8 +97,8 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   }, [status]);
   return (
     <>
-      <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
         {!loadingData && content === "sites" && (
+      <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
           <form
             className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-10 m-2"
             onSubmit={handleSubmit}
@@ -313,9 +314,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               />
             </div>
           </form>
-        )}
       </div>
-      {content === "images" && <SectionImage additionalInfo={additionalInfo} />}
+        )}
+      {content === "images" && <SectionImage siteId={siteId} additionalInfo={additionalInfo} />}
       {loadingData && (
         <TailSpin
           height="100"

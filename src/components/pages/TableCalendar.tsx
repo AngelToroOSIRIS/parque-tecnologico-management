@@ -40,16 +40,6 @@ type User = (typeof userstable)[0];
 
 export default function TableComponent({ category }: Props) {
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
-  const [date, setDate] = useState<{
-    year: number;
-    month: number;
-    day: number;
-  } | null>(null);
-  const minDate = {
-    year: moment().year(),
-    month: moment().month() + 1,
-    day: moment().date(),
-  };
   const { data: session, status } = useSession();
   const userSession = session?.user ?? {
     name: "default",
@@ -68,7 +58,8 @@ export default function TableComponent({ category }: Props) {
   };
 
   useEffect(() => {
-    if (status === "authenticated") getData();
+    if (status === "authenticated") 
+    getData();
   }, [status]);
 
   const columns = [
@@ -85,11 +76,6 @@ export default function TableComponent({ category }: Props) {
     {
       key: "estado_reservacion",
       label: "ESTADO",
-      sortable: true,
-    },
-    {
-      key: "fecha_actualizacion",
-      label: "FECHA",
       sortable: true,
     },
     {

@@ -7,26 +7,19 @@ import { useSession } from "next-auth/react";
 import fetchFileFn from "@/libs/fetchFileFn";
 import useFormData from "@/hooks/UseFormData";
 import toast from "react-hot-toast";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function ModalImage(
-  {
-    additionalInfo,
-  }: {
-    additionalInfo: {
-      id_estado_espacio: string;
-      activo_coworking: boolean;
-      activo_interno: boolean;
-    };
-  },
-  {
-    siteId,
-  }: {
-    siteId: {
-      id: string;
-    };
-  }
-) {
+export default function ModalImage({
+  additionalInfo,
+  siteId,
+}: {
+  additionalInfo: {
+    id_estado_espacio: string;
+    activo_coworking: boolean;
+    activo_interno: boolean;
+  };
+  siteId: number;
+}) {
   const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,6 +27,7 @@ export default function ModalImage(
   const { setFilesField, setData } = useFormData({
     minFiles: 3,
     maxFiles: 10,
+    fdFilesName: "images",
   });
   const onChange = (imageList: ImageListType) =>
     setImages(imageList as never[]);
@@ -48,10 +42,10 @@ export default function ModalImage(
 
     setFilesField(images.map((image) => image.file));
     const fd = setData({
-      id_espacio: 28,
-      id_estado_espacio: "1",
-      activo_coworking: 1,
-      activo_interno: 1,
+      id_espacio: siteId,
+      id_estado_espacio: additionalInfo.id_estado_espacio,
+      activo_coworking: additionalInfo.activo_coworking ? 1 : 0,
+      activo_interno: additionalInfo.activo_interno  ? 1 : 0,
       email: session?.user.emailHash,
     });
 
@@ -138,7 +132,7 @@ export default function ModalImage(
                 )}
               </div>
             )}
-            
+
             {imageList.length > 0 && (
               <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-5 p-5 gap-7">
                 {imageList.map((image, index) => (
@@ -167,13 +161,13 @@ export default function ModalImage(
                 ))}
               </div>
             )}
-            {images.length < 3  &&(
-                    <div className="w-full mt-3 text-center">
-                      <span className="text-primary font-semibold">
-                      Se necesita mínimo 3 imágenes
-                      </span>
-                    </div>
-                )}
+            {images.length < 3 && (
+              <div className="w-full mt-3 text-center">
+                <span className="text-primary font-semibold">
+                  Se necesita mínimo 3 imágenes
+                </span>
+              </div>
+            )}
             <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
               <Button
                 text="Guardar"

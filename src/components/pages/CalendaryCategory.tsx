@@ -30,6 +30,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
     month: moment().month() + 1,
     day: moment().date(),
   };
+  
   const categoryFound = categoriesObj.find((item) => item.route === category);
   return (
     <>
@@ -42,6 +43,7 @@ const CalendaryCategory = ({ category }: { category: CategoryTextShort }) => {
           setIsOpen={setShowModal}
           classContainer={contentModal === "hour" ? "max-w-[700px]" : "max-w-xl"}
         >
+          <h1 className="text-center text-2xl font-bold text-primary mx-auto justify-center items-center">Filtrar por </h1>
           <div>
             <i
               className="bi bi-x absolute text-borders top-2 right-3 hover:text-primary text-3xl transition-all cursor-pointer"

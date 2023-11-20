@@ -12,15 +12,12 @@ import {
   Input,
   Tooltip,
   Chip,
-  User,
   Pagination,
   Selection,
   ChipProps,
-  SortDescriptor,
   Badge,
-  MenuItem,
 } from "@nextui-org/react";
-import { columnsOld, userstable, statusOptions } from "@/components/table/data";
+import { statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { formatDate, includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
@@ -29,15 +26,14 @@ import { Category, CategoryTextShort, Site } from "@/types/d";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { categoriesObj } from "@/libs/staticData";
-import { Menu } from "@headlessui/react";
 import ButtonTable from "./ButtonTable";
 import { TailSpin } from "react-loader-spinner";
 
-interface Props {
-  params: { category: CategoryTextShort };
-}
-
-export default function TableComponent({ params }: Props) {
+export default function TableComponent({
+  category,
+}: {
+  category: CategoryTextShort;
+}) {
   const [rolAdmin, setRolAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [dataSite, setDataSite] = useState<Site[]>([]);
@@ -51,17 +47,16 @@ export default function TableComponent({ params }: Props) {
   }>({ categorias: [] });
 
   const getData = async () => {
-    const response = await fetchFn(`/places?categoria=${params.category}`);
+    const response = await fetchFn(`/places?categoria=${category}`);
     if (response.code !== 200) {
       return toast.error("No se ha podido obtener la información.", {
         id: "1",
       });
     }
-    setLoading(false)
+    setLoading(false);
     setDataSite(response.data);
   };
 
-  type site = (typeof dataSite)[0];
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     Activo: "success",
@@ -70,7 +65,7 @@ export default function TableComponent({ params }: Props) {
   };
 
   const categoryFound = categoriesObj.find(
-    (item) => item.route === params.category
+    (item) => item.route === category
   );
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -120,11 +115,11 @@ export default function TableComponent({ params }: Props) {
     if (status === "authenticated") {
       const result = includesString(userSession.rols ?? [], [
         "superadmin",
-        params.category,
+        category,
       ]);
       setRolAdmin(result);
       getData();
-      setLoading(true)
+      setLoading(true);
     }
   }, [status]);
 
@@ -216,7 +211,7 @@ export default function TableComponent({ params }: Props) {
           </Tooltip>
           {includesString(userSession.rols ?? [], [
             "superadmin",
-            params.category,
+            category,
           ]) && (
             <>
               <Tooltip
@@ -344,20 +339,20 @@ export default function TableComponent({ params }: Props) {
             }`}
             separator=";"
             data={dataSite}
-            className="h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
+            className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
           >
             Exportar en .CSV
-            <i className="bi bi-file-earmark-spreadsheet text-xl ml-2"></i>
+            <i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
           </CSVLink>
           <ButtonTable
             text="Agenda general"
             icon="calendar2-check"
-            onClick={() => router.push(`${params.category}/calendary`)}
+            onClick={() => router.push(`${category}/calendary`)}
             type="button"
           />
           {includesString(userSession.rols ?? [], [
             "superadmin",
-            params.category,
+            category,
           ]) && (
             <>
               <Badge
@@ -369,7 +364,7 @@ export default function TableComponent({ params }: Props) {
                 <ButtonTable
                   text="Solicitudes"
                   icon="exclamation-circle"
-                  onClick={() => router.push(`${params.category}/requests`)}
+                  onClick={() => router.push(`${category}/requests`)}
                   type="button"
                 />
               </Badge>

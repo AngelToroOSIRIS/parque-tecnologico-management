@@ -1,6 +1,6 @@
 "use client";
 
-import HeaderUser from "@/components/HeaderUser";
+import Header from "@/components/Header";
 import PlaceCard from "@/components/PlaceCard";
 import { useSession } from "next-auth/react";
 
@@ -13,7 +13,7 @@ export default function SitesPage() {
   return (
     <>
       <main>
-        <HeaderUser />
+        <Header />
         <div className="margin-header  mx-auto justify-center items-center">
           <h1 className="font-semibold text-primary text-2xl text-center m-8">
             Sitios disponible a reservar
