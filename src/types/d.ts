@@ -62,10 +62,10 @@ export interface RequestInfo {
 export interface HistoryRequest {
   id: number;
   id_reservacion: number;
-  creado_por: string;
   estado_reservacion: string;
   fecha_creacion: string;
   observaciones: string;
+  creado_por: string;
 }
 
 export interface PersonRequest {
@@ -87,12 +87,46 @@ export interface ReservationRequest {
   valor_pagado: number;
 }
 
+export interface CancelRequest {
+  id: number;
+  factura: string;
+  cuenta_bancaria: string;
+  fecha_creacion: string;
+}
+
+export interface DateChangeRequest {
+  id_reservacion_espacio: number;
+  fecha_inicio: string;
+  fecha_fin: string;
+  reservacion_espacio: {
+    fecha_inicio: string;
+    fecha_fin: string;
+  };
+}
+
 export interface RequestData {
-  solicitud_reservacion: RequestInfo;
-  estado_reservacion: string;
+  cambio_fecha_reservacion?: DateChangeRequest[];
+  cancelar_reservacion?: CancelRequest;
   historial: HistoryRequest[];
-  reservacion: ReservationRequest;
+  reservacion: Reservation;
   info_persona: PersonRequest;
+  estado_reservacion: string;
+  id_historial: number;
+}
+
+export interface ReservationSite {
+  id: number;
+  id_usuario: number;
+  id_espacio: number;
+  nombre_espacio: string;
+  estado_reservacion: string;
+  valor: number;
+  valor_descuento: number;
+  valor_pagado: number;
+  estado_pago: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+  persona_info: PersonRequest;
 }
 
 export interface Reservation {

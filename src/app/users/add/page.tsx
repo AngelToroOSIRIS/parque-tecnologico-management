@@ -1,11 +1,16 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import FormUser from "@/components/FormUser";
 import Header from "@/components/Header";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Añadir usuarios",
 };
 
-export default function () {
+export default async function () {
+  const session = await getServerSession(authOptions)
+      if(session?.user.interno) return redirect("/sites")
   return (
     <>
       <Header />

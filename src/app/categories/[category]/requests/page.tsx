@@ -1,7 +1,9 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import Header from "@/components/Header";
 import Request from "@/components/pages/Requests";
 import { categoriesObj } from "@/libs/staticData";
 import { CategoryTextShort } from "@/types/d";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -23,11 +25,12 @@ interface Props {
     };
   }
   
-export default function RequestPage({ params }: Props) {
+export default async function RequestPage({ params }: Props) {
     const categoryFound = categoriesObj.find(
         (item) => item.route === params.category
       );
-      
+      const session = await getServerSession(authOptions)
+      if(session?.user.interno) return redirect("/sites")
       if (!categoryFound || categoryFound.disabled) return redirect("/404");
   return (
     <>

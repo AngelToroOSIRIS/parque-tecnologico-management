@@ -18,6 +18,10 @@ const RequestCard = ({
         <article className="min-w-8xl flex p-4 justify-between mb-6 gap-10 items-center box">
           <section className="w-full flex justify-between">
             <div className="w-auto m-4">
+            <p >
+                <strong># Reservación: </strong>
+                {request.reservacion.id}
+              </p>
               <p>
                 <strong>Nombre: </strong>
                 {request.info_persona.nombre}
@@ -29,10 +33,6 @@ const RequestCard = ({
               <p>
                 <strong> Teléfono: </strong>
                 {request.info_persona.telefono}
-              </p>
-              <p className="text-primary">
-                <strong> Tipo de la solicitud: </strong>
-                {request.estado_reservacion}
               </p>
             </div>
             <div className="w-auto m-4 my-auto">
@@ -47,6 +47,10 @@ const RequestCard = ({
               <p>
                 <strong> Valor Pagado: </strong>
                 {request.reservacion.valor_pagado}
+              </p>
+              <p className="text-primary">
+                <strong> Tipo de la solicitud: </strong>
+                {request.estado_reservacion}
               </p>
             </div>
             <div className="w-auto m-4 my-auto">

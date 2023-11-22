@@ -17,12 +17,9 @@ import {
 } from "@nextui-org/react";
 import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
-import { includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
-import { CategoryTextShort, ReservationCategory } from "@/types/d";
-import moment from "moment";
-import fetchFn from "@/libs/fetchFn";
-import toast from "react-hot-toast";
+import { ReservationCategory, ReservationSite } from "@/types/d";
+import { formatDate } from "@/libs/functionsStrings";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Pagado: "success",
@@ -33,14 +30,10 @@ const INITIAL_VISIBLE_COLUMNS = ["username", "name", "type", "hour", "paid"];
 
 type User = (typeof userstable)[0];
 
-export default function TableComponent({
-  category,
-  reserCategory,
-  onClickAction,
+export default function TableCalendarSite({
+  reservationSite,
 }: {
-  category: CategoryTextShort;
-  reserCategory: ReservationCategory[];
-  onClickAction: (reservation: ReservationCategory, action: string) => void;
+  reservationSite: ReservationSite[];
 }) {
   const { data: session, status } = useSession();
   const userSession = session?.user ?? {
@@ -50,8 +43,8 @@ export default function TableComponent({
 
   const columns = [
     {
-      key: "nombre_espacio",
-      label: "ESPACIO",
+      key: "id",
+      label: "ID RESERVACION",
       sortable: true,
     },
     {
@@ -65,18 +58,20 @@ export default function TableComponent({
       sortable: true,
     },
     {
+      key: "fecha_creacion",
+      label: "FECHA CREACION",
+      sortable: true,
+    },
+    {
       key: "estado_pago",
-      label: "ESTADO",
+      label: "ESTADO PAGO",
       sortable: true,
     },
     {
       key: "info_reservation",
-      sortable: true,
     },
   ];
 
-  if (includesString(userSession.rols ?? [], ["superadmin", category])) {
-  }
   const [filterValue, setFilterValue] = React.useState("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
@@ -145,17 +140,17 @@ export default function TableComponent({
   const router = useRouter();
 
   const renderCell = React.useCallback(
-    (reservation: ReservationCategory, columnKey: React.Key) => {
-      if (columnKey == "nombre_espacio") {
+    (reservation: ReservationSite, columnKey: React.Key) => {
+      if (columnKey == "id") {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-base font-semibold">
-              {reservation.nombre_espacio}
+              {reservation.id}
             </p>
           </div>
         );
       }
-      if (columnKey === "nombre_usuario") {
+      if (columnKey == "nombre_usuario") {
         return (
           <div className="flex flex-col">
             <p>{reservation.persona_info.nombre}</p>
@@ -165,21 +160,23 @@ export default function TableComponent({
           </div>
         );
       }
-      if (columnKey === "estado_reservacion") {
+      if (columnKey == "estado_reservacion") {
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-base capitalize">
+            <p className="text-base font-semibold">
               {reservation.estado_reservacion}
             </p>
           </div>
         );
       }
-      if (columnKey === "fecha_actualizacion") {
-        <div className="flex flex-col">
-          <p className="text-bold text-base capitalize">
-            {reservation.fecha_actualizacion}
-          </p>
-        </div>;
+      if (columnKey == "fecha_creacion") {
+        return (
+          <div className="flex flex-col">
+            <p className="text-base">
+              {formatDate(reservation.fecha_creacion, true)}
+            </p>
+          </div>
+        );
       }
       if (columnKey === "estado_pago") {
         return (
@@ -193,15 +190,12 @@ export default function TableComponent({
           </Chip>
         );
       }
-      if (columnKey === "info_reservation") {
+      if(columnKey === "info_reservation"){
         return (
-          <i
-            onClick={() => {
-              onClickAction(reservation, "info");
-            }}
-            className="bi bi-info-circle  text-xl text-default-400 hover:text-custom-black transition-all"
-          ></i>
-        );
+          <a href="">
+            <i className="bi bi-info-circle text-xl text-default-400 hover:text-custom-black transition-all"></i>
+          </a>
+        )
       }
     },
     []
@@ -236,6 +230,43 @@ export default function TableComponent({
     hasSearchFilter,
   ]);
 
+  const bottomContent = React.useMemo(() => {
+    return (
+      <div className="p-2 flex text-center justify-between font-medium text-md gap-x-4 items-center transition-all">
+        <Pagination
+          showControls
+          aria-label="Pagination"
+          showShadow
+          size="lg"
+          classNames={{
+            cursor:
+              "bg-primary text-default-white font-medium text-md transition-all rounded-lg",
+          }}
+          isDisabled={hasSearchFilter}
+          page={page}
+          total={pages}
+          variant="light"
+          onChange={setPage}
+        />
+        <div className="flex gap-4">
+          <div className="flex gap-3 text-borders rounded-xl p-2">
+            <label className="justify-center items-center">
+              Sitios por página:
+              <select
+                className="outline-none h-7 text-base bg-primary rounded-md ml-2 text-default-white"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+    );
+  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+
   const classNames = React.useMemo(
     () => ({
       th: ["bg-borders-light", "text-borders", "text-center", "text-base"],
@@ -258,10 +289,10 @@ export default function TableComponent({
     router.refresh();
     setLoading(false);
   }, []);
-  if (!loading) {
     return (
       <Table
         className="w-full rounded-xl overflow-x-auto mx-auto text-sm text-center"
+        bottomContent={bottomContent}
         bottomContentPlacement="outside"
         aria-label="table"
         classNames={classNames}
@@ -281,11 +312,11 @@ export default function TableComponent({
         </TableHeader>
         <TableBody
           aria-label="Body table"
-          emptyContent={"No se han encontrado sitios"}
+          emptyContent={"No se han encontrado reservaciones para este sitio"}
           items={sortedItems}
         >
-          {}
-          {reserCategory.map((resevation) => {
+          {reservationSite.map((resevation) => {
+            console.log(resevation)
             return (
               <TableRow key={resevation.id}>
                 {(columnKey) => (
@@ -297,5 +328,4 @@ export default function TableComponent({
         </TableBody>
       </Table>
     );
-  }
 }

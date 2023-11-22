@@ -2,17 +2,20 @@
 
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonTable from "../ButtonTable";
-import TableCalendar from "@/components/pages/TableCalendar";
-import { includesString } from "@/libs/functionsStrings";
 import { TailSpin } from "react-loader-spinner";
 import { DtCalendar } from "../react-calendar-datetime-picker/dist";
 import Modal from "../Modal";
 import Calendar from "../Calendar";
+import fetchFn from "@/libs/fetchFn";
+import toast from "react-hot-toast";
+import { ReservationSite } from "@/types/d";
+import TableCalendarSite from "../TableCalendarSite";
 
 const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [reservationSite, setReservationSite] = useState<ReservationSite[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [contentModal, setContentModal] = useState<string>("");
   const { data, status } = useSession();
@@ -30,13 +33,33 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
     month: moment().month() + 1,
     day: moment().date(),
   };
+
+  const getData = async () => {
+    const response = await fetchFn(
+      `/reservationsByPlace?email=${userSession.emailHash}&id_place=${idPlace}`
+    );
+    if (response.code !== 200) {
+      return toast.error("No se ha podido obtener la información.", {
+        id: "1",
+      });
+    }
+    setReservationSite(response.data);
+    // setLoading(true)
+  };
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      getData();
+      // setLoading(false)
+    }
+  }, [status]);
   return (
     <>
-      {!loading && (
-        <div>
-          <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
-            Agenda del sitio
-          </p>
+      <div>
+        <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
+          Reservaciones
+        </p>
+        {!loading && (
           <div className="w-[95%] m-5 p-8 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
             <Modal
               isOpen={showModal}
@@ -115,13 +138,13 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                   category,
                 ]) && (
                     )} */}
-                    <ButtonTable text="Gestionar fechas" icon="calendar-range" />
+                <ButtonTable text="Gestionar fechas" icon="calendar-range" />
               </div>
             </div>
-            {/* {!loading && <TableCalendar category=""/>} */}
+            <TableCalendarSite reservationSite={reservationSite} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
       {loading && (
         <TailSpin
           height="100"

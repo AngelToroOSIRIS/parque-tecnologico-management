@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-
 import {
   Table,
   TableHeader,
@@ -21,22 +20,21 @@ import { statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { formatDate, includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink
+ } from "react-csv";
 import { Category, CategoryTextShort, Site } from "@/types/d";
-import fetchFn from "@/libs/fetchFn";
-import toast from "react-hot-toast";
 import { categoriesObj } from "@/libs/staticData";
 import ButtonTable from "./ButtonTable";
 import { TailSpin } from "react-loader-spinner";
 
 export default function TableComponent({
   category,
+  dataSite,
 }: {
   category: CategoryTextShort;
+  dataSite: Site[];
 }) {
   const [rolAdmin, setRolAdmin] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [dataSite, setDataSite] = useState<Site[]>([]);
   const { data, status } = useSession();
   const userSession = data?.user ?? {
     name: "default",
@@ -45,18 +43,6 @@ export default function TableComponent({
   const [dataFilters, setDataFilters] = useState<{
     categorias: Category[];
   }>({ categorias: [] });
-
-  const getData = async () => {
-    const response = await fetchFn(`/places?categoria=${category}`);
-    if (response.code !== 200) {
-      return toast.error("No se ha podido obtener la información.", {
-        id: "1",
-      });
-    }
-    setLoading(false);
-    setDataSite(response.data);
-  };
-
 
   const statusColorMap: Record<string, ChipProps["color"]> = {
     Activo: "success",
@@ -110,19 +96,6 @@ export default function TableComponent({
   }, [page, filteredItems, rowsPerPage]);
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      const result = includesString(userSession.rols ?? [], [
-        "superadmin",
-        category,
-      ]);
-      setRolAdmin(result);
-      getData();
-      setLoading(true);
-    }
-  }, [status]);
-
   const renderCell = React.useCallback((site: Site, columnKey: React.Key) => {
     if (columnKey == "id") {
       return (
@@ -449,11 +422,9 @@ export default function TableComponent({
   );
   useEffect(() => {
     router.refresh();
-    setLoading(false);
   }, []);
   return (
     <>
-      {!loading && (
         <Table
           className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
           bottomContent={bottomContent}
@@ -490,20 +461,6 @@ export default function TableComponent({
             })}
           </TableBody>
         </Table>
-      )}
-      {loading && (
-        <TailSpin
-          height="100"
-          width="100"
-          color="#990000"
-          ariaLabel="tail-spin-loading"
-          radius="1"
-          wrapperStyle={{
-            margin: "20px 0",
-            justifyContent: "center",
-          }}
-        />
-      )}
     </>
   );
 }

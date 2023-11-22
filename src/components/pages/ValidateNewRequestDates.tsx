@@ -1,0 +1,85 @@
+"use client";
+
+import { formatDate } from "@/libs/functionsStrings";
+import Button from "../Button";
+import { DateChangeRequest } from "@/types/d";
+import { Fragment, useState } from "react";
+
+const ValidateNewRequestDates = ({
+  newDates,
+  onSubmitAction,
+}: {
+  newDates: DateChangeRequest[];
+  onSubmitAction?: (valid: boolean) => any;
+}) => {
+  const [validateDates, setValidateDates] = useState<
+    {
+      id_reservacion_espacio: number;
+      valid: boolean | null;
+    }[]
+  >(
+    newDates.map((date) => {
+      return {
+        id_reservacion_espacio: date.id_reservacion_espacio,
+        valid: null,
+      };
+    })
+  );
+
+  return (
+    <>
+      <section className="font-medium gap-3 ">
+        {/*Aqui va el Map */}
+        {newDates.map((date) => {
+          const validDate = validateDates.find(
+            (i) => i.id_reservacion_espacio === date.id_reservacion_espacio
+          );
+
+          return (
+            <Fragment key={date.id_reservacion_espacio}>
+              <div className={`flex justify-between mb-5 relative px-4 py-4 border-2 ${validDate?.valid === null ? "border-borders-light" : validDate?.valid === false ? "border-red" :  "border-green"} rounded-2xl`}>
+                <div className="items-start">
+                  <p className="mb-3 font-semibold text-lg">
+                    Fecha actual reserva
+                  </p>
+                  <p>
+                    <strong> Fecha inicio: </strong>
+                    {formatDate(date.fecha_inicio, true)}
+                  </p>
+                  <p>
+                    <strong> Fecha Fin:</strong>{" "}
+                    {formatDate(date.fecha_fin, true)}
+                  </p>
+                </div>
+                <div>
+                  <p className="mb-3 text-primary font-semibold text-lg">
+                    Fecha petición de cambio
+                  </p>
+                  <p>
+                    <strong>Fecha inicio: </strong>
+                    {formatDate(date.reservacion_espacio.fecha_inicio, true)}
+                  </p>
+                  <p>
+                    <strong>Fecha fin: </strong>
+                    {formatDate(date.reservacion_espacio.fecha_fin, true)}
+                  </p>
+                </div>
+                <div className="items-center py-auto justify-center">
+                  <i
+                    title={validDate?.valid === null ? "Esperar validación" : validDate?.valid === false ? "No disponible para reserva" :  "Disponible para reserva"}
+                    className={`bi bi-${validDate?.valid === null ? "circle-fill" : validDate?.valid === false ? "x-circle-fill text-red" : "check-circle-fill text-green"} absolute right-3 top-12 text-default-300 text-2xl transition-all`}
+                  ></i>
+                </div>
+              </div>
+            </Fragment>
+          );
+        })}
+      </section>
+      <section className="w-[60%] mx-auto my-5 p-2">
+        <Button text="Consultar disponibilidad" />
+      </section>
+    </>
+  );
+};
+
+export default ValidateNewRequestDates;

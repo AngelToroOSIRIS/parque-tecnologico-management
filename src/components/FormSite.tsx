@@ -14,6 +14,7 @@ import { Category, CategoryTextShort, Enlace, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
 import TextareaForm from "./forms/TextareaForm";
+import { useRouter } from "next/navigation";
 
 const FormSite = ({ idSite }: { idSite?: number }) => {
   const { data: session, status } = useSession();
@@ -32,7 +33,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     { name: "activo_interno", type: "str", required: true },
   ]);
 
-  const [content, setContent] = useState<"sites" | "images">("images");
+  const [content, setContent] = useState<"sites" | "images">("sites");
   const [loading, setLoading] = useState<boolean>(false);
   const [siteId, setSiteId] = useState<number>(0);
   const [additionalInfo, setAdditionalInfo] = useState<{
@@ -46,7 +47,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     estadoEspacios: States[];
     identificadoresEnlace: Enlace[];
   }>({ categorias: [], estadoEspacios: [], identificadoresEnlace: [] });
-
+  const router = useRouter()
   const getData = async () => {
     const response = await fetchFn(
       `/characteristicsPlace?email=${session?.user.emailHash}`
@@ -80,7 +81,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       },
     });
     setLoading(false);
-    console.log(res.data)
     setSiteId(res.data.id);
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
@@ -93,12 +93,18 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   };
 
   useEffect(() => {
-    if (status === "authenticated") getData();
+    if (status === "authenticated") 
+    getData()
+    if (session?.user.rols || session?.user.interno) {
+      if (session?.user.interno) {
+        return router.push("/sites");
+      }
+    }
   }, [status]);
   return (
     <>
-        {!loadingData && content === "sites" && (
-      <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
+      {!loadingData && content === "sites" && (
+        <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
           <form
             className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-10 m-2"
             onSubmit={handleSubmit}
@@ -314,9 +320,11 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               />
             </div>
           </form>
-      </div>
-        )}
-      {content === "images" && <SectionImage siteId={siteId} additionalInfo={additionalInfo} />}
+        </div>
+      )}
+      {content === "images" && (
+        <SectionImage siteId={siteId} additionalInfo={additionalInfo} />
+      )}
       {loadingData && (
         <TailSpin
           height="100"

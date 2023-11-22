@@ -12,7 +12,8 @@ import toast from "react-hot-toast";
 import ReservationRecordCard from "../ReservationRecordCard";
 import { formatDate } from "@/libs/functionsStrings";
 import { categoriesObj } from "@/libs/staticData";
-import Categories from "./Categories";
+import { TailSpin } from "react-loader-spinner";
+import ValidateNewRequestDates from "./ValidateNewRequestDates";
 
 interface Props {
   params: { category: CategoryTextShort };
@@ -22,6 +23,7 @@ const Requests = ({ params }: Props) => {
   const { data: session, status } = useSession();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [contentModal, setContentModal] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedRequest, setSelectedRequest] = useState<RequestData>();
   const [requests, setRequests] = useState<RequestData[]>([]);
 
@@ -30,6 +32,7 @@ const Requests = ({ params }: Props) => {
   );
 
   const getData = async () => {
+    setLoading(true)
     const response = await fetchFn(
       `/getReservationsRequests?email=${session?.user.emailHash}&categoria=${params.category}`
     );
@@ -37,27 +40,25 @@ const Requests = ({ params }: Props) => {
       return toast.error("No se han podido obtener los datos", { id: "1" });
     }
     setRequests(response.data);
-    const res = await fetchFn("/updateReservation", {
-      method: "PUT",
-      body: {
-        email: session?.user.emailHash,
-        id_request: selectedRequest?.reservacion.id,
-        approved: true,
-        observations: "",
-        edit_dates: [
-          {
-            id_reservation_place: selectedRequest?.reservacion.id_espacio,
-            start_date: selectedRequest?.solicitud_reservacion.fecha_inicio,
-            end_date: selectedRequest?.solicitud_reservacion.fecha_fin,
-          },
-        ],
-      },
-    });
+    setLoading(false)
+    // const res = await fetchFn("/updateReservation", {
+    //   method: "PUT",
+    //   body: {
+    //     email: session?.user.emailHash,
+    //     id_request: selectedRequest?.reservacion.id,
+    //     approved: true,
+    //     observations: "",
+    //     edit_dates: [
+    //       {
+    //         id_reservation_place: selectedRequest?.reservacion.id_espacio,
+    //         start_date: selectedRequest?.solicitud_reservacion.fecha_inicio,
+    //         end_date: selectedRequest?.solicitud_reservacion.fecha_fin,
+    //       },
+    //     ],
+    //   },
+    // });
   };
 
-  const updateData = async () => {
-    
-  };
 
   useEffect(() => {
     if (status === "authenticated") getData();
@@ -65,10 +66,12 @@ const Requests = ({ params }: Props) => {
 
   return (
     <>
+    {!loading && (
+      <>
       <Modal
         isOpen={showModal}
         setIsOpen={setShowModal}
-        classContainer="w-[95%] max-w-xl"
+        classContainer="w-[95%] max-w-2xl"
       >
         <div>
           <i
@@ -85,118 +88,41 @@ const Requests = ({ params }: Props) => {
             <>
               <section>
                 <p className="mx-3 my-4 font-semibold text-center text-lg">
-                  Fecha actual reserva
+                  Fecha actual reservación:
                 </p>
                 <div className="flex justify-between px-3 text-center">
                   <p className="pb-7 text-center">
-                    <strong> Fecha inicio</strong>{" "}
-                    {selectedRequest?.solicitud_reservacion.fecha_inicio}
+                    <strong> Fecha creación: </strong>{" "}
+                    {formatDate(
+                      selectedRequest?.reservacion.fecha_creacion ?? "",
+                      true
+                    )}
                   </p>
                   <p className="pb-7 text-center">
-                    <strong> Fecha fin</strong>
-                    {selectedRequest?.solicitud_reservacion.fecha_fin}
+                    <strong> Fecha actualización: </strong>
+                    {formatDate(
+                      selectedRequest?.reservacion.fecha_actualizacion ?? "",
+                      true
+                    )}
                   </p>
                 </div>
               </section>
-              <section className="flex justify-between  mx-12 mb-10">
-                <p>
-                  <strong>Numero de Factura:</strong> N° 168
+              <section className="flex justify-between px-3 gap-10 text-center mb-10">
+                <p className="min-w-[250px] max-h-10">
+                  <strong>Numero de Factura:</strong> #
+                  {selectedRequest?.cancelar_reservacion?.factura}
                 </p>
                 <p className="text-blue ml-2 text-base hover:underline select-none cursor-pointer transition-all">
-                  Cuenta bancaria
+                  Cuenta bancaria:{" "}
+                  {selectedRequest?.cancelar_reservacion?.cuenta_bancaria}
                   <i className="bi bi-file-earmark-text ml-1"></i>
                 </p>
               </section>
-              <TextareaForm
-                onChange={() => {}}
-                name="observation"
-                label={{
-                  required: true,
-                  value: "Observación del proceso:",
-                }}
-                validations={{
-                  required: "Es necesaria la observación",
-                  minLength: {
-                    value: 10,
-                    message: "La observación debe tener minimo 10 caracteres.",
-                  },
-                  maxLength: {
-                    value: 250,
-                    message:
-                      "La observación debe contener máximo 250 caracteres.",
-                  },
-                }}
-                placeholder="Observación sobre el proceso de la solicitud"
-                minRows={5}
-              />
             </>
           )}
 
           {contentModal === "Solicitud cambio fecha" && (
-            <>
-              <section className="font-medium gap-3 ">
-                <p className="my-3 font-semibold text-center text-lg">
-                  Fecha actual reserva
-                </p>
-                <div className="flex justify-between text-center mb-10">
-                  <p className="text-center">
-                    <strong> Fecha inicio:</strong>{" "}
-                    {formatDate(
-                      selectedRequest?.solicitud_reservacion.fecha_inicio ?? "",
-                      true
-                    )}
-                  </p>
-                  <p className="text-center">
-                    <strong> Fecha fin:</strong>{" "}
-                    {formatDate(
-                      selectedRequest?.solicitud_reservacion.fecha_fin ?? "",
-                      true
-                    )}
-                  </p>
-                </div>
-
-                <div className="items-center text-center">
-                  <p className="m-3 text-primary font-semibold text-lg">
-                    Fecha petición de cambio
-                  </p>
-                  <div className="flex justify-between mb-10">
-                    <p className="text-center">
-                      <strong>Fecha inicio: </strong>
-                      29/11/2023 11:00 am
-                    </p>
-                    <p>
-                      <strong>Fecha fin: </strong>
-                      29/11/2023 12:00 am
-                    </p>
-                  </div>
-                </div>
-              </section>
-              <section className="w-[60%] mx-auto mb-5 p-2">
-                <Button text="Consultar disponibilidad" />
-              </section>
-              <TextareaForm
-                onChange={() => {}}
-                name="observation"
-                label={{
-                  required: true,
-                  value: "Observación del proceso:",
-                }}
-                validations={{
-                  required: "Es necesaria la observación",
-                  minLength: {
-                    value: 10,
-                    message: "La observación debe tener minimo 10 caracteres.",
-                  },
-                  maxLength: {
-                    value: 250,
-                    message:
-                      "La observación debe contener máximo 250 caracteres.",
-                  },
-                }}
-                placeholder="Observación sobre el proceso de la solicitud"
-                minRows={5}
-              />
-            </>
+            <ValidateNewRequestDates newDates={selectedRequest?.cambio_fecha_reservacion ?? []} />
           )}
 
           {contentModal === "history" && (
@@ -211,8 +137,31 @@ const Requests = ({ params }: Props) => {
               </section>
             </>
           )}
-
-          {contentModal !== "history" && (
+        </div>
+        {contentModal !== "history" && (
+          <>
+            <TextareaForm
+              onChange={() => {}}
+              name="observation"
+              label={{
+                value: "Observación del proceso:",
+                required: false
+              }}
+              validations={{
+                required: "Es necesaria la observación",
+                minLength: {
+                  value: 10,
+                  message: "La observación debe tener minimo 10 caracteres.",
+                },
+                maxLength: {
+                  value: 250,
+                  message:
+                    "La observación debe contener máximo 250 caracteres.",
+                },
+              }}
+              placeholder="Observación sobre el proceso de la solicitud"
+              minRows={5}
+            />
             <div className="flex mx-auto text-lg justify-center gap-7">
               <div className="border-b-3  border-default-white  hover:border-green transition-all">
                 <button
@@ -231,13 +180,14 @@ const Requests = ({ params }: Props) => {
                 </button>
               </div>
             </div>
-          )}
-        </div>
+          </>
+        )}
       </Modal>
-      <section className="lg:w-[85%] w-[70%] mx-auto">
+      {requests.length >= 1 &&(
+        <section className="lg:w-[85%] w-[70%] mx-auto">
         {requests.map((request) => (
           <RequestCard
-            key={request.solicitud_reservacion.id}
+            key={request.reservacion.id}
             request={request}
             onClickAction={(request, action) => {
               setSelectedRequest(request);
@@ -247,6 +197,31 @@ const Requests = ({ params }: Props) => {
           />
         ))}
       </section>
+      )}
+      {requests.length === 0 &&(
+        <>
+        <div className="text-center text-default-300 select-none mt-[7%]">
+        <i className="bi bi-x-circle text-7xl"></i>
+        <p className="text-4xl mt-[1%]">No se encuentran solicitudes <br /> para {categoryFound?.name}</p>
+        </div>
+        </>
+      )}
+      </>
+    )}
+    {loading && (
+        <TailSpin
+          height="100"
+          width="100"
+          color="#990000"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{
+            margin: "20px 0",
+            justifyContent: "center",
+          }}
+        />
+      )}
+      
     </>
   );
 };
