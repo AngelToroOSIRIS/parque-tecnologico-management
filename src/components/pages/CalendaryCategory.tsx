@@ -10,7 +10,7 @@ import TableCalendar from "@/components/pages/TableCalendar";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import Modal from "../Modal";
-import { includesString } from "@/libs/functionsStrings";
+import { formatDate, includesString } from "@/libs/functionsStrings";
 import Input from "../forms/Input";
 import GraySubtitle from "../GraySubtitle";
 import Button from "../Button";
@@ -26,7 +26,8 @@ export default function CalendaryCategory({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
-  const [selectedReservation, setSelectedReservation] = useState<ReservationCategory>();
+  const [selectedReservation, setSelectedReservation] =
+    useState<ReservationCategory>();
   const [contentModal, setContentModal] = useState<string>("");
   {
     const { data: session, status } = useSession();
@@ -75,11 +76,10 @@ export default function CalendaryCategory({
               <Modal
                 isOpen={showModal}
                 setIsOpen={setShowModal}
-                classContainer={contentModal ? "max-w-[700px]" : "max-w-xl"}
+                classContainer={
+                  contentModal !== "info" ? "max-w-[700px]" : "max-w-3xl"
+                }
               >
-                <h1 className="text-center text-2xl font-bold text-primary mx-auto justify-center items-center">
-                  Filtrar por{" "}
-                </h1>
                 <div>
                   <i
                     className="bi bi-x absolute text-borders top-2 right-3 hover:text-primary text-3xl transition-all cursor-pointer"
@@ -104,22 +104,117 @@ export default function CalendaryCategory({
                             minDate={minDate}
                           />
                           <div className="w-full">
-                              <p className="text-center m-5 text-soft-gray text-xl font-medium">
-                                Seleccione día
-                              </p>
-                              <div className="mt-20">
+                            <p className="text-center m-5 text-soft-gray text-xl font-medium">
+                              Seleccione día
+                            </p>
+                            <div className="mt-20">
                               <Button
                                 icon="calendar-check"
                                 text="Consultar disponibilidad"
                               />
-                              </div>
+                            </div>
                           </div>
                         </div>
                       </>
                     )}
-                    {contentModal === "info" &&(
-                      <p>Antonio, Buenas tardes</p>
+                    {contentModal === "info" && (
+                      <>
+                        <div>
+                        <p className="text-primary mt-4 font-semibold">Información de la reserva: </p>
+                          <section className="flex items-center justify-between gap-2 my-4 py-3 px-5">
+                            <div>
+                              <p>
+                                <strong># Reservacio: </strong>
+                                {selectedReservation?.id}
+                              </p>
+                              <p>
+                                <strong>Nombre del espacio: </strong>
+                                {selectedReservation?.nombre_espacio}
+                              </p>
+                              <p>
+                                <strong>Fecha de creación: </strong>
+                                {formatDate(
+                                  selectedReservation?.fecha_creacion ?? "",
+                                  true
+                                )}
+                              </p>
+                              <p>
+                                <strong>Fecha ultima actualización: </strong>
+                                {formatDate(
+                                  selectedReservation?.fecha_actualizacion ??
+                                    "",
+                                  true
+                                )}
+                              </p>
+                              <p>
+                                <strong>Estado del pago: </strong>
+                                {selectedReservation?.estado_pago}
+                              </p>
+                            </div>
+                            <div>
+                              <p>
+                                <strong>Estado de la reservación: </strong>
+                                {selectedReservation?.estado_reservacion}
+                              </p>
+                              <p>
+                                <strong>Valor espacio: </strong>
+                                {selectedReservation?.valor}
+                              </p>
+                              <p>
+                                <strong>Valor descuento: </strong>
+                                {selectedReservation?.valor_descuento}
+                              </p>
+                              <p>
+                                <strong>Valor pagado: </strong>
+                                {selectedReservation?.valor_pagado}
+                              </p>
+                            </div>
+                          </section>
+                          <hr className="w-full border-1 rounded-lg text-default-300 mx-auto" />
+                          {/* <h1 className="text-center text-xl m-5 font-bold text-primary mx-auto justify-center items-center">
+                        Información del usuario
+                      </h1> */}
+                            <p className="text-primary mt-4 font-semibold">Información del cliente: </p>
+                          <section className="flex items-center justify-between gap-3 mb-4 py-3 px-5">
+                            <div>
+                              <p>
+                                <strong>Nombre cliente: </strong>
+                                {selectedReservation?.persona_info.nombre}
+                              </p>
+                              <p>
+                                <strong>Email cliente: </strong>
+                                {selectedReservation?.persona_info.email}
+                              </p>
+                              <p
+                                className={
+                                  selectedReservation?.persona_info
+                                    .email_facturacion
+                                    ? "block"
+                                    : "hidden"
+                                }
+                              >
+                                <strong>Email facturación cliente: </strong>
+                                {
+                                  selectedReservation?.persona_info
+                                    .email_facturacion
+                                }
+                              </p>
+                            </div>
+                            <div>
+                              <p>
+                                <strong>Telefono cliente: </strong>
+                                {selectedReservation?.persona_info.telefono}
+                              </p>
+                              <p>
+                                <strong>Dirección cliente: </strong>
+                                {selectedReservation?.persona_info.direccion}
+                              </p>
+                            </div>
+                          </section>
+                        </div>
+                      </>
                     )}
+
                     {contentModal === "range" && (
                       <>
                         <div className="flex gap-5 py-2 m-3 justify-between">
@@ -209,11 +304,11 @@ export default function CalendaryCategory({
                 </div>
               </div>
               <TableCalendar
-              onClickAction={(reservation, action)=>{
-                  setSelectedReservation(reservation)
+                onClickAction={(reservation, action) => {
+                  setSelectedReservation(reservation);
                   setContentModal(action);
-                  setShowModal(true)
-              }}
+                  setShowModal(true);
+                }}
                 category={category}
                 reserCategory={reserCategory}
               />

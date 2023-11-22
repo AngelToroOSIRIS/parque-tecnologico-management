@@ -2,34 +2,83 @@
 
 import { formatDate } from "@/libs/functionsStrings";
 import Button from "../Button";
-import { DateChangeRequest } from "@/types/d";
+import { DateChangeRequest, Reservation } from "@/types/d";
 import { Fragment, useState } from "react";
+import fetchFn from "@/libs/fetchFn";
+import toast from "react-hot-toast";
+import { ScrollShadow } from "@nextui-org/react";
 
 const ValidateNewRequestDates = ({
   newDates,
   onSubmitAction,
+  idPlace,
 }: {
   newDates: DateChangeRequest[];
+  idPlace: number;
   onSubmitAction?: (valid: boolean) => any;
 }) => {
+  const inicialState = newDates.map((date) => {
+    return {
+      id_reservacion_espacio: date.id_reservacion_espacio,
+      valid: null,
+    };
+  });
+  const [loading, setLoading] = useState<boolean>(false);
   const [validateDates, setValidateDates] = useState<
     {
       id_reservacion_espacio: number;
       valid: boolean | null;
     }[]
-  >(
-    newDates.map((date) => {
-      return {
-        id_reservacion_espacio: date.id_reservacion_espacio,
-        valid: null,
-      };
-    })
-  );
+  >(inicialState);
+
+  const postData = async () => {
+    setLoading(true);
+    setValidateDates(inicialState);
+
+    const responseDates = [];
+    const invalidValues = [];
+
+    const toastLoading = toast.loading("Verificando disponibilidad...");
+
+    for (let newDate of newDates) {
+      const response = await fetchFn("/spaceAvailability", {
+        method: "POST",
+        body: {
+          id_espacio: idPlace,
+          fecha_inicio: newDate.fecha_inicio,
+          fecha_fin: newDate.fecha_fin,
+        },
+      });
+
+      if (response.code !== 200) {
+        invalidValues.push(newDate.id_reservacion_espacio);
+        responseDates.push({
+          id_reservacion_espacio: newDate.id_reservacion_espacio,
+          valid: false,
+        });
+      } else {
+        responseDates.push({
+          id_reservacion_espacio: newDate.id_reservacion_espacio,
+          valid: true,
+        });
+      }
+    }
+
+    setValidateDates(responseDates);
+    setLoading(false);
+    if (onSubmitAction) onSubmitAction(invalidValues.length === 0);
+    if (invalidValues.length > 0) {
+      toast.error("Fecha sin disponibilidad", {
+        id: toastLoading,
+      });
+    } else {
+      toast.dismiss(toastLoading);
+    }
+  };
 
   return (
     <>
-      <section className="font-medium gap-3 ">
-        {/*Aqui va el Map */}
+      <ScrollShadow className="font-medium gap-3 max-h-[500px]">
         {newDates.map((date) => {
           const validDate = validateDates.find(
             (i) => i.id_reservacion_espacio === date.id_reservacion_espacio
@@ -37,18 +86,29 @@ const ValidateNewRequestDates = ({
 
           return (
             <Fragment key={date.id_reservacion_espacio}>
-              <div className={`flex justify-between mb-5 relative px-4 py-4 border-2 ${validDate?.valid === null ? "border-borders-light" : validDate?.valid === false ? "border-red" :  "border-green"} rounded-2xl`}>
+                <div>
+                </div>
+                <p><strong># Reservacion del espacio: </strong>{date.id_reservacion_espacio}</p>
+              <div
+                className={`flex justify-between mb-5 relative px-4 py-4 border-2 ${
+                    validDate?.valid === null
+                    ? "border-borders-light"
+                    : validDate?.valid === false
+                    ? "border-red"
+                    : "border-green"
+                } rounded-2xl`}
+                >
                 <div className="items-start">
                   <p className="mb-3 font-semibold text-lg">
                     Fecha actual reserva
                   </p>
                   <p>
                     <strong> Fecha inicio: </strong>
-                    {formatDate(date.fecha_inicio, true)}
+                    {formatDate(date.reservacion_espacio.fecha_inicio, true)}
                   </p>
                   <p>
                     <strong> Fecha Fin:</strong>{" "}
-                    {formatDate(date.fecha_fin, true)}
+                    {formatDate(date.reservacion_espacio.fecha_fin, true)}
                   </p>
                 </div>
                 <div>
@@ -57,26 +117,42 @@ const ValidateNewRequestDates = ({
                   </p>
                   <p>
                     <strong>Fecha inicio: </strong>
-                    {formatDate(date.reservacion_espacio.fecha_inicio, true)}
+                    {formatDate(date.fecha_inicio, true)}
                   </p>
                   <p>
                     <strong>Fecha fin: </strong>
-                    {formatDate(date.reservacion_espacio.fecha_fin, true)}
+                    {formatDate(date.fecha_fin, true)}
                   </p>
                 </div>
                 <div className="items-center py-auto justify-center">
                   <i
-                    title={validDate?.valid === null ? "Esperar validación" : validDate?.valid === false ? "No disponible para reserva" :  "Disponible para reserva"}
-                    className={`bi bi-${validDate?.valid === null ? "circle-fill" : validDate?.valid === false ? "x-circle-fill text-red" : "check-circle-fill text-green"} absolute right-3 top-12 text-default-300 text-2xl transition-all`}
+                    title={
+                      validDate?.valid === null
+                        ? "Esperar validación"
+                        : validDate?.valid === false
+                        ? "No disponible para reserva"
+                        : "Disponible para reserva"
+                    }
+                    className={`bi bi-${
+                      validDate?.valid === null
+                        ? "circle-fill"
+                        : validDate?.valid === false
+                        ? "x-circle-fill text-red"
+                        : "check-circle-fill text-green"
+                    } absolute right-3 top-12 text-default-300 text-2xl transition-all`}
                   ></i>
                 </div>
               </div>
             </Fragment>
           );
         })}
-      </section>
+      </ScrollShadow>
       <section className="w-[60%] mx-auto my-5 p-2">
-        <Button text="Consultar disponibilidad" />
+        <Button
+          text="Consultar disponibilidad"
+          onClick={postData}
+          disabled={loading}
+        />
       </section>
     </>
   );
