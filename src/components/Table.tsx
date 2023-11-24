@@ -16,16 +16,14 @@ import {
   ChipProps,
   Badge,
 } from "@nextui-org/react";
-import { statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { formatDate, includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
-import { CSVLink
- } from "react-csv";
+import { CSVLink } from "react-csv";
 import { Category, CategoryTextShort, Site } from "@/types/d";
 import { categoriesObj } from "@/libs/staticData";
 import ButtonTable from "./ButtonTable";
-import { TailSpin } from "react-loader-spinner";
+import ModalIcon from "./ModalIcon";
 
 export default function TableComponent({
   category,
@@ -34,7 +32,6 @@ export default function TableComponent({
   category: CategoryTextShort;
   dataSite: Site[];
 }) {
-  const [rolAdmin, setRolAdmin] = useState<boolean>(false);
   const { data, status } = useSession();
   const userSession = data?.user ?? {
     name: "default",
@@ -50,9 +47,7 @@ export default function TableComponent({
     Mantenimiento: "warning",
   };
 
-  const categoryFound = categoriesObj.find(
-    (item) => item.route === category
-  );
+  const categoryFound = categoriesObj.find((item) => item.route === category);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
@@ -74,14 +69,6 @@ export default function TableComponent({
     if (hasSearchFilter) {
       filteredSite = filteredSite.filter((dataSite) =>
         dataSite.nombre.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredSite = filteredSite.filter((site) =>
-        Array.from(statusFilter).includes(site.estado_espacio)
       );
     }
 
@@ -158,7 +145,7 @@ export default function TableComponent({
     }
     if (columnKey == "options") {
       return (
-        <div className="relative justify-center flex items-center gap-3">
+        <div className="relative justify-center flex items-center">
           <Tooltip
             className="font-semibold  rounded-lg shadow-xl bg-off-white"
             content="Ver página del sitio"
@@ -168,7 +155,7 @@ export default function TableComponent({
               href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/${site.id}`}
               className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
             >
-              <i className="bi bi-eye text-2xl"></i>
+              <i className="bi bi-eye m-2 text-2xl"></i>
             </a>
           </Tooltip>
           <Tooltip
@@ -179,13 +166,10 @@ export default function TableComponent({
               onClick={() => router.push(`/sites/${site.id}/calendar`)}
               className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
             >
-              <i className="bi bi-calendar2-check text-xl"></i>
+              <i className="bi bi-calendar2-check m-2 text-xl"></i>
             </span>
           </Tooltip>
-          {includesString(userSession.rols ?? [], [
-            "superadmin",
-            category,
-          ]) && (
+          {includesString(userSession.rols ?? [], ["superadmin", category]) && (
             <>
               <Tooltip
                 className="font-semibold rounded-lg shadow-xl bg-off-white"
@@ -195,15 +179,20 @@ export default function TableComponent({
                   onClick={() => router.push(`/sites/${site.id}/edit`)}
                   className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
                 >
-                  <i className="bi bi-pen text-xl"></i>
+                  <i className="bi bi-pen m-2 text-xl"></i>
                 </span>
               </Tooltip>
               <Tooltip
                 className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
                 content="Inhabilitar sitio"
               >
-                <span className="text-lg outline-none text-borders hover:text-primary cursor-pointer transition-all">
-                  <i className="bi bi-dash-circle text-xl"></i>
+                <span>
+                  <ModalIcon
+                    icon="dash-circle"
+                    title="Inhabilitar sitio"
+                    button1="Inhabilitar sitio"
+                    text={`¿Seguro que quiere Inhabilitar el sitio ${site.nombre}`}
+                  />
                 </span>
               </Tooltip>
             </>
@@ -221,6 +210,7 @@ export default function TableComponent({
     []
   );
 
+  
   const onSearchChange = React.useCallback((value?: string) => {
     if (value) {
       setFilterValue(value);
@@ -323,10 +313,7 @@ export default function TableComponent({
             onClick={() => router.push(`${category}/calendary`)}
             type="button"
           />
-          {includesString(userSession.rols ?? [], [
-            "superadmin",
-            category,
-          ]) && (
+          {includesString(userSession.rols ?? [], ["superadmin", category]) && (
             <>
               <Badge
                 content={<i className="bi bi-bell-fill text-sm"></i>}
@@ -425,42 +412,42 @@ export default function TableComponent({
   }, []);
   return (
     <>
-        <Table
-          className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          aria-label="table"
-          classNames={classNames}
-          selectedKeys={selectedKeys}
-          topContent={topContent}
-          topContentPlacement="outside"
-          onSelectionChange={setSelectedKeys}
+      <Table
+        className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        aria-label="table"
+        classNames={classNames}
+        selectedKeys={selectedKeys}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.key}
+              align={column.key === "actions" ? "center" : "start"}
+            >
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          aria-label="Body table"
+          emptyContent={"No se han encontrado sitios"}
         >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.key}
-                align={column.key === "actions" ? "center" : "start"}
-              >
-                {column.label}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody
-            aria-label="Body table"
-            emptyContent={"No se han encontrado sitios"}
-          >
-            {dataSite.map((site) => {
-              return (
-                <TableRow key={site.id}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(site, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+          {dataSite.map((site) => {
+            return (
+              <TableRow key={site.id}>
+                {(columnKey) => (
+                  <TableCell>{renderCell(site, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </>
   );
 }

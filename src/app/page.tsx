@@ -5,7 +5,7 @@ import PlaceCard from "@/components/PlaceCard";
 import fetchFn from "@/libs/fetchFn";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function Home() {

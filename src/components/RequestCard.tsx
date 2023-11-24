@@ -4,7 +4,7 @@ import {
   RequestData,
 } from "@/types/d";
 import Button from "./Button";
-import { formatDate } from "@/libs/functionsStrings";
+import { convertToCurrency, formatDate } from "@/libs/functionsStrings";
 
 const RequestCard = ({
   request,
@@ -38,15 +38,15 @@ const RequestCard = ({
             <div className="w-auto m-4 my-auto">
               <p>
                 <strong> Valor: </strong>
-                {request.reservacion.valor}
+                {convertToCurrency(request.reservacion.valor)}
               </p>
               <p>
                 <strong> Valor con descuento: </strong>
-                {request.reservacion.valor_descuento}
+                {convertToCurrency(request.reservacion.valor_descuento)}
               </p>
               <p>
                 <strong> Valor Pagado: </strong>
-                {request.reservacion.valor_pagado}
+                {convertToCurrency(request.reservacion.valor_pagado)}
               </p>
               <p className="text-primary">
                 <strong> Tipo de la solicitud: </strong>

@@ -127,6 +127,14 @@ export interface ReservationSite {
   fecha_creacion: string;
   fecha_actualizacion: string;
   persona_info: PersonRequest;
+  fechas: Dates[];
+}
+
+export interface Dates {
+  id_reservacion_espacio: number;
+  valor: number;
+  fecha_inicio: string;
+  fecha_fin: string;
 }
 
 export interface Reservation {

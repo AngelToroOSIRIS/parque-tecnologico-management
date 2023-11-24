@@ -1,6 +1,12 @@
 import fetchFn from "@/libs/fetchFn";
 import { includesString } from "@/libs/functionsStrings";
-import { Avatar, Chip, ChipProps, SelectItem, Tooltip } from "@nextui-org/react";
+import {
+  Avatar,
+  Chip,
+  ChipProps,
+  SelectItem,
+  Tooltip,
+} from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { Rol, UsersAndRoles } from "@/types/d";
@@ -56,10 +62,13 @@ const UserRow = ({
     toast.success("Usuario actualizado correctamente");
     return;
   };
-  const deleteUser = async () => {
-    const res = await fetchFn(`/disableUser?email=${session?.user.emailHash}&emailUser=${user.email}`, {
-      method: "PUT",
-    });
+  const disabledUser = async () => {
+    const res = await fetchFn(
+      `/disableUser?email=${session?.user.emailHash}&emailUser=${user.email}`,
+      {
+        method: "PUT",
+      }
+    );
     if (res.code !== 200) {
       return toast.error("No se ha podido inactivar el usuario.", {
         id: "1",
@@ -145,67 +154,82 @@ const UserRow = ({
       {/* celda 3 */}
 
       <div className="w-[10%] text-center">
-          <Chip
+        <Chip
           className="capitalize border-none gap-1"
           color={statusColorMap[user.estado]}
           size="lg"
           variant="dot"
-          >
-        <p className="text-lg font-medium text-borders contrast-50">
+        >
+          <p className="text-lg font-medium text-borders contrast-50">
             {user.estado}
-        </p>
-            </Chip>
+          </p>
+        </Chip>
       </div>
 
       {/* celda 4 */}
       <div className="w-[10%] text-center justify-between ">
-        
-        {user.estado === "Activo" &&
+        {user.estado === "Activo" && (
           <>
-          <Tooltip
-          className={`mx-1 outline-none ${
-            changedRols
-              ? "font-semibold rounded-lg shadow-xl bg-off-white"
-              : "hidden"
-          }`}
-          content="Guardar cambios"
-        >
-          <button
-            onClick={() => {
-              if (changedRols) saveRols();
-            }}
-            className={`mx-1 outline-none ${
-              changedRols
-                ? "text-borders transition-all"
-                : "text-borders-light transition-all cursor-default"
-            }`}
-          >
-            <i className="bi bi-floppy text-xl"></i>
-          </button>
-        </Tooltip>
+            <Tooltip
+              className={`mx-1 outline-none ${
+                changedRols
+                  ? "font-semibold rounded-lg shadow-xl bg-off-white"
+                  : "hidden"
+              }`}
+              content="Guardar cambios"
+            >
+              <button
+                onClick={() => {
+                  if (changedRols) saveRols();
+                }}
+                className={`mx-1 outline-none ${
+                  changedRols
+                    ? "text-borders transition-all"
+                    : "text-borders-light transition-all cursor-default"
+                }`}
+              >
+                <i className="bi bi-floppy text-xl"></i>
+              </button>
+            </Tooltip>
 
-        <Tooltip
-          className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
-          content="Inactivar usuario"
-        >
-          <button
-            onClick={() => {
-              onDeleteClick(user.email);
-            }}
-            className="mx-1 text-borders outline-none hover:text-primary transition-all"
-          >
-            <ModalIcon
-              button1="Inactivar usuario"
-              onClick={deleteUser}
-              text={`¿Seguro que quiere Inhabilitar el usuario ${user.email}?`}
-              title="Inactivar usuario"
-              icon="dash-circle"
-            />
-            {/* <i className="bi bi-trash3 text-xl"></i> */}
-          </button>
-        </Tooltip>
-        </>
-        }
+            <Tooltip
+              className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+              content="Inactivar usuario"
+            >
+              <button
+                onClick={() => {
+                  onDeleteClick(user.email);
+                }}
+                className="mx-1 text-borders outline-none hover:text-primary transition-all"
+              >
+                <ModalIcon
+                  button1="Inactivar usuario"
+                  onClick={disabledUser}
+                  text={`¿Seguro que quiere Inhabilitar el usuario ${user.email}?`}
+                  title="Inactivar usuario"
+                  icon="dash-circle"
+                />
+              </button>
+            </Tooltip>
+          </>
+        )}
+        {user.estado === "Inactivo" && (
+          <>
+            <Tooltip
+            className="font-semibold text-primary rounded-lg shadow-xl bg-off-white"
+            content="Activar usuario"
+            >
+              <button className="ml-7">
+                <ModalIcon
+                  button1="Activar usuario"
+                  text={`¿Seguro que quiere activar el usuario ${user.email}?`}
+                  title="Activar usuario"
+                  icon="plus-circle "
+                />
+              </button>
+            </Tooltip>
+          </>
+        )}
       </div>
     </article>
   );

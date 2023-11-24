@@ -2,7 +2,7 @@
 
 import { formatDate } from "@/libs/functionsStrings";
 import Button from "../Button";
-import { DateChangeRequest, Reservation } from "@/types/d";
+import { DateChangeRequest } from "@/types/d";
 import { Fragment, useState } from "react";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";

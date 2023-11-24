@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
+import TankTable from "../TankTable";
 
 export default function Categories({
   category,
@@ -41,7 +42,10 @@ export default function Categories({
   return(
     <>
     {!loading && (
-      <Table category={category} dataSite={dataSite} />
+      <>
+        <Table category={category} dataSite={dataSite} />
+        <TankTable category={category} dataSite={dataSite}/>
+      </>
     )}
     {loading && (
         <TailSpin

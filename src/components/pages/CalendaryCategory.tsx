@@ -10,7 +10,7 @@ import TableCalendar from "@/components/pages/TableCalendar";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import Modal from "../Modal";
-import { formatDate, includesString } from "@/libs/functionsStrings";
+import { convertToCurrency, formatDate, includesString } from "@/libs/functionsStrings";
 import Input from "../forms/Input";
 import GraySubtitle from "../GraySubtitle";
 import Button from "../Button";
@@ -77,7 +77,7 @@ export default function CalendaryCategory({
                 isOpen={showModal}
                 setIsOpen={setShowModal}
                 classContainer={
-                  contentModal !== "info" ? "max-w-[700px]" : "max-w-3xl"
+                  contentModal !== "info" ? "max-w-[700px]" : "max-w-4xl"
                 }
               >
                 <div>
@@ -120,11 +120,11 @@ export default function CalendaryCategory({
                     {contentModal === "info" && (
                       <>
                         <div>
-                        <p className="text-primary mt-4 font-semibold">Información de la reserva: </p>
-                          <section className="flex items-center justify-between gap-2 my-4 py-3 px-5">
+                        <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">Información de la reserva: </p>
+                          <section className="flex items-center justify-between gap-2 mb-4 py-3 px-8">
                             <div>
                               <p>
-                                <strong># Reservacio: </strong>
+                                <strong># Reservación: </strong>
                                 {selectedReservation?.id}
                               </p>
                               <p>
@@ -147,26 +147,26 @@ export default function CalendaryCategory({
                                 )}
                               </p>
                               <p>
-                                <strong>Estado del pago: </strong>
-                                {selectedReservation?.estado_pago}
+                                <strong>Estado de la reservación: </strong>
+                                {selectedReservation?.estado_reservacion}
                               </p>
                             </div>
                             <div>
                               <p>
-                                <strong>Estado de la reservación: </strong>
-                                {selectedReservation?.estado_reservacion}
-                              </p>
-                              <p>
                                 <strong>Valor espacio: </strong>
-                                {selectedReservation?.valor}
+                                {convertToCurrency(selectedReservation?.valor)}
                               </p>
                               <p>
                                 <strong>Valor descuento: </strong>
-                                {selectedReservation?.valor_descuento}
+                                {convertToCurrency(selectedReservation?.valor_descuento)}
                               </p>
                               <p>
                                 <strong>Valor pagado: </strong>
-                                {selectedReservation?.valor_pagado}
+                                {convertToCurrency(selectedReservation?.valor_pagado)}
+                              </p>
+                              <p>
+                                <strong>Estado del pago: </strong>
+                                {selectedReservation?.estado_pago}
                               </p>
                             </div>
                           </section>
@@ -174,8 +174,8 @@ export default function CalendaryCategory({
                           {/* <h1 className="text-center text-xl m-5 font-bold text-primary mx-auto justify-center items-center">
                         Información del usuario
                       </h1> */}
-                            <p className="text-primary mt-4 font-semibold">Información del cliente: </p>
-                          <section className="flex items-center justify-between gap-3 mb-4 py-3 px-5">
+                            <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">Información del cliente: </p>
+                          <section className="flex items-center justify-between gap-2 mb-4 py-3 px-8">
                             <div>
                               <p>
                                 <strong>Nombre cliente: </strong>

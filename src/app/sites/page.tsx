@@ -1,15 +1,7 @@
-"use client";
-
 import Header from "@/components/Header";
 import PlaceCard from "@/components/PlaceCard";
-import { useSession } from "next-auth/react";
 
 export default function SitesPage() {
-  const { data, status } = useSession();
-  const user = data?.user ?? {
-    name: "default",
-    email: "useremail",
-  };
   return (
     <>
       <main>

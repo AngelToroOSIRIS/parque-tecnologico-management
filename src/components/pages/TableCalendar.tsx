@@ -15,14 +15,10 @@ import {
   ChipProps,
   SortDescriptor,
 } from "@nextui-org/react";
-import { columnsOld, userstable, statusOptions } from "@/components/table/data";
 import { useRouter } from "next/navigation";
 import { includesString } from "@/libs/functionsStrings";
 import { useSession } from "next-auth/react";
 import { CategoryTextShort, ReservationCategory } from "@/types/d";
-import moment from "moment";
-import fetchFn from "@/libs/fetchFn";
-import toast from "react-hot-toast";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Pagado: "success",
@@ -31,7 +27,6 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["username", "name", "type", "hour", "paid"];
 
-type User = (typeof userstable)[0];
 
 export default function TableComponent({
   category,
@@ -42,12 +37,11 @@ export default function TableComponent({
   reserCategory: ReservationCategory[];
   onClickAction: (reservation: ReservationCategory, action: string) => void;
 }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const userSession = session?.user ?? {
     name: "default",
     email: "useremail",
   };
-
   const columns = [
     {
       key: "nombre_espacio",
@@ -94,54 +88,7 @@ export default function TableComponent({
   });
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(userstable.length / rowsPerPage);
 
-  const hasSearchFilter = Boolean(filterValue);
-
-  const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columnsOld;
-
-    return columnsOld.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
-    );
-  }, [visibleColumns]);
-
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...userstable];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((userstable) =>
-        userstable.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
-      );
-    }
-
-    return filteredUsers;
-  }, [userstable, filterValue, statusFilter]);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
-  const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
-  }, [sortDescriptor, items]);
   const router = useRouter();
 
   const renderCell = React.useCallback(
@@ -232,8 +179,6 @@ export default function TableComponent({
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    userstable.length,
-    hasSearchFilter,
   ]);
 
   const classNames = React.useMemo(
@@ -281,8 +226,7 @@ export default function TableComponent({
         </TableHeader>
         <TableBody
           aria-label="Body table"
-          emptyContent={"No se han encontrado sitios"}
-          items={sortedItems}
+          emptyContent={`No se han encontrado reservas para esta categoria`}
         >
           {}
           {reserCategory.map((resevation) => {

@@ -10,7 +10,7 @@ import Button from "./Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { Category, CategoryTextShort, Enlace, States } from "@/types/d";
+import { Category, Enlace, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
 import TextareaForm from "./forms/TextareaForm";
@@ -205,7 +205,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 }}
                 onChange={setField}
               />
-              <div className="w-[50%] flex-center gap-2">
+              <div className="w-full flex-center gap-2">
                 <Input
                   radius="full"
                   size="lg"
@@ -269,7 +269,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   },
                 }}
               />
-              <div className="w-[50%] grid grid-cols-2 gap-5 text-center items-center">
+              <div className="w-full grid grid-cols-2 gap-5 text-center items-center">
                 <p>Wifi:</p>
                 <Checkbox />
                 <p>Cafe:</p>
