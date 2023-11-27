@@ -16,12 +16,11 @@ interface Props {
   text: string;
   button1: string;
   icon?: string;
-  onClick?: () => {};
+  onClick?: any;
 }
 
 const ModalIcon = ({ title, text, button1, icon, onClick }: Props) => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-  const closeModal = onClose;
 
   return (
     <>

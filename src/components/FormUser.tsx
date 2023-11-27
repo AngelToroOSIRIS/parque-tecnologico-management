@@ -48,7 +48,9 @@ const FormUser = () => {
         method: "POST",
         body: {
           email: emailUser,
-          roles: selectedRols.map((rol) => Number(rol)),
+          roles:  includesString(selectedRols, ["1"])
+          ? [1]
+          : selectedRols.map((rol) => Number(rol)),
         },
       }
     );
@@ -59,6 +61,11 @@ const FormUser = () => {
       }
       return toast.error("No se ha podido crear el usuario", {
         id: "3",
+      });
+    }
+    if (includesString(selectedRols, ["1"])) {
+      toast("Superadmin concede permisos globales", {
+        icon: "💡",
       });
     }
     toast.success("Usuario creado exitosamente!", { id: "2" });
