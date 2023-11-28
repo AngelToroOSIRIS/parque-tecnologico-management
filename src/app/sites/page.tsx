@@ -1,6 +1,10 @@
 import Header from "@/components/Header";
 import PlaceCard from "@/components/PlaceCard";
 
+export const metadata = {
+  title: "Co-working || ECIJG",
+};
+
 export default function SitesPage() {
   return (
     <>

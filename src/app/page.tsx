@@ -39,7 +39,7 @@ export default function Home() {
     });
     return;
   };
-
+console.log(session?.user.rols)
   useEffect(() => {
     if (status === "authenticated") {
       if (!session.user.rols && !session.user.interno) {

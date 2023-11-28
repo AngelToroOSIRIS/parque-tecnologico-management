@@ -25,7 +25,7 @@ export const categoriesObj: {
   },
   {
     route: "meeting",
-    name: "Salas de Juntas",
+    name: "Salas de Reuniones",
     icon: "suitcase-lg",
     color: "#0008B2",
   },
@@ -36,6 +36,12 @@ export const categoriesObj: {
     color: "#6800B4",
     disabled: true,
   },
+  {
+    route: "maximus_classrooms",
+    name: "Aula Máxima",
+    icon: "easel3",
+    color: "#BBBBBB",
+  }
 ];
 
 export const locationSites: {

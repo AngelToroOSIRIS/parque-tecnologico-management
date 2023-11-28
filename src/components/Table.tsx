@@ -23,7 +23,7 @@ import { CSVLink } from "react-csv";
 import { Category, CategoryTextShort, Site } from "@/types/d";
 import { categoriesObj } from "@/libs/staticData";
 import ButtonTable from "./ButtonTable";
-import ModalIcon from "./ModalIcon";
+import Modal from "./Modal";
 
 export default function TableComponent({
   category,
@@ -143,6 +143,44 @@ export default function TableComponent({
         </div>
       );
     }
+    const [showModal, setShowModal] = useState<boolean>(false);
+    <Modal
+      isOpen={showModal}
+      setIsOpen={setShowModal}
+      classContainer="w-[95%] max-w-[500px]"
+    >
+      <>
+        <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
+          Inhabilitar sitio
+        </h1>
+        <div>
+          <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+            ¿Seguro que quiere Inhabilitar el sitio ${site.nombre}
+          </p>
+        </div>
+        <div className="flex items-center gap-7 pb-3 justify-center text-center">
+          <div className="mt-5">
+            <button
+              type="button"
+              className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
+            >
+              Inhabilitar sitio
+            </button>
+          </div>
+          <div className="mt-5">
+            <button
+              type="button"
+              className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </>
+    </Modal>;
     if (columnKey == "options") {
       return (
         <div className="relative justify-center flex items-center">
@@ -187,12 +225,10 @@ export default function TableComponent({
                 content="Inhabilitar sitio"
               >
                 <span>
-                  <ModalIcon
-                    icon="dash-circle"
-                    title="Inhabilitar sitio"
-                    button1="Inhabilitar sitio"
-                    text={`¿Seguro que quiere Inhabilitar el sitio ${site.nombre}`}
-                  />
+                  <i
+                    onClick={() => setShowModal(true)}
+                    className="bi bi-dash-circle hover:text-primary m-2 transition-all"
+                  ></i>
                 </span>
               </Tooltip>
             </>
@@ -210,7 +246,6 @@ export default function TableComponent({
     []
   );
 
-  
   const onSearchChange = React.useCallback((value?: string) => {
     if (value) {
       setFilterValue(value);

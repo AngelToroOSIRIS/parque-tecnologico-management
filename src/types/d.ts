@@ -4,7 +4,7 @@ export type CategoryTextShort =
   | "laboratories"
   | "meeting"
   | "classrooms"
-  | "financial";
+  | "maximus_classrooms";
 
 export interface Category {
   id: number;

@@ -64,7 +64,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     if (!validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
-
     setLoading(true);
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
@@ -205,42 +204,39 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 }}
                 onChange={setField}
               />
-              <div className="w-full flex-center gap-2">
+              <div className="w-full flex-center gap-5">
                 <Input
                   radius="full"
                   size="lg"
                   variant="faded"
-                  label="Capacidad:"
-                  labelPlacement="outside-left"
+                  label="Dimensiones:"
+                  labelPlacement="outside"
                   name="capacity"
                   type="number"
+                  description="* metros"
                   placeholder="0"
-                  description="* Personas"
                   className="mt-1 mb-[10px] outline-none select-none "
                   classNames={{
                     inputWrapper: "bg-[#ffff]",
                     errorMessage: "text-sm font-medium",
                   }}
                 />
+                <p>X</p>
                 <Input
                   radius="full"
                   size="lg"
                   variant="faded"
                   type="number"
-                  label="Precio:"
-                  labelPlacement="outside-left"
+                  label="Dimensiones:"
+                  labelPlacement="outside"
                   placeholder="0"
-                  description="* Hora"
+                  description="* metros"
                   className="mt-1 mb-[10px] outline-none select-none "
                   classNames={{
                     inputWrapper: "bg-[#ffff]",
                     errorMessage: "text-sm font-medium",
+                    label: "text-[#ffffff] select-none"
                   }}
-                  startContent={
-                    <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">$</span>
-                    </div>
-                  }
                 />
               </div>
             </div>
@@ -270,14 +266,126 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 }}
               />
               <div className="w-full grid grid-cols-2 gap-5 text-center items-center">
-                <p>Wifi:</p>
-                <Checkbox />
-                <p>Cafe:</p>
-                <Checkbox />
-                <p>Proyector:</p>
-                <Checkbox />
-                <p>PC:</p>
-                <Checkbox />
+              <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Escritorios:"
+                  labelPlacement="outside"
+                  name="desks"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Sillas:"
+                  labelPlacement="outside"
+                  name="chairs"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Mesas:"
+                  labelPlacement="outside"
+                  name="tables"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Televisores:"
+                  labelPlacement="outside"
+                  name="tvs"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Computadores:"
+                  labelPlacement="outside"
+                  name="computers"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Tableros:"
+                  labelPlacement="outside"
+                  name="markers"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Video Beam:"
+                  labelPlacement="outside"
+                  name="VB"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
+                <Input
+                  radius="full"
+                  size="lg"
+                  variant="faded"
+                  label="Adicionales:"
+                  labelPlacement="outside"
+                  name="additional"
+                  type="number"
+                  placeholder="0"
+                  className="mt-1 mb-[10px] outline-none select-none "
+                  classNames={{
+                    inputWrapper: "bg-[#ffff]",
+                    errorMessage: "text-sm font-medium",
+                  }}
+                />
               </div>
             </div>
             <div className="flex mx-auto w-full md:w-[520px] m-10 gap-2 justify-center items-center">
