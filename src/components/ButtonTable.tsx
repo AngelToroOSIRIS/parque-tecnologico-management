@@ -14,7 +14,7 @@ interface Props {
 
 const ButtonTable = ({ route, text, onClick, type, icon, disabled = false }: Props) => {
   const router = useRouter();
-  const classbtn = "flex h-10 justify-center px-2 items-center rounded-lg font-medium text-base border-borders-light hover:border-borders text-borders border-2 bg-borders-light transition-all"
+  const classbtn = "flex h-10 justify-center select-none px-2 items-center rounded-lg font-medium text-base border-borders-light hover:border-borders text-borders border-2 bg-borders-light transition-all"
   return (
     <button
     disabled={disabled}

@@ -71,7 +71,7 @@ const UsersEdit = () => {
               </button>
             </div>
             <section className="w-full p-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#ffffff] rounded-xl">
-              <article className="flex h-10 rounded-lg p-2 items-center justify-between bg-borders-light text-borders text-md font-semibold">
+              <article className="flex h-10 rounded-lg p-2 items-center justify-between select-none bg-borders-light text-borders text-md font-semibold">
                 <div className="w-[30%] ml-2">CORREO</div>
                 <div className="w-[30%] text-center">ROL</div>
                 <div className="w-[10%] text-center">ESTADO</div>

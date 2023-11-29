@@ -1,71 +1,35 @@
 export const categoriesObj: {
   route: string;
   name: string;
-  icon: string;
-  color: string;
   disabled?: boolean;
 }[] = [
   {
     route: "auditoriums",
     name: "Auditorios",
-    icon: "building",
-    color: "#D33CFF",
-  },
-  {
-    route: "sports",
-    name: "Espacios Deportivos",
-    icon: "dribbble",
-    color: "#F28400",
-  },
-  {
-    route: "laboratories",
-    name: "Laboratorios",
-    icon: "book",
-    color: "#229400",
-  },
-  {
-    route: "meeting",
-    name: "Salas de Reuniones",
-    icon: "suitcase-lg",
-    color: "#0008B2",
-  },
-  {
-    route: "classrooms",
-    name: "Salones de Clase",
-    icon: "backpack2",
-    color: "#6800B4",
-    disabled: true,
   },
   {
     route: "maximus_classrooms",
     name: "Aula Máxima",
-    icon: "easel3",
-    color: "#BBBBBB",
-  }
-];
-
-export const locationSites: {
-  name: string;
-}[] = [
-  {
-   name: "Edifio A" 
-  }, 
-  { 
-    name: "Edificio B" 
   },
   {
-    name: "Edifico C"
+    route: "sports",
+    name: "Espacios Deportivos",
   },
   {
-    name: "Edifico D"
+    route: "laboratories",
+    name: "Laboratorios",
   },
   {
-    name: "Edifico E"
+    route: "office",
+    name: "Oficinas",
   },
   {
-    name: "Edifico F"
+    route: "meeting",
+    name: "Salas de Reuniones",
+    disabled: true
   },
   {
-    name: "Edifico G"
-  }
+    route: "classrooms",
+    name: "Salones de Clase",
+  },
 ];

@@ -15,7 +15,7 @@ const PlaceCard = ({ place }: { place: PlaceCard }) => {
 					className="flex-center w-1/3 sm:w-full max-w-[330px] h-full max-h-[186px] sm:max-h-[186px] rounded-2xl sm:rounded-none overflow-hidden hover:opacity-80 cursor-pointer transition-all"
 					// TODO:
 					// onClick={() => router.push(`/sites/${place.id}`)}
-					onClick={() => router.push(`/sites/16`)}
+					onClick={() => router.push(`/sites/${place.id}`)}
 					title="Ver detalles"
 				>
 					<Image
@@ -40,8 +40,8 @@ const PlaceCard = ({ place }: { place: PlaceCard }) => {
 					</div>
 					<Link
 						// TODO:
-						// href={`/sites/${place.id}`}
-						href={`/sites/16`}
+						href={`/sites/${place.id}`}
+						// href={`/sites/16`}
 						className="mt-2 text-primary hover:underline text-center select-none cursor-pointer"
 					>
 						Ver detalles <i className="bi bi-arrow-right-circle mr-1"></i>

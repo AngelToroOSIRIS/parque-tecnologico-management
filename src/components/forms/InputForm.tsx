@@ -1,10 +1,10 @@
 "use client";
- 
+
 import { useState } from "react";
 import Input from "./Input";
 import GraySubtitle from "../GraySubtitle";
 import { emptyValue, validateString } from "@/libs/functionsStrings";
- 
+
 interface Validations {
   required?: string;
   validateEmail?: boolean;
@@ -18,12 +18,13 @@ interface Validations {
     message: string;
   };
 }
- 
+
 const InputForm = ({
   type = "text",
   name,
   defaultValue,
   icon,
+  value,
   className,
   placeholder,
   onlyInput,
@@ -35,6 +36,7 @@ const InputForm = ({
   type?: string;
   name: string;
   icon?: string;
+  value?: string;
   description?: string;
   className?: string;
   placeholder?: string;
@@ -45,7 +47,7 @@ const InputForm = ({
   onChange: ({ name, value }: { name: string; value: string | null }) => any;
 }) => {
   const [error, setError] = useState<string | undefined>(undefined);
- 
+
   const handleChange = ({
     name,
     value,
@@ -57,28 +59,28 @@ const InputForm = ({
     if (Object.keys(validations ?? {}).length === 0) {
       return onChange({ name, value });
     }
- 
+
     const nullReturn = {
       name,
       value: null,
     };
- 
+
     const returnValue = () => {
       if (validations?.onlyNumbers) {
         const valueNumber = validateString(value, "int");
- 
+
         if (!valueNumber) {
           setError("El valor debe ser numérico.");
           return nullReturn;
         }
         return { name, value: valueNumber };
       }
- 
+
       return { name, value };
     };
- 
+
     setError(undefined);
- 
+
     // VALIDATE REQUIRED
     if (validations?.required && emptyValue(value)) {
       setError(
@@ -93,7 +95,7 @@ const InputForm = ({
       onChange(nullReturn);
       return;
     }
- 
+
     // VALIDATE LENGTHS
     if (!emptyValue(value) && !validations?.validateEmail) {
       // WITHOUT LENGTHS
@@ -102,7 +104,7 @@ const InputForm = ({
         onChange(returnValue());
         return;
       }
- 
+
       // VALIDATE MIN LENGTH
       if (validations?.minLength && !validations?.maxLength) {
         if (value && value.length < validations?.minLength.value) {
@@ -115,7 +117,7 @@ const InputForm = ({
           return;
         }
       }
- 
+
       // VALIDATE MAX LENGTH
       if (!validations?.minLength && validations?.maxLength) {
         if (value && value.length > validations?.maxLength.value) {
@@ -128,7 +130,7 @@ const InputForm = ({
           return;
         }
       }
- 
+
       // VALIDATE MINMAX LENGTH
       if (validations?.minLength && validations?.maxLength) {
         if (
@@ -141,13 +143,13 @@ const InputForm = ({
           onChange(returnValue());
           return;
         }
- 
+
         if (value && value.length > validations?.maxLength.value) {
           setError(validations?.maxLength.message);
           onChange(nullReturn);
           return;
         }
- 
+
         if (value && value.length < validations?.minLength.value) {
           setError(validations?.minLength.message);
           onChange(nullReturn);
@@ -155,7 +157,7 @@ const InputForm = ({
         }
       }
     }
- 
+
     // VALIDATE EMAIL
     if (validations?.validateEmail) {
       if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value ?? "")) {
@@ -169,13 +171,14 @@ const InputForm = ({
       }
     }
   };
- 
+
   if (onlyInput) {
     return (
       <Input
         type={type}
         name={name}
         icon={icon}
+        value={value}
         description={description}
         className={className}
         defaultValue={defaultValue}
@@ -185,7 +188,7 @@ const InputForm = ({
       />
     );
   }
- 
+
   return (
     <div className="text-start w-full">
       <GraySubtitle
@@ -200,6 +203,7 @@ const InputForm = ({
         name={name}
         description={description}
         icon={icon}
+        value={value}
         className={className}
         defaultValue={defaultValue}
         placeholder={placeholder ?? "Ingresar " + name}
@@ -209,5 +213,5 @@ const InputForm = ({
     </div>
   );
 };
- 
+
 export default InputForm;

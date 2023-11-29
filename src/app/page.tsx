@@ -39,7 +39,6 @@ export default function Home() {
     });
     return;
   };
-console.log(session?.user.rols)
   useEffect(() => {
     if (status === "authenticated") {
       if (!session.user.rols && !session.user.interno) {
@@ -70,7 +69,7 @@ console.log(session?.user.rols)
               </h2>
                <div className="mx-auto w-[80%]">
                  <div className="sm:grid lg:grid-cols-4 sm:grid-cols-2 md:grid-col-2 gap-5 mt-10 mx-auto mb-10 items-center">
-                   <PlaceCard
+                   {/* <PlaceCard
                      place={{
                        id: 1,
                        nombre: "prueba",
@@ -105,7 +104,7 @@ console.log(session?.user.rols)
                          "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
                        img_card: "f5d77cdc-91a4-4660-b1b5-1f7b6ee2f76d.jpg",
                      }}
-                   />
+                   /> */}
                  </div>
                </div>
           </div>

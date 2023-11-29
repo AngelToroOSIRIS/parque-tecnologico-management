@@ -83,9 +83,9 @@ const Header = () => {
                     <p className="hidden lg:block">Categorías</p>
                     <i className="bi bi-caret-down-fill ml-1 mt-[4px] text-xs transition-none"></i>
                   </Menu.Button>
-                  <Menu.Items className="absolute mt-64 w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
+                  <Menu.Items className="absolute mt-[350px] w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
                     {categoriesObj.map(
-                      ({ name, route, icon, color, disabled }, i) => {
+                      ({ name, route, disabled }, i) => {
                         if (!disabled) {
                           return (
                             <div className="px-1  py-1" key={i}>
@@ -95,18 +95,11 @@ const Header = () => {
                                     className={`${
                                       active && `font-bold bg-hover `
                                     } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                    style={{ color: active ? color : "" }}
                                     onClick={() =>
                                       router.push(`/categories/${route}`)
                                     }
-                                  >
-                                    <i
-                                      className={
-                                        `mr-2 hidden text-lg sm:block bi bi-` +
-                                        icon
-                                      }
-                                      style={{ color }}
-                                    ></i>
+                                    >
+                                    <i className="bi bi-caret-right-fill mr-2"></i>
                                     {name}
                                   </button>
                                 )}

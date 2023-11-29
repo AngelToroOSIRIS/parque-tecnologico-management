@@ -165,14 +165,23 @@ export interface ReservationCategory {
 export interface Site {
   id: number;
   categoria: string;
-  id_tarifas_espacio: any;
+  id_tarifas_espacio: number;
   estado_espacio: string;
-  id_identificador_enlace: number;
+  id_identificador_enlace?: number;
   nombre: string;
   descripcion: string;
   descripcion_corta: string;
   fecha_creacion: string;
   fecha_actualizacion: string;
-  activo_coworking: boolean;
-  activo_interno: boolean;
+  activo_coworking: string;
+  activo_interno: string;
+}
+
+export interface SiteTbl{
+  id: string;
+  categoria: string;
+  estado_espacio: string;
+  nombre: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
 }

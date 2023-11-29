@@ -5,6 +5,7 @@ const Input: React.FC<{
 	type?: string;
 	name?: string;
 	icon?: string;
+	value?: string; 
 	clearable?: boolean;
 	placeholder?: string;
 	className?: string;
@@ -18,6 +19,7 @@ const Input: React.FC<{
 	type = "text",
 	name,
 	icon,
+	value,
 	clearable = false,
 	placeholder,
 	defaultValue,
@@ -40,6 +42,7 @@ const Input: React.FC<{
 			startContent={
 				icon && <Icon icon={icon} className={error && "text-red"} />
 			}
+			value={value}
 			isDisabled={disabled}
 			isInvalid={error ? true : false}
 			errorMessage={error ?? null}
