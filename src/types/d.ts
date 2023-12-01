@@ -7,9 +7,11 @@ export type CategoryTextShort =
   | "maximus_classrooms";
 
 export interface Category {
-  id: number;
-  descripcion: string;
-  identificador: string;
+  id: number,
+	descripcion: string,
+	identificador: string,
+	titulo: string,
+	estado: string
 }
 
 export interface States {

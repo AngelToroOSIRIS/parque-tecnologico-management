@@ -125,41 +125,6 @@ const Requests = ({ params }: Props) => {
 
               {contentModal === "Solicitud cambio fecha" && (
                 <>
-                  <div className="flex mx-auto text-lg justify-center gap-7">
-                    <div
-                      className={
-                        validInfo
-                          ? "border-b-3  border-default-white  hover:border-green transition-all"
-                          : "cursor-none "
-                      }
-                    >
-                      <button
-                        disabled={validInfo}
-                        onClick={() => {
-                          putData(true);
-                        }}
-                        type="button"
-                        className={
-                          validInfo
-                            ? "font-base text-xl outline-none hover:text-green hover:font-semibold border-none transition-all justify-center rounded-lg px-4 py-1"
-                            : "font-base text-xl cursor-default outline-none text-default-300 transition-all justify-center rounded-lg px-4 py-1"
-                        }
-                      >
-                        Aceptar
-                      </button>
-                    </div>
-                    <div className="border-b-3 border-default-white hover:border-primary transition-all">
-                      <button
-                        onClick={() => {
-                          putData(false);
-                        }}
-                        type="button"
-                        className="font-base hover:font-semibold border-b-2 hover:text-primary border-primary outline-none border-none transition-all justify-center rounded-lg px-4 py-1 text-xl"
-                      >
-                        Rechazar
-                      </button>
-                    </div>
-                  </div>
                   <ValidateNewRequestDates
                     newDates={selectedRequest?.cambio_fecha_reservacion ?? []}
                     idPlace={selectedRequest?.reservacion.id_espacio ?? 0}
@@ -209,13 +174,24 @@ const Requests = ({ params }: Props) => {
                   minRows={5}
                 />
                 <div className="flex mx-auto text-lg justify-center gap-7">
-                  <div className="border-b-3  border-default-white  hover:border-green transition-all">
+                  <div
+                    className={
+                      validInfo
+                        ? "border-b-3  border-default-white  hover:border-green transition-all"
+                        : "cursor-none "
+                    }
+                  >
                     <button
+                      disabled={validInfo}
                       onClick={() => {
                         putData(true);
                       }}
                       type="button"
-                      className="font-base text-xl outline-none hover:text-green hover:font-semibold border-none transition-all justify-center rounded-lg px-4 py-1"
+                      className={
+                        validInfo
+                          ? "font-base text-xl outline-none hover:text-green hover:font-semibold border-none transition-all justify-center rounded-lg px-4 py-1"
+                          : "font-base text-xl cursor-default outline-none text-default-300 transition-all justify-center rounded-lg px-4 py-1"
+                      }
                     >
                       Aceptar
                     </button>

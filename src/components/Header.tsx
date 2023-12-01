@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import { categoriesObj } from "@/libs/staticData";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
@@ -73,43 +73,64 @@ const Header = () => {
               <div className="flex items-center justify-center">
                 <Menu
                   as="div"
-                  className="flex m-3 p-1 items-center cursor-pointer justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary"
+                  className="sm:relative mx-2 p-2 items-center w-full lg:w-[150px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
                 >
-                  <Menu.Button
-                    as="li"
-                    className="flex m-2 p-1 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-                  >
-                    <i className="bi bi-layers mr-2 text-xl text-primary"></i>{" "}
-                    <p className="hidden lg:block">Categorías</p>
-                    <i className="bi bi-caret-down-fill ml-1 mt-[4px] text-xs transition-none"></i>
+                  <Menu.Button as="li" className={"flex px-2 w-full"}>
+                    <i className="bi bi-layers text-lg text-primary"></i>{" "}
+                    <p className="ml-2 hidden lg:flex">Categorías</p>
                   </Menu.Button>
-                  <Menu.Items className="absolute mt-[350px] w-56 divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
-                    {categoriesObj.map(
-                      ({ name, route, disabled }, i) => {
-                        if (!disabled) {
-                          return (
-                            <div className="px-1  py-1" key={i}>
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <button
-                                    className={`${
-                                      active && `font-bold bg-hover `
-                                    } group flex w-full  items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                    onClick={() =>
-                                      router.push(`/categories/${route}`)
-                                    }
-                                    >
-                                    <i className="bi bi-caret-right-fill mr-2"></i>
-                                    {name}
-                                  </button>
-                                )}
-                              </Menu.Item>
-                            </div>
-                          );
-                        }
-                      }
-                    )}
-                  </Menu.Items>
+
+                  <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute mt-2 w-56 origin-top-right divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
+                      <>
+                        {categoriesObj.map(({ name, route }, i) => (
+                          <div className="px-1 py-1" key={i}>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  className={`${
+                                    active &&
+                                    "text-primary font-bold border-primary bg-hover"
+                                  } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                  onClick={() =>
+                                    router.push(`/categories/${route}`)
+                                  }
+                                >
+                                  <i className="mr-1 block bi bi-caret-right-fill"></i>
+                                  {name}
+                                </button>
+                              )}
+                            </Menu.Item>
+                          </div>
+                        ))}
+                        <div>
+                          {!user.interno && status === "authenticated" && includesString(user.rols ?? [], ["superadmin"]) && (
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  className={`${
+                                    active &&
+                                    "text-primary font-bold border-primary bg-hover"
+                                  } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                  onClick={() => router.push(`/categories`)}
+                                >
+                                  <i className="mr-2 ml-1 block bi bi-pencil-fill"></i>
+                                  Editar categorías
+                                </button>
+                              )}
+                            </Menu.Item>
+                          )}
+                        </div>
+                      </>
+                    </Menu.Items>
+                  </Transition>
                 </Menu>
 
                 {!user.interno &&

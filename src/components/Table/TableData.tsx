@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { Fragment, useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
@@ -14,22 +14,24 @@ import Link from "next/link";
 import FilterTable from "./FilterTable";
 import Input from "../forms/Input";
 import Select from "../forms/Select";
-import Button from "../Button";
 import { useRouter } from "next/navigation";
 import { Triangle } from "react-loader-spinner";
-import encode64 from "../../libs/encode64";
-import { SelectItem } from "@nextui-org/react";
+import { Badge, SelectItem } from "@nextui-org/react";
+import ButtonTable from "../ButtonTable";
+import { CategoryTextShort } from "@/types/d";
 
 interface Props {
   columnsArray: { accessor: string; header: string }[];
   dataArray: any[];
   createdTable: any;
+  category: CategoryTextShort;
   description: string;
   className?: string;
 }
 
 const TableData: React.FC<Props> = ({
   columnsArray,
+  category,
   dataArray,
   createdTable,
   description,
@@ -78,22 +80,18 @@ const TableData: React.FC<Props> = ({
     .rows.map((row) => row.original);
 
   useEffect(() => {
-      const totalPages = instance.getPageCount();
-      const pQuery = 1;
-      let pageNumber =
-        pQuery !== undefined
-          ? Number(pQuery) < 1
-            ? 0
-            : Number(pQuery) - 1
-          : 0;
+    const totalPages = instance.getPageCount();
+    const pQuery = 1;
+    let pageNumber =
+      pQuery !== undefined ? (Number(pQuery) < 1 ? 0 : Number(pQuery) - 1) : 0;
 
-      pageNumber = isNaN(pageNumber) ? 0 : pageNumber;
+    pageNumber = isNaN(pageNumber) ? 0 : pageNumber;
 
-      setCurrentPage(pageNumber > totalPages ? totalPages - 1 : pageNumber);
-      instance.setPageIndex(
-        pageNumber > totalPages ? totalPages - 1 : pageNumber
-      );
-      setLoading(false);
+    setCurrentPage(pageNumber > totalPages ? totalPages - 1 : pageNumber);
+    instance.setPageIndex(
+      pageNumber > totalPages ? totalPages - 1 : pageNumber
+    );
+    setLoading(false);
   }, []);
 
   if (!loading)
@@ -113,18 +111,47 @@ const TableData: React.FC<Props> = ({
               {instance.getPageCount()}{" "}
             </p>
           </div>
-          <div className="w-52">
+          <div className="w-[38%]">
             {instance.getFilteredRowModel().rows.length > 0 && (
-              <CSVLink
-                headers={columnsForCsv}
-                data={dataForCsv}
-                separator=";"
-				className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
-                filename={`INVENTARIO ${new Date().toJSON().slice(0, 10)}`}
-				>
-				Exportar en .CSV
-            	<i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
-              </CSVLink>
+              <>
+                <div className="flex justify-between font-medium items-center gap-3 ">
+                  <CSVLink
+                    headers={columnsForCsv}
+                    data={dataForCsv}
+                    separator=";"
+                    className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
+                    filename={`INVENTARIO ${new Date().toJSON().slice(0, 10)}`}
+                  >
+                    Exportar en .CSV
+                    <i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
+                  </CSVLink>
+                  <ButtonTable
+                    text="Agenda general"
+                    icon="calendar2-check"
+                    onClick={() => router.push(`${category}/calendary`)}
+                    type="button"
+                  />
+                    <Badge
+                      content={<i className="bi bi-bell-fill text-sm"></i>}
+                      color="primary"
+                      size="lg"
+                      className="animate-pulse"
+                    >
+                      <ButtonTable
+                        text="Solicitudes"
+                        icon="exclamation-circle"
+                        onClick={() => router.push(`${category}/requests`)}
+                        type="button"
+                      />
+                    </Badge>
+                    <ButtonTable
+                      text="Añadir sitio"
+                      icon="plus-circle"
+                      onClick={() => router.push("/sites/add")}
+                      type="button"
+                    />
+                </div>
+                </>
             )}
           </div>
         </section>
@@ -133,7 +160,7 @@ const TableData: React.FC<Props> = ({
             <table
               className={`table-data min-w-[1800PX] border-collapse bg-default-white overflow-hidden ${className}`}
             >
-              <thead className="text-default-white bg-gray select-none">
+              <thead className="text-borders-light bg-borders select-none">
                 {instance.getHeaderGroups().map((headerGroup: any) => (
                   <tr key={headerGroup.id}>
                     {description === "Dispositivos" && (
@@ -168,11 +195,7 @@ const TableData: React.FC<Props> = ({
                       key={row.id}
                     >
                       {description === "Dispositivos" && (
-                        <Link
-                          href={`/device/${
-                            row.original?.["id"]
-                          }`}
-                        >
+                        <Link href={`/device/${row.original?.["id"]}`}>
                           <td
                             className="text-center text-gray transition-all cursor-pointer hover:bg-hover"
                             title="Ver detalles"
@@ -199,11 +222,9 @@ const TableData: React.FC<Props> = ({
                 className="my-0 py-1 max-w-[60px]"
                 type="number"
                 value={(currentPage + 1).toString()}
-                onChange={({value}) => {
+                onChange={({ value }) => {
                   if (Number(value) <= instance.getPageCount()) {
-                    const page = value
-                      ? Number(value) - 1
-                      : 0;
+                    const page = value ? Number(value) - 1 : 0;
                     instance.setPageIndex(page);
                     setCurrentPage(page);
                   }

@@ -1,7 +1,6 @@
 export const categoriesObj: {
   route: string;
   name: string;
-  disabled?: boolean;
 }[] = [
   {
     route: "auditoriums",
@@ -26,10 +25,9 @@ export const categoriesObj: {
   {
     route: "meeting",
     name: "Salas de Reuniones",
-    disabled: true
   },
-  {
-    route: "classrooms",
-    name: "Salones de Clase",
-  },
+  // {
+  //   route: "classrooms",
+  //   name: "Salones de Clase",
+  // },
 ];

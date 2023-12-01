@@ -108,20 +108,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //  return console.log({
-    //    ...dataForm,
-    //    tarifas_espacio: dataPaid.getData,
-    //    dias_disponibilidad: {...dataDays.getData, "hora_inicio": infoHorary.time_start, "hora_fin" : infoHorary.time_end },
-    //    caracteristicas_espacio: {
-    //      ...dataInfoSite.getData,
-    //      adicionales: []
-    //    },
-    //    activo_coworking: "0",
-    //    activo_interno: "0",
-    //    id_estado_espacio: dataFilters.estadoEspacios.find(
-    //      (estado) => estado.descripcion === "Inactivo"
-    //    )?.id,
-    //  });
     if (!validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
@@ -151,25 +137,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
         )?.id,
       },
     });
-    console.log({
-      ...dataForm,
-      tarifas_espacio: dataPaid.getData,
-      dias_disponibilidad: dataDays.getData,
-      caracteristicas_espacio: {
-        ...dataInfoSite.getData,
-        adicionales: Object.entries({}).map((property) => {
-          return {
-            nombre: property[0],
-            descripcion: property[1],
-          };
-        }),
-      },
-      activo_coworking: "0",
-      activo_interno: "0",
-      id_estado_espacio: dataFilters.estadoEspacios.find(
-        (estado) => estado.descripcion === "Inactivo"
-      )?.id,
-    })
     setLoading(false);
     setSiteId(res.data.id);
     if (res.data.message) {
@@ -181,9 +148,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     }
 
     setContent("images");
-    return toast.success("El sitio se ha guardado exitosamente", {
-      id: toastLoading,
-    });
+    return toast.dismiss(toastLoading);
   };
 
   useEffect(() => {
@@ -560,18 +525,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                     setInfoHorary({ time_end, time_start, valid });
                   }}
                 />
-                {/* <InputForm
-                  name="hora_inicio"
-                  onChange={dataDays.setField}
-                  label={{ required: true, value: "Hora inicio" }}
-                  placeholder="00:00"
-                />
-                <InputForm
-                  name="hora_fin"
-                  onChange={dataDays.setField}
-                  label={{ required: true, value: "Hora fin" }}
-                  placeholder="00:00"
-                /> */}
               </div>
               <div className="w-full mb-20">
                 <h2 className="text-center text-2xl text-primary font-medium mt-4 mb-10">

@@ -1,0 +1,323 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import InputForm from "./forms/InputForm";
+import { TailSpin } from "react-loader-spinner";
+import SelectForm from "./forms/SelectForm";
+import { SelectItem } from "@nextui-org/react";
+import ImageUploading, { ImageListType } from "react-images-uploading";
+import Button from "./Button";
+import TextareaForm from "./forms/TextareaForm";
+import fetchFn from "@/libs/fetchFn";
+import { useSession } from "next-auth/react";
+import useValidateForm from "@/hooks/useValidateForm";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import fetchFileFn from "@/libs/fetchFileFn";
+import useFormData from "@/hooks/UseFormData";
+
+const CategoryForm = () => {
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [content, setContent] = useState<"add" | "images">("add");
+  const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
+  const { setFilesField, setData } = useFormData({
+    minFiles: 3,
+    maxFiles: 10,
+    fdFilesName: "images",
+  });
+  const router = useRouter();
+  const onChange = (imageList: ImageListType) =>
+    setImages(imageList as never[]);
+  const validData = useValidateForm([
+    { name: "titulo", type: "str", required: true },
+    { name: "identificador", type: "str", required: true },
+    { name: "descripcion", type: "str", required: true },
+  ]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validData.validData) {
+      return toast.error("Por favor complete el formulario", { id: "empty" });
+    }
+    setLoading(true);
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
+    const response = await fetchFn(`/createCategory`, {
+      method: "POST",
+      body: {
+        email: session?.user.emailHash,
+        identificador: validData.getData.identificador,
+        descripcion: validData.getData.descripcion,
+        titulo: validData.getData.titulo,
+      },
+    });
+    setLoading(false);
+
+    if (response.code !== 200) {
+      if (response.data.message) {
+        return toast.error(response.data.message, { id: toastLoading });
+      }
+
+      return toast.error("No se ha podido guardar", { id: toastLoading });
+    }
+
+    toast.dismiss(toastLoading);
+    setCategoryId(response.data.id);
+    setContent("images");
+  };
+
+  const SendImages = async () => {
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
+    if (images.length < 1 || images.length > 5) {
+      return toast.error("Seleccione la cantidad necesaria de imágenes");
+    }
+    setFilesField(images.map((image) => image.file));
+    const fd = setData({
+      email: session?.user.emailHash,
+      id_category: categoryId,
+    });
+    const res = await fetchFileFn(`/imageCategory`, {
+      method: "POST",
+      formData: fd,
+    });
+    setLoading(false);
+    if (res.code !== 200) {
+      return toast.error("No se ha podido guardar", { id: toastLoading });
+    }
+    toast.success("La categoría se ha guardado exitosamente", {
+      id: toastLoading,
+    });
+    router.push("/categories");
+  };
+
+  useEffect(() => {
+    if (session?.user.rols || session?.user.interno) {
+      if (session?.user.interno) {
+        return router.push("/categories");
+      }
+    }
+  }, []);
+
+  return (
+    <>
+      {!loading && (
+        <>
+          {content === "add" && (
+            <div className="w-[95%] max-w-[1000px] mx-auto p-1 bg-gray-box normal-shadow rounded-lg mb-10">
+              <form
+                onSubmit={handleSubmit}
+                className="W-full m-2 bg-default-white p-2 px-16 rounded-lg pt-7 gap-2"
+              >
+                <InputForm
+                  name="titulo"
+                  label={{ required: true, value: "Nombre:" }}
+                  placeholder="Nombre de la categoría"
+                  onChange={validData.setField}
+                  validations={{
+                    required: "Este campo es obligatorio",
+                    maxLength: {
+                      value: 30,
+                      message: "Maxímo se pueden ingresar 30 caracteres",
+                    },
+                  }}
+                />
+                <InputForm
+                  name="identificador"
+                  placeholder="Identificador de la categoría"
+                  validations={{
+                    required: "Este campo es obligatorio",
+                    maxLength: {
+                      value: 30,
+                      message: "Maxímo se pueden ingresar 30 scaracteres",
+                    },
+                  }}
+                  label={{ required: true, value: "Nombre identificador:" }}
+                  onChange={validData.setField}
+                  description="*Por favor ingresar un nombre válido en minúscula y sin caracteres especiales (Ejemplo: Nombre: Deportes, identificador: sports)*"
+                />
+
+                {/* <SelectForm
+                  name="state_category"
+                  required={true}
+                  onChange={() => {}}
+                  label={{ required: true, value: "Estado:" }}
+                  placeholder="Seleccionar estado"
+                >
+                  <SelectItem key={1}>Activo</SelectItem>
+                  <SelectItem key={2}>Inactivo</SelectItem>
+                </SelectForm> */}
+
+                <TextareaForm
+                  name="descripcion"
+                  placeholder="Descripción de la categoría"
+                  onChange={validData.setField}
+                  minRows={5}
+                  label={{
+                    required: true,
+                    value: "Descripción:",
+                  }}
+                  validations={{
+                    required: "La observación del sitio es obligatoria",
+                    minLength: {
+                      message:
+                        "Se requiere mínimo 15 caracteres en la observación",
+                      value: 15,
+                    },
+                    maxLength: {
+                      message:
+                        "Se admiten máximo 200 caracteres en la observación",
+                      value: 200,
+                    },
+                  }}
+                />
+                <div className="flex-center justify-between my-5 gap-6 px-10">
+                  <Button
+                    type="submit"
+                    text="Continuar"
+                    disabled={!validData.validData}
+                  />
+                  <Button text="Cancelar" />
+                </div>
+              </form>
+            </div>
+          )}
+        </>
+      )}
+      {content === "images" && (
+        <>
+          <ImageUploading
+            multiple
+            value={images}
+            onChange={onChange}
+            maxNumber={5}
+          >
+            {({
+              imageList,
+              onImageUpload,
+              onImageRemoveAll,
+              onImageUpdate,
+              onImageRemove,
+              isDragging,
+              dragProps,
+              errors,
+            }) => (
+              <div className="w-[90%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
+                <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
+                  Subir imágenes
+                </h1>
+                <div className="text-center">
+                  {imageList.length === 0 && (
+                    <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
+                      <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
+                        * Puede subir mínimo 3 fotos, máximo 5. <br />{" "}
+                        Resolución recomendada: 1920 x 1080 *
+                        <br />
+                        extensiones de archivo: jpg, png, jpeg
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    className="bg-default-white font-medium border-3 hover:font-semibold hover:text-soft-blue hover:border-soft-blue border-borders-light border-dotted rounded-lg m-2 p-2 transition-all"
+                    style={isDragging ? { color: "blue" } : undefined}
+                    onClick={onImageUpload}
+                    {...dragProps}
+                  >
+                    <i className="bi bi-upload text-xl mr-2 font-medium"></i>
+                    Seleccionar o Arrastrar
+                  </button>
+                  &nbsp;
+                  <button
+                    className=" bg-default-white border-2 hover:font-semibold border-borders-light hover:border-primary rounded-lg m-2 p-2 hover:text-primary font-medium transition-all"
+                    onClick={onImageRemoveAll}
+                  >
+                    <i className="bi bi-trash3 text-xl mr-2 font-medium"></i>
+                    Eliminar todas las imágenes
+                  </button>
+                </div>
+                {errors && (
+                  <div className="text-center m-2">
+                    {errors.maxNumber && (
+                      <span className="text-primary font-semibold">
+                        Solo puede agregar hasta 5 imágenes.
+                      </span>
+                    )}
+                    {errors.acceptType && (
+                      <span className="text-primary font-semibold">
+                        Solo puede subir archivos de imagen.
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {imageList.length > 0 && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-2 p-2 gap-4">
+                    {imageList.map((image, index) => (
+                      <div key={index} className="mx-auto">
+                        <img
+                          src={image.dataURL}
+                          className="border-3 text-xl shadow-xl border-borders-light rounded-lg h-[400px]"
+                          alt=""
+                          width="800px"
+                        />
+                        <div className="image-item__btn-wrapper">
+                          <button
+                            className="bg-borders-light rounded-lg m-2 p-2 hover:font-semibold transition-all"
+                            onClick={() => onImageUpdate(index)}
+                          >
+                            Cambiar
+                          </button>
+                          <button
+                            className="bg-borders-light rounded-lg m-2 p-2 hover:text-primary hover:font-semibold transition-all"
+                            onClick={() => onImageRemove(index)}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {images.length < 1 && !errors?.maxNumber && (
+                  <div className="w-full mt-3 text-center">
+                    <span className="text-primary font-semibold">
+                      Se necesita mínimo 1 imagen
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center mx-auto w-full md:w-[30%] justify-center mt-8 gap-5">
+                  <Button
+                    text="Guardar"
+                    onClick={() => {
+                      SendImages();
+                    }}
+                    disabled={images.length < 1 || loading}
+                  />
+                </div>
+              </div>
+            )}
+          </ImageUploading>
+        </>
+      )}
+      {loading && (
+        <TailSpin
+          height="100"
+          width="100"
+          color="#990000"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{
+            margin: "20px 0",
+            justifyContent: "center",
+          }}
+        />
+      )}
+    </>
+  );
+};
+
+export default CategoryForm;
