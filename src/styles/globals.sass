@@ -190,55 +190,63 @@ input[type="date"]::-webkit-calendar-picker-indicator
 	border-radius: 16px
 	background-color: $off-white
 
-// .table-grid
-// 	display: grid
-// 	grid-template-columns: 18.5% 18.5% 18.5% 18.5% 18.5% 7.5%
-// 	margin: 10px 0 20px 0
-// 	border-radius: 10px
-// 	border: 1px solid $borders-light
-// 	background-color: $off-white
-// 	overflow: hidden
-// 	article
-// 		p, a
-// 			display: block
-// 			padding: 5px
-// 			border: 1px solid $borders-light
-// 		a
-// 			color: $red
-// 			font-weight: 500
-// 	&__title
-// 		@include font(thin, 0.8rem, normal, $white)
-// 		text-align: center
-// 		background-color: $gray
+.table-grid
+	display: grid
+	grid-template-columns: 18.5% 18.5% 18.5% 18.5% 18.5% 7.5%
+	margin: 10px 0 20px 0
+	border-radius: 10px
+	border: 1px solid $borders-light
+	background-color: $off-white
+	overflow: hidden
+	article
+		p, a
+			display: block
+			padding: 5px
+			border: 1px solid $borders-light
+		a
+			color: $red
+			font-weight: 500
+	&__title
+		@include font(thin, 0.8rem, normal, $white)
+		text-align: center
+		background-color: $gray
 
-// 	th
-// 		background-color: $borders-light
-// 		color: $borders
+	th
+		background-color: $borders-light
+		color: $borders
 
 .flex-center
 	display: flex
 	justify-content: center
 	align-items: center
 
-// .table-data
-// 	input
-// 		block-size: 25px
-// 	tr:nth-child(odd)
-// 		background-color: $gray-box
+.table-data
+	input
+		block-size: 15px
+	tr:nth-child(odd)
+		background-color: $white
 
-// .table-three-col
-// 	max-inline-size: 1024px
-// 	max-block-size: 500px
-// 	overflow-y: scroll
-// 	&.--fc-small
-// 		section
-// 			grid-template-columns: 25% 65% 10%
-// 	section
-// 		display: grid
-// 		grid-template-columns: 45% 45% 10%
-// 		align-items: center
-// 		inline-size: 100%
-// 		padding-inline: 8px
+.table-three-col
+	max-inline-size: 1024px
+	max-block-size: 500px
+	overflow-y: scroll
+	&.--fc-small
+		section
+			grid-template-columns: 25% 65% 10%
+	section
+		display: grid
+		grid-template-columns: 45% 45% 10%
+		align-items: center
+		inline-size: 100%
+		padding-inline: 8px
+
+.table-header
+	padding: 8px
+	text-align: center
+	font: bold
+	color: $borders
+	background-color: $borders-light
+	font-size: 15px
 
 .bg-button-deg
 	background-image: linear-gradient(to right bottom, $primary, $primary, #7a080a, $dark-primary)

@@ -61,10 +61,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     { name: "video_beam", type: "int", required: false },
   ]);
 
-  const InfoSite = {
-    nombre: "Sitio prueba creado",
-  };
-
   const [content, setContent] = useState<"sites" | "reservation" | "images">(
     "sites"
   );
@@ -120,7 +116,11 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       body: {
         ...dataForm,
         tarifas_espacio: dataPaid.getData,
-        dias_disponibilidad: {...dataDays.getData, "hora_inicio": infoHorary.time_start, "hora_fin" : infoHorary.time_end },
+        dias_disponibilidad: {
+          ...dataDays.getData,
+          hora_inicio: infoHorary.time_start,
+          hora_fin: infoHorary.time_end,
+        },
         caracteristicas_espacio: {
           ...dataInfoSite.getData,
           adicionales: Object.entries({}).map((property) => {
@@ -150,6 +150,54 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     setContent("images");
     return toast.dismiss(toastLoading);
   };
+
+  const updateSite = async ()=> {
+    if (!validData) {
+      return toast.error("Por favor complete el formulario", { id: "empty" });
+    }
+    setLoading(true);
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
+    const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
+      method: "PUT",
+      body: {
+        ...dataForm,
+        tarifas_espacio: dataPaid.getData,
+        dias_disponibilidad: {
+          ...dataDays.getData,
+          hora_inicio: infoHorary.time_start,
+          hora_fin: infoHorary.time_end,
+        },
+        caracteristicas_espacio: {
+          ...dataInfoSite.getData,
+          adicionales: Object.entries({}).map((property) => {
+            return {
+              nombre: property[0],
+              descripcion: property[1],
+            };
+          }),
+        },
+        activo_coworking: "0",
+        activo_interno: "0",
+        id_estado_espacio: dataFilters.estadoEspacios.find(
+          (estado) => estado.descripcion === "Inactivo"
+        )?.id,
+      },
+    });
+    setLoading(false);
+    setSiteId(res.data.id);
+    if (res.data.message) {
+      return toast.error(res.data.message, { id: toastLoading });
+    }
+
+    if (res.code !== 200) {
+      return toast.error("No se ha podido guardar los datos", { id: toastLoading });
+    }
+
+    setContent("images");
+    return toast.dismiss(toastLoading);
+  }
 
   useEffect(() => {
     if (status === "authenticated") getData();
@@ -479,6 +527,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 text="Continuar"
               />
             </div>
+            <p>Páginas 1/3</p>
           </form>
         </div>
       )}
@@ -621,6 +670,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
                 <Button type="submit" text="Continuar" />
               </div>
+              <p>Páginas 2/3</p>
             </form>
           </div>
         </>

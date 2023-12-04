@@ -45,7 +45,7 @@ export default function ModalImage({
       id_espacio: siteId,
       id_estado_espacio: additionalInfo.id_estado_espacio,
       activo_coworking: additionalInfo.activo_coworking ? 1 : 0,
-      activo_interno: additionalInfo.activo_interno  ? 1 : 0,
+      activo_interno: additionalInfo.activo_interno ? 1 : 0,
       email: session?.user.emailHash,
     });
 
@@ -175,6 +175,7 @@ export default function ModalImage({
                 disabled={images.length < 3 || loading}
               />
             </div>
+            <p>Páginas 3/3</p>
           </div>
         )}
       </ImageUploading>

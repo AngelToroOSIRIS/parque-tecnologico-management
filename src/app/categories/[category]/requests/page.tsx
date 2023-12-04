@@ -10,20 +10,6 @@ interface Props {
     params: { category: CategoryTextShort };
   }
   
-  export async function generateMetadata({
-    params,
-  }: {
-    params: { category: string };
-  }) {
-    const categoryFound = categoriesObj.find(
-      (item) => item.route);
-  
-    return {
-      title: `Solicitudes | ${
-        categoryFound?.name ?? "Categoría no encontrada"
-      }`,
-    };
-  }
   
 export default async function RequestPage({ params }: Props) {
     const categoryFound = categoriesObj.find(
@@ -31,7 +17,7 @@ export default async function RequestPage({ params }: Props) {
       );
       const session = await getServerSession(authOptions)
       if(session?.user.interno) return redirect("/sites")
-      if (!categoryFound || categoryFound.disabled) return redirect("/404");
+      if (!categoryFound) return redirect("/404");
   return (
     <>
         <Header />

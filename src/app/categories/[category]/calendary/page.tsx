@@ -10,18 +10,6 @@ interface Props {
   params: { category: CategoryTextShort };
 }
 
-export async function generateMetadata({
-  params,
-}: Props) {
-  const categoryFound = categoriesObj.find((item) => item.route);
-
-  return {
-    title: `Agenda de ${
-      categoryFound?.name ?? "Categoría no encontrada"
-    } | Parque Tecnólogico ECIJG`,
-  };
-}
-
 export default async function CategoryCalendaryPage({
   params,
 }: {
@@ -32,7 +20,7 @@ export default async function CategoryCalendaryPage({
   );
   const session = await getServerSession(authOptions);
 
-  if (!categoryFound || categoryFound.disabled) return redirect("/404");
+  if (!categoryFound) return redirect("/404");
   if (session?.user.interno) return redirect("/sites");
 
  

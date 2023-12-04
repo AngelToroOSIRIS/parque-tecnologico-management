@@ -9,16 +9,43 @@ import ContentLoader from "react-content-loader";
 import { includesString } from "@/libs/functionsStrings";
 import Link from "next/link";
 import Modal from "./Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Category } from "@/types/d";
+import fetchFn from "@/libs/fetchFn";
 
 const Header = () => {
   const router = useRouter();
+  const [dataCategory, setDataCategory] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { data, status } = useSession();
   const user = data?.user ?? {
     name: "default",
     email: "useremail",
   };
+
+  const CategoryData = async () => {
+    const response = await fetchFn(
+      process.env.NEXT_PUBLIC_API_BASEURL + `/categorias`,
+      {
+        externalUrl: true,
+      }
+    );
+    if (response.code !== 200) {
+      router.push("/logout?error=auth");
+      toast.error("Ha ocurrido un error iniciando sesión", { id: "1" });
+      return;
+    }
+    setDataCategory(response.data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      CategoryData();
+    }
+  }, []);
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
@@ -90,8 +117,8 @@ const Header = () => {
                   >
                     <Menu.Items className="absolute mt-2 w-56 origin-top-right divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
                       <>
-                        {categoriesObj.map(({ name, route }, i) => (
-                          <div className="px-1 py-1" key={i}>
+                        {dataCategory.map(({ titulo, identificador, id }) => (
+                          <div key={id}>
                             <Menu.Item>
                               {({ active }) => (
                                 <button
@@ -100,33 +127,35 @@ const Header = () => {
                                     "text-primary font-bold border-primary bg-hover"
                                   } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
                                   onClick={() =>
-                                    router.push(`/categories/${route}`)
+                                    router.push(`/categories/${identificador}`)
                                   }
                                 >
                                   <i className="mr-1 block bi bi-caret-right-fill"></i>
-                                  {name}
+                                  {titulo}
                                 </button>
                               )}
                             </Menu.Item>
                           </div>
                         ))}
                         <div>
-                          {!user.interno && status === "authenticated" && includesString(user.rols ?? [], ["superadmin"]) && (
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={`${
-                                    active &&
-                                    "text-primary font-bold border-primary bg-hover"
-                                  } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                  onClick={() => router.push(`/categories`)}
-                                >
-                                  <i className="mr-2 ml-1 block bi bi-pencil-fill"></i>
-                                  Editar categorías
-                                </button>
-                              )}
-                            </Menu.Item>
-                          )}
+                          {!user.interno &&
+                            status === "authenticated" &&
+                            includesString(user.rols ?? [], ["superadmin"]) && (
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    className={`${
+                                      active &&
+                                      "text-primary font-bold border-primary bg-hover"
+                                    } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                    onClick={() => router.push(`/categories`)}
+                                  >
+                                    <i className="mr-2 ml-1 block bi bi-pencil-fill"></i>
+                                    Editar categorías
+                                  </button>
+                                )}
+                              </Menu.Item>
+                            )}
                         </div>
                       </>
                     </Menu.Items>

@@ -15,7 +15,7 @@ import FilterTable from "./FilterTable";
 import Input from "../forms/Input";
 import Select from "../forms/Select";
 import { useRouter } from "next/navigation";
-import { Triangle } from "react-loader-spinner";
+import { TailSpin } from "react-loader-spinner";
 import { Badge, SelectItem } from "@nextui-org/react";
 import ButtonTable from "../ButtonTable";
 import { CategoryTextShort } from "@/types/d";
@@ -97,284 +97,302 @@ const TableData: React.FC<Props> = ({
   if (!loading)
     return (
       <Fragment>
-        <section className="flex items-center justify-between pb-2">
-          <div>
-            <button
-              className="w-7 h-7 inline text-default-white rounded-md border border-soft-primary bg-primary transition-all cursor-pointer hover:bg-dark-primary hover:border-primary active:border-dark-primary"
-              onClick={() => setActiveFilters(!activeFilters)}
-              title="Filtros"
-            >
-              <i className="bi bi-funnel-fill"></i>
-            </button>
-            <p className="ml-3 inline text-primary font-medium">
-              P&aacute;gina {instance.getState().pagination.pageIndex + 1} de{" "}
-              {instance.getPageCount()}{" "}
-            </p>
-          </div>
-          <div className="w-[38%]">
-            {instance.getFilteredRowModel().rows.length > 0 && (
-              <>
-                <div className="flex justify-between font-medium items-center gap-3 ">
-                  <CSVLink
-                    headers={columnsForCsv}
-                    data={dataForCsv}
-                    separator=";"
-                    className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
-                    filename={`INVENTARIO ${new Date().toJSON().slice(0, 10)}`}
+        {instance.getFilteredRowModel().rows.length === 0 && (
+          <>
+            <div className="text-center text-default-300 select-none">
+              <i className="bi bi-x-circle text-7xl"></i>
+              <p className="text-4xl mt-[1%]">
+                No se existen espacios para categoría
+              </p>
+            </div>
+          </>
+        )}
+        {instance.getFilteredRowModel().rows.length > 0 && (
+          <>
+            <div className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3">
+              <section className="flex items-center justify-between pb-2">
+                <div>
+                  <button
+                    className="w-7 h-7 inline text-default-white rounded-md border border-soft-primary bg-primary transition-all cursor-pointer hover:bg-dark-primary hover:border-primary active:border-dark-primary"
+                    onClick={() => setActiveFilters(!activeFilters)}
+                    title="Filtros"
                   >
-                    Exportar en .CSV
-                    <i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
-                  </CSVLink>
-                  <ButtonTable
-                    text="Agenda general"
-                    icon="calendar2-check"
-                    onClick={() => router.push(`${category}/calendary`)}
-                    type="button"
-                  />
-                    <Badge
-                      content={<i className="bi bi-bell-fill text-sm"></i>}
-                      color="primary"
-                      size="lg"
-                      className="animate-pulse"
-                    >
-                      <ButtonTable
-                        text="Solicitudes"
-                        icon="exclamation-circle"
-                        onClick={() => router.push(`${category}/requests`)}
-                        type="button"
-                      />
-                    </Badge>
-                    <ButtonTable
-                      text="Añadir sitio"
-                      icon="plus-circle"
-                      onClick={() => router.push("/sites/add")}
-                      type="button"
-                    />
+                    <i className="bi bi-funnel-fill"></i>
+                  </button>
+                  <p className="ml-3 inline text-primary font-medium">
+                    P&aacute;gina {instance.getState().pagination.pageIndex + 1}{" "}
+                    de {instance.getPageCount()}{" "}
+                  </p>
                 </div>
-                </>
-            )}
-          </div>
-        </section>
-        <section className="overflow-hidden rounded-lg border border-borders-light">
-          <section className="overflow-x-scroll overflow-y-hidden">
-            <table
-              className={`table-data min-w-[1800PX] border-collapse bg-default-white overflow-hidden ${className}`}
-            >
-              <thead className="text-borders-light bg-borders select-none">
-                {instance.getHeaderGroups().map((headerGroup: any) => (
-                  <tr key={headerGroup.id}>
-                    {description === "Dispositivos" && (
-                      <th className="w-10 p-2 text-center font-bold bg-gray">
-                        <i className="bi bi-three-dots"></i>
-                      </th>
-                    )}
-                    {headerGroup.headers.map((header: any) => (
-                      <th
-                        className="p-2 text-start font-bold bg-gray"
-                        key={header.id}
-                        colSpan={header.colSpan}
-                      >
-                        {header.isPlaceholder ? null : (
-                          <div>
-                            {header.renderHeader()}
-                            {activeFilters && header.column.getCanFilter() && (
-                              <FilterTable column={header.column} />
-                            )}
-                          </div>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {instance.getRowModel().rows.map((row: any) => {
-                  return (
-                    <tr
-                      className="border-t border-b border-borders-light last:border-b-0"
-                      key={row.id}
-                    >
-                      {description === "Dispositivos" && (
-                        <Link href={`/device/${row.original?.["id"]}`}>
-                          <td
-                            className="text-center text-gray transition-all cursor-pointer hover:bg-hover"
-                            title="Ver detalles"
-                          >
-                            <i className="bi bi-eye-fill"></i>
-                          </td>
-                        </Link>
-                      )}
-                      {row.getVisibleCells().map((cell: any) => (
-                        <td className="p-2" key={cell.id}>
-                          {cell.renderCell()}
-                        </td>
+                <div className="flex items-center gap-4">
+                  {instance.getFilteredRowModel().rows.length > 0 && (
+                    <>
+                      <div className="flex justify-between font-medium items-center gap-3">
+                        <CSVLink
+                          headers={columnsForCsv}
+                          data={dataForCsv}
+                          separator=";"
+                          className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
+                          filename={`INVENTARIO ${new Date()
+                            .toJSON()
+                            .slice(0, 10)}`}
+                        >
+                          Exportar en .CSV
+                          <i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
+                        </CSVLink>
+                        <ButtonTable
+                          text="Agenda general"
+                          icon="calendar2-check"
+                          onClick={() => router.push(`${category}/calendary`)}
+                          type="button"
+                        />
+                        <Badge
+                          content={<i className="bi bi-bell-fill text-sm"></i>}
+                          color="primary"
+                          size="lg"
+                          className="animate-pulse"
+                        >
+                          <ButtonTable
+                            text="Solicitudes"
+                            icon="exclamation-circle"
+                            onClick={() => router.push(`${category}/requests`)}
+                            type="button"
+                          />
+                        </Badge>
+                        <ButtonTable
+                          text="Añadir sitio"
+                          icon="plus-circle"
+                          onClick={() => router.push("/sites/add")}
+                          type="button"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </section>
+              <section className="overflow-hidden rounded-lg border border-borders-light">
+                <section className="overflow-x-scroll overflow-y-hidden">
+                  <table
+                    className={`table-data min-w-[1800PX] border-collapse overflow-hidden ${className}`}
+                  >
+                    <thead className="text-borders rounded-lg bg-borders-light select-none">
+                      {instance.getHeaderGroups().map((headerGroup: any) => (
+                        <tr key={headerGroup.id}>
+                          {headerGroup.headers.map((header: any) => (
+                            <th
+                              className="table-header"
+                              key={header.id}
+                              colSpan={header.colSpan}
+                            >
+                              {header.isPlaceholder ? null : (
+                                <div>
+                                  {header.renderHeader()}
+                                  {activeFilters &&
+                                    header.column.getCanFilter() && (
+                                      <FilterTable column={header.column} />
+                                    )}
+                                </div>
+                              )}
+                            </th>
+                          ))}
+                        </tr>
                       ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </section>
-          <section className="md:grid md:grid-cols-3 w-full px-4 border-t border-borders-light bg-gray-box items-center text-center">
-            <div className="hidden md:flex items-center gap-3">
-              <p className="font-medium text-dark-gray">P&aacute;gina: </p>
-              <Input
-                className="my-0 py-1 max-w-[60px]"
-                type="number"
-                value={(currentPage + 1).toString()}
-                onChange={({ value }) => {
-                  if (Number(value) <= instance.getPageCount()) {
-                    const page = value ? Number(value) - 1 : 0;
-                    instance.setPageIndex(page);
-                    setCurrentPage(page);
-                  }
-                }}
-              />
-              <p className="font-medium text-dark-gray">Cantidad de filas: </p>
-              <Select
-                placeholder="Seleccionar"
-                className="my-0 py-1 max-w-[60px]"
-                defaultValue={String(instance.getState().pagination.pageSize)}
-                onChange={({ value }) => {
-                  instance.setPageSize(Number(value));
-                }}
-              >
-                {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize}>
-                    {pageSize}
-                  </SelectItem>
-                ))}
-              </Select>
+                    </thead>
+                    <tbody>
+                      {instance.getRowModel().rows.map((row: any) => {
+                        return (
+                          <tr className="" key={row.id}>
+                            {description === "Dispositivos" && (
+                              <Link href={`/device/${row.original?.["id"]}`}>
+                                <td
+                                  className="text-center text-gray transition-all cursor-pointer hover:bg-hover"
+                                  title="Ver detalles"
+                                >
+                                  <i className="bi bi-eye-fill"></i>
+                                </td>
+                              </Link>
+                            )}
+                            {row.getVisibleCells().map((cell: any) => (
+                              <td className="p-2" key={cell.id}>
+                                {cell.renderCell()}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </section>
+                <section className="md:grid md:grid-cols-3 w-full px-4 border-t border-borders-light bg-gray-box items-center text-center">
+                  <div className="hidden md:flex items-center gap-3">
+                    <p className="font-medium text-dark-gray">
+                      Página:{" "}
+                    </p>
+                    <Input
+                      className="my-0 py-1 max-w-[70px]"
+                      type="number"
+                      value={(currentPage + 1).toString()}
+                      onChange={({ value }) => {
+                        if (Number(value) <= instance.getPageCount()) {
+                          const page = value ? Number(value) - 1 : 0;
+                          instance.setPageIndex(page);
+                          setCurrentPage(page);
+                        }
+                      }}
+                    />
+                    <p className="font-medium text-dark-gray">
+                      Cantidad de filas:{" "}
+                    </p>
+                    <Select
+                      placeholder="Seleccionar"
+                      className="my-0 py-1 max-w-[70px]"
+                      defaultValue={String(
+                        instance.getState().pagination.pageSize
+                      )}
+                      onChange={({ value }) => {
+                        instance.setPageSize(Number(value));
+                      }}
+                    >
+                      {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                        <SelectItem key={pageSize} value={pageSize}>
+                          {pageSize}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="flex my-3 md:my-0 justify-center items-center gap-2 h-full">
+                    <button
+                      className={
+                        instance.getCanPreviousPage()
+                          ? nextPageClass
+                          : nextPageClassDisabled
+                      }
+                      onClick={() => {
+                        setCurrentPage(0);
+                        instance.setPageIndex(0);
+                      }}
+                      disabled={!instance.getCanPreviousPage()}
+                      title="Primer página"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      className={
+                        instance.getCanPreviousPage()
+                          ? nextPageClass
+                          : nextPageClassDisabled
+                      }
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        instance.previousPage();
+                      }}
+                      disabled={!instance.getCanPreviousPage()}
+                      title="Página anterior"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 19.5L8.25 12l7.5-7.5"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      className={
+                        instance.getCanNextPage()
+                          ? nextPageClass
+                          : nextPageClassDisabled
+                      }
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        instance.nextPage();
+                      }}
+                      disabled={!instance.getCanNextPage()}
+                      title="Página siguiente"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      className={
+                        instance.getCanNextPage()
+                          ? nextPageClass
+                          : nextPageClassDisabled
+                      }
+                      onClick={() => {
+                        setCurrentPage(instance.getPageCount() - 1);
+                        instance.setPageIndex(instance.getPageCount() - 1);
+                      }}
+                      disabled={!instance.getCanNextPage()}
+                      title="Última página"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <p className="font-medium text-borders text-end">
+                    {description} encontrados:{" "}
+                    {instance.getFilteredRowModel().rows.length}
+                  </p>
+                </section>
+              </section>
             </div>
-            <div className="flex my-3 md:my-0 justify-center items-center gap-2 h-full">
-              <button
-                className={
-                  instance.getCanPreviousPage()
-                    ? nextPageClass
-                    : nextPageClassDisabled
-                }
-                onClick={() => {
-                  setCurrentPage(0);
-                  instance.setPageIndex(0);
-                }}
-                disabled={!instance.getCanPreviousPage()}
-                title="Primer página"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <button
-                className={
-                  instance.getCanPreviousPage()
-                    ? nextPageClass
-                    : nextPageClassDisabled
-                }
-                onClick={() => {
-                  setCurrentPage(currentPage - 1);
-                  instance.previousPage();
-                }}
-                disabled={!instance.getCanPreviousPage()}
-                title="Página anterior"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 19.5L8.25 12l7.5-7.5"
-                  />
-                </svg>
-              </button>
-              <button
-                className={
-                  instance.getCanNextPage()
-                    ? nextPageClass
-                    : nextPageClassDisabled
-                }
-                onClick={() => {
-                  setCurrentPage(currentPage + 1);
-                  instance.nextPage();
-                }}
-                disabled={!instance.getCanNextPage()}
-                title="Página siguiente"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              </button>
-              <button
-                className={
-                  instance.getCanNextPage()
-                    ? nextPageClass
-                    : nextPageClassDisabled
-                }
-                onClick={() => {
-                  setCurrentPage(instance.getPageCount() - 1);
-                  instance.setPageIndex(instance.getPageCount() - 1);
-                }}
-                disabled={!instance.getCanNextPage()}
-                title="Última página"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              </button>
-            </div>
-            <p className="font-medium text-borders text-end">
-              {description} encontrados:{" "}
-              {instance.getFilteredRowModel().rows.length}
-            </p>
-          </section>
-        </section>
+          </>
+        )}
       </Fragment>
     );
 
   return (
-    <Triangle
-      height="80"
-      width="80"
+    <TailSpin
+      height="100"
+      width="100"
       color="#990000"
-      ariaLabel="triangle-loading"
+      ariaLabel="tail-spin-loading"
+      radius="1"
       wrapperStyle={{
         margin: "20px 0",
         justifyContent: "center",

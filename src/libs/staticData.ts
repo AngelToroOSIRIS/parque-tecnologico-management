@@ -7,7 +7,7 @@ export const categoriesObj: {
     name: "Auditorios",
   },
   {
-    route: "maximus_classrooms",
+    route: "maximum_classrooms",
     name: "Aula Máxima",
   },
   {

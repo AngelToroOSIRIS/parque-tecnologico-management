@@ -32,7 +32,7 @@ const InputTable: React.FC<{
 		<InputNextUi
 			isClearable={clearable}
 			radius="full"
-			size="lg"
+			size="sm"
 			variant="faded"
 			classNames={{
 				inputWrapper: "bg-[#ffff]",
