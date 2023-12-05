@@ -10,7 +10,7 @@ import Button from "./Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { Category, Enlace, States } from "@/types/d";
+import { Category, Enlace, SiteEdit, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
 import TextareaForm from "./forms/TextareaForm";
@@ -20,46 +20,177 @@ import DynamicForm from "./forms/DynamicForm";
 import SelectTime from "./SelectTime";
 
 const FormSite = ({ idSite }: { idSite?: number }) => {
+  const [dataEdit, setdataEdit] = useState<SiteEdit>();
+  const [loadingData, setLoadingData] = useState<boolean>(true);
   const { data: session, status } = useSession();
   const {
     validData,
     getData: dataForm,
     setField,
-  } = useValidateForm([
-    { name: "id_categoria", type: "int", required: true },
-    { name: "id_estado_espacio", type: "int", required: true },
-    { name: "id_identificador_enlace", type: "int", required: true },
-    { name: "nombre", type: "str", required: true },
-    { name: "descripcion_corta", type: "str", required: true },
-    { name: "descripcion", type: "str", required: true },
-    { name: "activo_coworking", type: "str", required: true },
-    { name: "activo_interno", type: "str", required: true },
-  ]);
-  const dataPaid = useValidateForm([
-    { name: "hora", type: "int", required: true },
-    { name: "dia", type: "int", required: false },
-    { name: "mes", type: "int", required: false },
-  ]);
-  const dataDays = useValidateForm([
-    { name: "lunes", type: "str", value: "1", required: true },
-    { name: "martes", type: "str", value: "1", required: true },
-    { name: "miercoles", type: "str", value: "1", required: true },
-    { name: "jueves", type: "str", value: "1", required: true },
-    { name: "viernes", type: "str", value: "1", required: true },
-    { name: "sabado", type: "str", value: "0", required: true },
-    { name: "domingo", type: "str", value: "0", required: true },
-    { name: "festivos", type: "str", value: "0", required: true },
-  ]);
-  const dataInfoSite = useValidateForm([
-    { name: "dimensiones", type: "str", required: true },
-    { name: "escritorios", type: "int", required: false },
-    { name: "sillas", type: "int", required: false },
-    { name: "mesa_reunion", type: "int", required: false },
-    { name: "televisores", type: "int", required: false },
-    { name: "computadores", type: "int", required: false },
-    { name: "tablero", type: "int", required: false },
-    { name: "video_beam", type: "int", required: false },
-  ]);
+  } = useValidateForm(
+    [
+      { name: "id_categoria", type: "int", required: true },
+      { name: "id_estado_espacio", type: "int", required: true },
+      { name: "id_identificador_enlace", type: "int", required: true },
+      { name: "nombre", type: "str", required: true, value: dataEdit?.nombre },
+      {
+        name: "descripcion_corta",
+        type: "str",
+        required: true,
+        value: dataEdit?.descripcion_corta,
+      },
+      {
+        name: "descripcion",
+        type: "str",
+        required: true,
+        value: dataEdit?.descripcion,
+      },
+      { name: "activo_coworking", type: "str", required: true },
+      { name: "activo_interno", type: "str", required: true },
+    ],
+    {
+      loadData: idSite ? true : false,
+      status: loadingData ? "loading" : "charged",
+    }
+  );
+  const dataPaid = useValidateForm(
+    [
+      {
+        name: "hora",
+        type: "int",
+        required: true,
+        value: dataEdit?.tarifas_espacio.hora,
+      },
+      {
+        name: "dia",
+        type: "int",
+        required: false,
+        value: dataEdit?.tarifas_espacio.dia,
+      },
+      {
+        name: "mes",
+        type: "int",
+        required: false,
+        value: dataEdit?.tarifas_espacio.mes,
+      },
+    ],
+    {
+      loadData: idSite ? true : false,
+      status: loadingData ? "loading" : "charged",
+    }
+  );
+  const dataDays = useValidateForm(
+    [
+      {
+        name: "lunes",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.lunes ?? "1",
+      },
+      {
+        name: "martes",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.martes ?? "1",
+      },
+      {
+        name: "miercoles",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.miercoles ?? "1",
+      },
+      {
+        name: "jueves",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.jueves ?? "1",
+      },
+      {
+        name: "viernes",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.viernes ?? "1",
+      },
+      {
+        name: "sabado",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.sabado ?? "0",
+      },
+      {
+        name: "domingo",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.domingo ?? "0",
+      },
+      {
+        name: "festivos",
+        type: "str",
+        required: true,
+        value: dataEdit?.dias_disponibilidad_espacio.festivos ?? "0",
+      },
+    ],
+    {
+      loadData: idSite ? true : false,
+      status: loadingData ? "loading" : "charged",
+    }
+  );
+  const dataInfoSite = useValidateForm(
+    [
+      {
+        name: "dimensiones",
+        type: "str",
+        required: true,
+        value: dataEdit?.caracteristicas_espacio.dimensiones,
+      },
+      {
+        name: "escritorios",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.escritorios,
+      },
+      {
+        name: "sillas",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.sillas,
+      },
+      {
+        name: "mesa_reunion",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.mesa_reuniones,
+      },
+      {
+        name: "televisores",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.televisores,
+      },
+      {
+        name: "computadores",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.computadores,
+      },
+      {
+        name: "tablero",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.tablero,
+      },
+      {
+        name: "video_beam",
+        type: "int",
+        required: false,
+        value: dataEdit?.caracteristicas_espacio.video_beam,
+      },
+    ],
+    {
+      loadData: idSite ? true : false,
+      status: loadingData ? "loading" : "charged",
+    }
+  );
 
   const [content, setContent] = useState<"sites" | "reservation" | "images">(
     "sites"
@@ -78,7 +209,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     activo_interno: boolean;
     id_estado_espacio: string;
   }>({ id_estado_espacio: "", activo_coworking: false, activo_interno: false });
-  const [loadingData, setLoadingData] = useState<boolean>(true);
   const [infoHorary, setInfoHorary] = useState<{
     time_start: string;
     time_end: string;
@@ -90,8 +220,19 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     estadoEspacios: States[];
     identificadoresEnlace: Enlace[];
   }>({ categorias: [], estadoEspacios: [], identificadoresEnlace: [] });
+
   const router = useRouter();
+
   const getData = async () => {
+    setLoadingData(true);
+    if (idSite) {
+      const data = await fetchFn(`/getPlace/${idSite}`);
+      if (data.code !== 200) {
+        return toast.error("No se ha podido obtener la info", { id: "2" });
+      }
+      setdataEdit(data.data);
+    }
+
     const response = await fetchFn(
       `/characteristicsPlace?email=${session?.user.emailHash}`
     );
@@ -111,47 +252,51 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
     });
-    const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
-      method: "POST",
-      body: {
-        ...dataForm,
-        tarifas_espacio: dataPaid.getData,
-        dias_disponibilidad: {
-          ...dataDays.getData,
-          hora_inicio: infoHorary.time_start,
-          hora_fin: infoHorary.time_end,
-        },
-        caracteristicas_espacio: {
-          ...dataInfoSite.getData,
-          adicionales: Object.entries({}).map((property) => {
-            return {
-              nombre: property[0],
-              descripcion: property[1],
-            };
-          }),
-        },
-        activo_coworking: "0",
-        activo_interno: "0",
-        id_estado_espacio: dataFilters.estadoEspacios.find(
-          (estado) => estado.descripcion === "Inactivo"
-        )?.id,
-      },
-    });
-    setLoading(false);
-    setSiteId(res.data.id);
-    if (res.data.message) {
-      return toast.error(res.data.message, { id: toastLoading });
-    }
 
-    if (res.code !== 200) {
-      return toast.error("No se ha podido guardar", { id: toastLoading });
-    }
+    if (!idSite) {
+      const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
+        method: "POST",
+        body: {
+          ...dataForm,
+          tarifas_espacio: dataPaid.getData,
+          dias_disponibilidad: {
+            ...dataDays.getData,
+            hora_inicio: infoHorary.time_start,
+            hora_fin: infoHorary.time_end,
+          },
+          caracteristicas_espacio: {
+            ...dataInfoSite.getData,
+            adicionales: Object.entries({}).map((property) => {
+              return {
+                nombre: property[0],
+                descripcion: property[1],
+              };
+            }),
+          },
+          activo_coworking: "0",
+          activo_interno: "0",
+          id_estado_espacio: dataFilters.estadoEspacios.find(
+            (estado) => estado.descripcion === "Inactivo"
+          )?.id,
+        },
+      });
 
-    setContent("images");
-    return toast.dismiss(toastLoading);
+      setLoading(false);
+      setSiteId(res.data.id);
+      if (res.data.message) {
+        return toast.error(res.data.message, { id: toastLoading });
+      }
+
+      if (res.code !== 200) {
+        return toast.error("No se ha podido guardar", { id: toastLoading });
+      }
+
+      setContent("images");
+      return toast.dismiss(toastLoading);
+    }
   };
 
-  const updateSite = async ()=> {
+  const updateSite = async () => {
     if (!validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
@@ -159,32 +304,35 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
     });
-    const res = await fetchFn(`/place?email=${session?.user.emailHash}`, {
-      method: "PUT",
-      body: {
-        ...dataForm,
-        tarifas_espacio: dataPaid.getData,
-        dias_disponibilidad: {
-          ...dataDays.getData,
-          hora_inicio: infoHorary.time_start,
-          hora_fin: infoHorary.time_end,
+    const res = await fetchFn(
+      `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`,
+      {
+        method: "PUT",
+        body: {
+          ...dataForm,
+          tarifas_espacio: dataPaid.getData,
+          dias_disponibilidad: {
+            ...dataDays.getData,
+            hora_inicio: infoHorary.time_start,
+            hora_fin: infoHorary.time_end,
+          },
+          caracteristicas_espacio: {
+            ...dataInfoSite.getData,
+            adicionales: Object.entries({}).map((property) => {
+              return {
+                nombre: property[0],
+                descripcion: property[1],
+              };
+            }),
+          },
+          activo_coworking: "0",
+          activo_interno: "0",
+          id_estado_espacio: dataFilters.estadoEspacios.find(
+            (estado) => estado.descripcion === "Inactivo"
+          )?.id,
         },
-        caracteristicas_espacio: {
-          ...dataInfoSite.getData,
-          adicionales: Object.entries({}).map((property) => {
-            return {
-              nombre: property[0],
-              descripcion: property[1],
-            };
-          }),
-        },
-        activo_coworking: "0",
-        activo_interno: "0",
-        id_estado_espacio: dataFilters.estadoEspacios.find(
-          (estado) => estado.descripcion === "Inactivo"
-        )?.id,
-      },
-    });
+      }
+    );
     setLoading(false);
     setSiteId(res.data.id);
     if (res.data.message) {
@@ -192,12 +340,21 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     }
 
     if (res.code !== 200) {
-      return toast.error("No se ha podido guardar los datos", { id: toastLoading });
+      return toast.error("No se ha podido guardar los datos", {
+        id: toastLoading,
+      });
     }
 
     setContent("images");
-    return toast.dismiss(toastLoading);
-  }
+    return toast.success("Datos actualizados correctamente!", {
+      id: toastLoading,
+    });
+  };
+
+  console.log(dataInfoSite );
+  console.log(dataDays);
+  console.log(dataAdittional);
+  console.log(dataForm);
 
   useEffect(() => {
     if (status === "authenticated") getData();
@@ -222,10 +379,10 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
             </h1>
             <div className="items-center justify-center gap-10 lg:flex py-1">
               <InputForm
-                // defaultValue={InfoSite.nombre}
                 onChange={setField}
                 type="text"
                 name="nombre"
+                defaultValue={dataEdit?.nombre}
                 label={{
                   required: true,
                   value: "Nombre:",
@@ -265,7 +422,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               >
                 {dataFilters.categorias.map((categoria) => (
                   <SelectItem key={categoria.id} value={categoria.id}>
-                    {categoria.descripcion}
+                    {categoria.titulo}
                   </SelectItem>
                 ))}
               </SelectForm>
@@ -293,6 +450,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <TextareaForm
                   classContainer="w-[50%]"
                   name="descripcion_corta"
+                  defaultValue={dataEdit?.descripcion_corta}
                   placeholder="Ingresar descripción corta completa"
                   minRows={3}
                   label={{
@@ -318,6 +476,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   <InputForm
                     onChange={dataInfoSite.setField}
                     type="text"
+                    defaultValue={dataEdit?.caracteristicas_espacio.dimensiones}
                     placeholder="000x000"
                     description="* metros"
                     className="mt-1 mb-[10px] outline-none select-none "
@@ -340,6 +499,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <TextareaForm
                   classContainer="w-[50%]"
                   name="descripcion"
+                  defaultValue={dataEdit?.descripcion}
                   onChange={setField}
                   placeholder="Ingresar descripción completa"
                   minRows={8}
@@ -364,7 +524,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               </div>
             </div>
             <h1 className="text-center text-2xl lg:text-3xl text-primary font-medium mt-4 mb-10">
-              Características del sitio
+              Características
             </h1>
             <div className="w-full lg:px-14 text-justify items-center">
               <div className="w-full gap-5 grid-cols-1 lg:flex">
@@ -372,6 +532,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={dataInfoSite.setField}
                   name="escritorios"
                   type="number"
+                  defaultValue={dataEdit?.caracteristicas_espacio.escritorios}
                   placeholder="Cantidad"
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
@@ -386,6 +547,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={dataInfoSite.setField}
                   name="sillas"
                   type="number"
+                  defaultValue={dataEdit?.caracteristicas_espacio.sillas}
                   placeholder="Cantidad"
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
@@ -403,6 +565,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   name="mesa_reunion"
                   type="number"
                   placeholder="Cantidad"
+                  defaultValue={
+                    dataEdit?.caracteristicas_espacio.mesa_reuniones
+                  }
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
                     required: false,
@@ -417,6 +582,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   name="televisores"
                   type="number"
                   placeholder="Cantidad"
+                  defaultValue={dataEdit?.caracteristicas_espacio.televisores}
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
                     required: false,
@@ -432,6 +598,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={dataInfoSite.setField}
                   name="computadores"
                   type="number"
+                  defaultValue={dataEdit?.caracteristicas_espacio.computadores}
                   placeholder="Cantidad"
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
@@ -446,6 +613,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={dataInfoSite.setField}
                   name="tablero"
                   type="number"
+                  defaultValue={dataEdit?.caracteristicas_espacio.tablero}
                   placeholder="Cantidad"
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
@@ -460,6 +628,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={dataInfoSite.setField}
                   name="video_beam"
                   type="number"
+                  defaultValue={dataEdit?.caracteristicas_espacio.video_beam}
                   placeholder="Cantidad"
                   className="mt-1 mb-[10px] outline-none select-none "
                   label={{
@@ -668,7 +837,15 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 </div>
               </div>
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
-                <Button type="submit" text="Continuar" />
+                <Button
+                  type="submit"
+                  text="Continuar"
+                  onClick={() => {
+                    if (idSite) {
+                      updateSite();
+                    }
+                  }}
+                />
               </div>
               <p>Páginas 2/3</p>
             </form>

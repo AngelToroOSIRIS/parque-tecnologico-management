@@ -7,11 +7,11 @@ export type CategoryTextShort =
   | "maximus_classrooms";
 
 export interface Category {
-  id: number,
-	descripcion: string,
-	identificador: string,
-	titulo: string,
-	estado: string
+  id: number;
+  descripcion: string;
+  identificador: string;
+  titulo: string;
+  estado: string;
 }
 
 export interface States {
@@ -164,11 +164,64 @@ export interface ReservationCategory {
   persona_info: PersonRequest;
 }
 
+export interface SiteEdit {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  descripcion_corta: string;
+  categoria: string;
+  estado: boolean;
+  images: [
+    {
+      img_card: string;
+      img_big: string;
+      id: number;
+      img_medium: string;
+      img_small: string;
+    }
+  ];
+  tarifas_espacio: {
+    id: number;
+    hora: number;
+    dia: number;
+    mes: number;
+  };
+  dias_disponibilidad_espacio: {
+    id: number;
+    lunes: number;
+    martes: number;
+    miercoles: number;
+    jueves: number;
+    viernes: number;
+    sabado: number;
+    domingo: number;
+    festivos: number;
+    hora_inicio: string;
+    hora_fin: string;
+  };
+  caracteristicas_espacio: {
+    id: number;
+    dimensiones: string;
+    escritorios: number;
+    sillas: number;
+    mesa_reuniones: number;
+    televisores: number;
+    computadores: number;
+    tablero: number;
+    video_beam: number;
+    adicionales: string;
+  };
+}
+
 export interface Site {
   id: number;
   categoria: string;
+  id_categoria: number;
   id_tarifas_espacio: number;
-  estado_espacio: string;
+  id_estado_espacio: number;
+  id_caracteristicas_espacio: number;
+  estado: boolean;
+  id_dias_disponibilidad_espacio: number;
   id_identificador_enlace?: number;
   nombre: string;
   descripcion: string;
@@ -177,9 +230,54 @@ export interface Site {
   fecha_actualizacion: string;
   activo_coworking: string;
   activo_interno: string;
+  images: ImageSite[];
+  tarifas_espacio: TarifySite;
+  dias_disponibilidad_espacio: DaysDisponibilitySite;
+  caracteristicas_espacio: CharacteristicSite;
+}
+export interface ImageSite {
+  img_card: string;
+  img_big: string;
+  id: number;
+  img_medium: string;
+  img_small: string;
 }
 
-export interface SiteTbl{
+export interface CharacteristicSite {
+  id: number;
+  dimensiones: string;
+  escritorios: number;
+  sillas: number;
+  mesa_reuniones: number;
+  televisores: number;
+  computadores: number;
+  tablero: number;
+  video_beam: number;
+  adicionales: string;
+}
+
+export interface DaysDisponibilitySite {
+  id: number;
+  lunes: string;
+  martes: string;
+  miercoles: string;
+  jueves: string;
+  viernes: string;
+  sabado: string;
+  domingo: string;
+  festivos: string;
+  hora_inicio: string;
+  hora_fin: string;
+}
+
+export interface TarifySite {
+  id: number;
+  hora: number;
+  dia: number;
+  mes: number;
+}
+
+export interface SiteTbl {
   id: string;
   categoria: string;
   estado_espacio: string;

@@ -16,9 +16,15 @@ import Input from "../forms/Input";
 import Select from "../forms/Select";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
-import { Badge, SelectItem } from "@nextui-org/react";
+import { Badge, SelectItem, Tooltip } from "@nextui-org/react";
 import ButtonTable from "../ButtonTable";
 import { CategoryTextShort } from "@/types/d";
+import {
+  formatDate,
+  includesString,
+  stringIncludes,
+} from "@/libs/functionsStrings";
+import Modal from "../Modal";
 
 interface Props {
   columnsArray: { accessor: string; header: string }[];
@@ -42,6 +48,7 @@ const TableData: React.FC<Props> = ({
   const columns = useColumnsRows(columnsArray, table);
 
   const [data] = useState<any>(dataArray);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -102,7 +109,7 @@ const TableData: React.FC<Props> = ({
             <div className="text-center text-default-300 select-none">
               <i className="bi bi-x-circle text-7xl"></i>
               <p className="text-4xl mt-[1%]">
-                No se existen espacios para categoría
+                No se existen espacios para está categoría
               </p>
             </div>
           </>
@@ -133,7 +140,7 @@ const TableData: React.FC<Props> = ({
                           data={dataForCsv}
                           separator=";"
                           className="flex h-10 justify-center px-2 items-center rounded-lg font-medium border-borders-light hover:border-borders text-borders text-base border-2 bg-borders-light transition-all "
-                          filename={`INVENTARIO ${new Date()
+                          filename={`EXPORT ${new Date()
                             .toJSON()
                             .slice(0, 10)}`}
                         >
@@ -143,7 +150,7 @@ const TableData: React.FC<Props> = ({
                         <ButtonTable
                           text="Agenda general"
                           icon="calendar2-check"
-                          onClick={() => router.push(`${category}/calendary`)}
+                          onClick={() => router.push(`/${category}/calendary`)}
                           type="button"
                         />
                         <Badge
@@ -155,7 +162,7 @@ const TableData: React.FC<Props> = ({
                           <ButtonTable
                             text="Solicitudes"
                             icon="exclamation-circle"
-                            onClick={() => router.push(`${category}/requests`)}
+                            onClick={() => router.push(`/${category}/requests`)}
                             type="button"
                           />
                         </Badge>
@@ -212,11 +219,126 @@ const TableData: React.FC<Props> = ({
                                 </td>
                               </Link>
                             )}
-                            {row.getVisibleCells().map((cell: any) => (
-                              <td className="p-2" key={cell.id}>
-                                {cell.renderCell()}
-                              </td>
-                            ))}
+                            {row.getVisibleCells().map((cell: any) => {
+                              console.log(cell.column);
+                              const valueRender = cell
+                                .renderCell()
+                                .props.cell.getValue();
+                              {
+                                <Modal
+                                  isOpen={showModal}
+                                  setIsOpen={setShowModal}
+                                  classContainer="w-[95%] max-w-[500px]"
+                                >
+                                  <>
+                                    <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
+                                      Inhabilitar sitio
+                                    </h1>
+                                    <div>
+                                      <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+                                        ¿Seguro que quiere Inhabilitar el sitio{" "}
+                                        {cell.row.original.nombre}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center gap-7 pb-3 justify-center text-center">
+                                      <div className="mt-5">
+                                        <button
+                                          type="button"
+                                          className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
+                                        >
+                                          Inhabilitar sitio
+                                        </button>
+                                      </div>
+                                      <div className="mt-5">
+                                        <button
+                                          type="button"
+                                          className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
+                                          onClick={() => {
+                                            setShowModal(false);
+                                          }}
+                                        >
+                                          Cancelar
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </>
+                                </Modal>
+                              }
+                              if (
+                                stringIncludes(cell.column.id, [
+                                  "fecha_creacion",
+                                  "fecha_actualizacion",
+                                ])
+                              ) {
+                                return (
+                                  <td className="p-2" key={cell.id}>
+                                    {formatDate(valueRender, true)}
+                                  </td>
+                                );
+                              }
+                              if (stringIncludes(cell.column.id, ["options"])) {
+                                return (
+                                  <td className="p-2" key={cell.id}>
+                                    <div className="relative justify-center flex items-center">
+                                      <a
+                                        title="Ver sitio"
+                                        target="_blank"
+                                        href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/`}
+                                        className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                      >
+                                        <i className="bi bi-eye m-2 text-2xl"></i>
+                                      </a>
+                                      <span
+                                        title="Ver agenda de sitio"
+                                        onClick={() =>
+                                          router.push(
+                                            `/sites/${cell.row.original.id}/calendar`
+                                          )
+                                        }
+                                        className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                      >
+                                        <i className="bi bi-calendar2-check m-2 text-xl"></i>
+                                      </span>
+                                      <>
+                                        <span
+                                          title="Editar datos"
+                                          onClick={() =>
+                                            router.push(
+                                              `/sites/${cell.row.original.id}/edit`
+                                            )
+                                          }
+                                          className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                        >
+                                          <i className="bi bi-pen m-2 text-xl"></i>
+                                        </span>
+                                        <span
+                                          title="Editar datos"
+                                          onClick={() =>
+                                            router.push(
+                                              `/sites/${cell.row.original.id}/edit/images`
+                                            )
+                                          }
+                                          className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                        >
+                                          <i className="bi bi-images m-2 text-xl"></i>
+                                        </span>
+                                        <span title="Inhabilitar sitio">
+                                          <i
+                                            onClick={() => setShowModal(true)}
+                                            className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
+                                          ></i>
+                                        </span>
+                                      </>
+                                    </div>
+                                  </td>
+                                );
+                              }
+                              return (
+                                <td className="p-2" key={cell.id}>
+                                  {cell.renderCell()}
+                                </td>
+                              );
+                            })}
                           </tr>
                         );
                       })}
@@ -225,9 +347,7 @@ const TableData: React.FC<Props> = ({
                 </section>
                 <section className="md:grid md:grid-cols-3 w-full px-4 border-t border-borders-light bg-gray-box items-center text-center">
                   <div className="hidden md:flex items-center gap-3">
-                    <p className="font-medium text-dark-gray">
-                      Página:{" "}
-                    </p>
+                    <p className="font-medium text-dark-gray">Página: </p>
                     <Input
                       className="my-0 py-1 max-w-[70px]"
                       type="number"

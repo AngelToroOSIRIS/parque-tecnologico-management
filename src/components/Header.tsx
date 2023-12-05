@@ -27,7 +27,7 @@ const Header = () => {
 
   const CategoryData = async () => {
     const response = await fetchFn(
-      process.env.NEXT_PUBLIC_API_BASEURL + `/categorias`,
+      process.env.NEXT_PUBLIC_API_BASEURL + `/categories`,
       {
         externalUrl: true,
       }
@@ -104,7 +104,7 @@ const Header = () => {
                 >
                   <Menu.Button as="li" className={"flex px-2 w-full"}>
                     <i className="bi bi-layers text-lg text-primary"></i>{" "}
-                    <p className="ml-2 hidden lg:flex">Categorías</p>
+                    <p className="ml-2 hidden cursor-pointer lg:flex">Categorías</p>
                   </Menu.Button>
 
                   <Transition

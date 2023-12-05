@@ -15,16 +15,15 @@ export default async function CategoryPage({ params }: Props) {
     (item) => item.route === params.category
   );
   const session = await getServerSession(authOptions)
-  if (!categoryFound) return redirect("/404");
   if (session?.user.interno) return redirect("/sites")
   return (
     <>
       <Header />
       <main className="margin-header mx-auto">
         <h1 className="mt-[7%] md:mt-[5%] pt-5 lg:mt-[2%] mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
-          Administración de {categoryFound.name}
+          Administración de {categoryFound?.name}
         </h1>
-        <Categories category={categoryFound.route as CategoryTextShort} />
+        <Categories category={categoryFound?.route as CategoryTextShort} />
       </main>
     </>
   );
