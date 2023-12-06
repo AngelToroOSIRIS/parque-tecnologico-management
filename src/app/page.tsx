@@ -61,7 +61,7 @@ export default function Home() {
           <div className="grid grid-cols-1">
             <div className="margin-header mx-auto justify-center items-center">
               <h2 className="text-center border-b-3 border-primary justify-center text-3xl font-semibold m-8 items-center mx-auto">
-                  Acceso Rápido:
+                  Acceso Rápido
               </h2>
             </div>
               <h2 className="text-center justify-center text-lg items-center mx-auto">

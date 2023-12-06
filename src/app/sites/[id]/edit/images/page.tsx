@@ -16,9 +16,7 @@ export default async function EditImagesSites({
     <>
         <Header />
       <main>
-        <h1 className="margin-header mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
-          Editar imágenes 
-        </h1>
+        
         <EditImagesComponent id={params.id}/>
       </main>
     </>

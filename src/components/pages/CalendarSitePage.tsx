@@ -124,41 +124,45 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                               </p>
                             </div>
                           </section>
-                          <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto" />
-                          <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
-                            Fechas reservadas:{" "}
-                          </p>
-                          {newDates.map((dates) => {
-                            return (
-                              <div
-                                className="my-5"
-                                key={dates.id_reservacion_espacio}
-                              >
-                                <p className="mx-8 m-2 text-primary font-semibold">
-                                  # Fecha reservada:{" "}
-                                  {dates.id_reservacion_espacio}
-                                </p>
-                                <section className=" flex items-center justify-between mx-10 px-10">
-                                  <div>
-                                    <p className="mt-2">
-                                      <strong>Fecha de Inicio: </strong>
-                                      {formatDate(dates.fecha_inicio, true)}
+                          {newDates.length > 0 && (
+                            <>
+                              <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto" />
+                              <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
+                                Fechas reservadas:{" "}
+                              </p>
+                              {newDates.map((dates) => {
+                                return (
+                                  <div
+                                    className="my-5"
+                                    key={dates.id_reservacion_espacio}
+                                  >
+                                    <p className="mx-8 m-2 text-primary font-semibold">
+                                      # Fecha reservada:{" "}
+                                      {dates.id_reservacion_espacio}
                                     </p>
+                                    <section className=" flex items-center justify-between mx-10 px-10">
+                                      <div>
+                                        <p className="mt-2">
+                                          <strong>Fecha de Inicio: </strong>
+                                          {formatDate(dates.fecha_inicio, true)}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <p>
+                                          <strong>Fecha de Fin: </strong>
+                                          {formatDate(dates.fecha_fin, true)}
+                                        </p>
+                                      </div>
+                                      <p>
+                                        <strong>Valor: </strong>
+                                        {convertToCurrency(dates.valor)}
+                                      </p>
+                                    </section>
                                   </div>
-                                  <div>
-                                    <p>
-                                      <strong>Fecha de Fin: </strong>
-                                      {formatDate(dates.fecha_fin, true)}
-                                    </p>
-                                  </div>
-                                  <p>
-                                    <strong>Valor: </strong>
-                                    {convertToCurrency(dates.valor)}
-                                  </p>
-                                </section>
-                              </div>
-                            );
-                          })}
+                                );
+                              })}
+                            </>
+                          )}
                           <hr className="w-[90%] border-1 mt-7 rounded-lg text-default-300 mx-auto" />
                           <p className="text-primary text-xl text-center mt-4 mb-3 font-semibold">
                             Información del cliente:{" "}

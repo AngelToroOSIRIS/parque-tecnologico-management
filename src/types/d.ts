@@ -164,54 +164,6 @@ export interface ReservationCategory {
   persona_info: PersonRequest;
 }
 
-export interface SiteEdit {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  descripcion_corta: string;
-  categoria: string;
-  estado: boolean;
-  images: [
-    {
-      img_card: string;
-      img_big: string;
-      id: number;
-      img_medium: string;
-      img_small: string;
-    }
-  ];
-  tarifas_espacio: {
-    id: number;
-    hora: number;
-    dia: number;
-    mes: number;
-  };
-  dias_disponibilidad_espacio: {
-    id: number;
-    lunes: number;
-    martes: number;
-    miercoles: number;
-    jueves: number;
-    viernes: number;
-    sabado: number;
-    domingo: number;
-    festivos: number;
-    hora_inicio: string;
-    hora_fin: string;
-  };
-  caracteristicas_espacio: {
-    id: number;
-    dimensiones: string;
-    escritorios: number;
-    sillas: number;
-    mesa_reuniones: number;
-    televisores: number;
-    computadores: number;
-    tablero: number;
-    video_beam: number;
-    adicionales: string;
-  };
-}
 
 export interface Site {
   id: number;
@@ -284,4 +236,19 @@ export interface SiteTbl {
   nombre: string;
   fecha_creacion: string;
   fecha_actualizacion: string;
+}
+
+export interface CategoryComplete {
+	id: number;
+	descripcion: string;
+	identificador: string;
+	titulo: string;
+	estado: string;
+	fecha_creacion: string;
+	fecha_actualizacion: string;
+	imagenes: {
+		id: number;
+		img: string;
+		id_categoria: number;
+	}[];
 }

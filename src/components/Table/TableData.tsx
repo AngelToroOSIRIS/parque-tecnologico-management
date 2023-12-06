@@ -150,7 +150,7 @@ const TableData: React.FC<Props> = ({
                         <ButtonTable
                           text="Agenda general"
                           icon="calendar2-check"
-                          onClick={() => router.push(`/${category}/calendary`)}
+                          onClick={() => router.push(`/categories/${category}/calendary`)}
                           type="button"
                         />
                         <Badge
@@ -162,7 +162,7 @@ const TableData: React.FC<Props> = ({
                           <ButtonTable
                             text="Solicitudes"
                             icon="exclamation-circle"
-                            onClick={() => router.push(`/${category}/requests`)}
+                            onClick={() => router.push(`/categories/${category}/requests`)}
                             type="button"
                           />
                         </Badge>

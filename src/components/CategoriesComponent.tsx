@@ -1,37 +1,23 @@
 "use client";
 
-import fetchFn from "@/libs/fetchFn";
-import { Category } from "@/types/d";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
 import CategoryRow from "./CategoryRow";
 import { useSession } from "next-auth/react";
+import { useAppSelector } from "@/redux/hook";
 
 const CategoriesComponent = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { data: session, status } = useSession();
-  const [dataCategory, setDataCategory] = useState<Category[]>([]);
   const router = useRouter();
 
-  const CategoryData = async () => {
-    const response = await fetchFn(process.env.NEXT_PUBLIC_API_BASEURL + `/categorias`, {
-      externalUrl: true,
-    });
-    if (response.code !== 200) {
-      router.push("/logout?error=auth");
-      toast.error("Ha ocurrido un error iniciando sesión", { id: "1" });
-      return;
-    }
-    setDataCategory(response.data);
-    setLoading(false);
-  };
+  const categories = useAppSelector((state) => state.categoriesReducer);
+
   useEffect(() => {
     if (status === "authenticated") {
-      CategoryData();
     }
-  }, []);
+  }, [categories]);
   return (
     <>
       {!loading && (
@@ -53,13 +39,13 @@ const CategoriesComponent = () => {
                 <div className="w-[45%] text-center">DESCRIPCIÓN</div>
                 <div className="w-[10%] text-center">OPCIONES</div>
               </article>
-              {dataCategory.map((category) => (
-                <CategoryRow key={category.id} category={category} />
+              {categories.data.map((categoria) => (
+                <CategoryRow key={categoria.id} titulo={categoria.titulo} descripcion={categoria.descripcion} estado={categoria.estado} identificador={categoria.identificador} />
               ))}
             </section>
           </div>
       )}
-      {loading && (
+      {loading && (  
         <TailSpin
           height="100"
           width="100"

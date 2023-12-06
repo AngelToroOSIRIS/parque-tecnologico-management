@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
-import { categoriesObj } from "@/libs/staticData";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import ContentLoader from "react-content-loader";
@@ -11,41 +10,40 @@ import Link from "next/link";
 import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Category } from "@/types/d";
 import fetchFn from "@/libs/fetchFn";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setCategories } from "@/redux/features/categoriesSlice";
 
 const Header = () => {
   const router = useRouter();
-  const [dataCategory, setDataCategory] = useState<Category[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { data, status } = useSession();
   const user = data?.user ?? {
     name: "default",
     email: "useremail",
   };
+  const categories = useAppSelector((state) => state.categoriesReducer);
+  const dispatch = useAppDispatch();
 
-  const CategoryData = async () => {
+  const getCategories = async () => {
     const response = await fetchFn(
-      process.env.NEXT_PUBLIC_API_BASEURL + `/categories`,
+      process.env.NEXT_PUBLIC_API_BASEURL + "/categories",
       {
         externalUrl: true,
       }
     );
-    if (response.code !== 200) {
-      router.push("/logout?error=auth");
-      toast.error("Ha ocurrido un error iniciando sesión", { id: "1" });
-      return;
-    }
-    setDataCategory(response.data);
-    setLoading(false);
-  };
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      CategoryData();
+    if (response.code !== 200) {
+      return toast.error("No se han podido cargar las categorías", {
+        id: "error1",
+      });
     }
-  }, []);
+    dispatch(setCategories(response.data));
+  };
+  useEffect(() => {
+    if (categories.data.length < 1) getCategories();
+  }, [categories]);
+
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
@@ -98,70 +96,83 @@ const Header = () => {
             )}
             {!user.interno && status === "authenticated" && (
               <div className="flex items-center justify-center">
-                <Menu
-                  as="div"
-                  className="sm:relative mx-2 p-2 items-center w-full lg:w-[150px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-                >
-                  <Menu.Button as="li" className={"flex px-2 w-full"}>
-                    <i className="bi bi-layers text-lg text-primary"></i>{" "}
-                    <p className="ml-2 hidden cursor-pointer lg:flex">Categorías</p>
-                  </Menu.Button>
-
-                  <Transition
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                {categories.data.length > 0 && (
+                  <Menu
+                    as="div"
+                    className="sm:relative mx-2 p-2 items-center w-full lg:w-[150px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
                   >
-                    <Menu.Items className="absolute mt-2 w-56 origin-top-right divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
-                      <>
-                        {dataCategory.map(({ titulo, identificador, id }) => (
-                          <div key={id}>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  className={`${
-                                    active &&
-                                    "text-primary font-bold border-primary bg-hover"
-                                  } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                  onClick={() =>
-                                    router.push(`/categories/${identificador}`)
-                                  }
-                                >
-                                  <i className="mr-1 block bi bi-caret-right-fill"></i>
-                                  {titulo}
-                                </button>
-                              )}
-                            </Menu.Item>
-                          </div>
-                        ))}
-                        <div>
-                          {!user.interno &&
-                            status === "authenticated" &&
-                            includesString(user.rols ?? [], ["superadmin"]) && (
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <button
-                                    className={`${
-                                      active &&
-                                      "text-primary font-bold border-primary bg-hover"
-                                    } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
-                                    onClick={() => router.push(`/categories`)}
-                                  >
-                                    <i className="mr-2 ml-1 block bi bi-pencil-fill"></i>
-                                    Editar categorías
-                                  </button>
-                                )}
-                              </Menu.Item>
-                            )}
-                        </div>
-                      </>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                    <Menu.Button as="li" className={"flex px-2 w-full"}>
+                      <i className="bi bi-layers text-lg text-primary"></i>{" "}
+                      <p className="ml-2 hidden cursor-pointer lg:flex">
+                        Categorías
+                      </p>
+                    </Menu.Button>
 
+                    <Transition
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute mt-2 w-56 origin-top-right divide-y divide-borders-light rounded-2xl bg-off-white normal-shadow z-40 outline-none">
+                        <>
+                          {categories.data.map(
+                            ({ titulo, estado, identificador, id }) => {
+                              if (estado === "1") {
+                                return (
+                                  <div key={id}>
+                                    <Menu.Item>
+                                      {({ active }) => (
+                                        <button
+                                          className={`${
+                                            active &&
+                                            "text-primary font-bold border-primary bg-hover"
+                                          } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                          onClick={() =>
+                                            router.push(
+                                              `/categories/${identificador}`
+                                            )
+                                          }
+                                        >
+                                          <i className="mr-1 block bi bi-caret-right-fill"></i>
+                                          {titulo}
+                                        </button>
+                                      )}
+                                    </Menu.Item>
+                                  </div>
+                                );
+                              }
+                            }
+                          )}
+                          <div>
+                            {!user.interno &&
+                              status === "authenticated" &&
+                              includesString(user.rols ?? [], [
+                                "superadmin",
+                              ]) && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <button
+                                      className={`${
+                                        active &&
+                                        "text-primary font-bold border-primary bg-hover"
+                                      } group flex w-full items-center rounded-2xl p-2 border-r-4 border-gray-box transition-all text-gray font-medium opacity-80 hover:opacity-100`}
+                                      onClick={() => router.push(`/categories`)}
+                                    >
+                                      <i className="mr-2 ml-1 block bi bi-pencil-fill"></i>
+                                      Editar categorías
+                                    </button>
+                                  )}
+                                </Menu.Item>
+                              )}
+                          </div>
+                        </>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                )}
                 {!user.interno &&
                   status === "authenticated" &&
                   includesString(user.rols ?? [], ["superadmin", "users"]) && (

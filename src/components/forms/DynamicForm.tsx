@@ -18,7 +18,7 @@ const DynamicForm = ({
     onChangeValue(
       mappedValues.map((property) => {
         return {
-          nombre: property[0],
+          nombre: validateString(String(property[0])),
           descripcion: validateString(String(property[1])),
         };
       })

@@ -21,7 +21,7 @@ import { useSession } from "next-auth/react";
 import { CategoryTextShort, ReservationCategory } from "@/types/d";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  Pagado: "success",
+  "Sí pago": "success",
   "No pago": "danger",
 };
 

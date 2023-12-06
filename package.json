@@ -15,8 +15,9 @@
     "@nextui-org/react": "^2.1.13",
     "@nextui-org/system": "^2.0.10",
     "@nextui-org/theme": "^2.1.9",
-    "@tanstack/react-table": "8.0.0-beta.8",
     "@react-stately/data": "^3.10.2",
+    "@reduxjs/toolkit": "^2.0.1",
+    "@tanstack/react-table": "8.0.0-beta.8",
     "bootstrap-icons": "^1.11.1",
     "framer-motion": "^10.16.4",
     "moment": "^2.29.4",
@@ -33,6 +34,7 @@
     "react-images-uploading": "^3.1.7",
     "react-loader-spinner": "^5.4.5",
     "react-object-input": "^0.2.1",
+    "react-redux": "^9.0.2",
     "sass": "^1.68.0"
   },
   "devDependencies": {

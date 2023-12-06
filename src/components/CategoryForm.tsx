@@ -15,7 +15,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import fetchFileFn from "@/libs/fetchFileFn";
 import useFormData from "@/hooks/UseFormData";
-
+import { Category } from "@/types/d";
+0
 const CategoryForm = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +37,16 @@ const CategoryForm = () => {
     { name: "descripcion", type: "str", required: true },
   ]);
 
+  const getData = async () => {
+    const res = await fetchFn(process.env.NEXT_PUBLIC_API_BASEURL + `/categories`, {
+      externalUrl: true,
+    });
+    if(res.code !== 200){
+      toast.error("No se ha podido obtener la información")
+    }
+    console.log(res.data);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validData.validData) {
@@ -45,6 +56,7 @@ const CategoryForm = () => {
     const toastLoading = toast.loading("Guardando información...", {
       id: "Save",
     });
+
     const response = await fetchFn(`/createCategory`, {
       method: "POST",
       body: {
@@ -96,6 +108,7 @@ const CategoryForm = () => {
   };
 
   useEffect(() => {
+    getData()
     if (session?.user.rols || session?.user.interno) {
       if (session?.user.interno) {
         return router.push("/categories");

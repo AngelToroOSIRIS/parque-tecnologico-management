@@ -1,5 +1,6 @@
 import CategoryForm from "@/components/CategoryForm";
 import Header from "@/components/Header";
+import { Category } from "@/types/d";
 
  export async function generateMetadata() {
     return {
@@ -7,7 +8,7 @@ import Header from "@/components/Header";
     };
   }
   
-export default async function AddCategoryPage() {
+export default async function EditCategoryPage() {
   return (
     <>
         <Header />

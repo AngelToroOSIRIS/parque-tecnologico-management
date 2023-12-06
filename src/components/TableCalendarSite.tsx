@@ -21,7 +21,7 @@ import { ReservationSite } from "@/types/d";
 import { formatDate } from "@/libs/functionsStrings";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  Pagado: "success",
+  "Sí pago": "success",
   "No pago": "danger",
 };
 
@@ -45,27 +45,22 @@ export default function TableCalendarSite({
     {
       key: "id",
       label: "ID RESERVACION",
-      sortable: true,
     },
     {
       key: "nombre_usuario",
       label: "NOMBRE USUARIO",
-      sortable: false,
     },
     {
       key: "estado_reservacion",
       label: "ESTADO",
-      sortable: true,
     },
     {
       key: "fecha_creacion",
       label: "FECHA CREACION",
-      sortable: true,
     },
     {
       key: "estado_pago",
       label: "ESTADO PAGO",
-      sortable: true,
     },
     {
       key: "info_reservation",
