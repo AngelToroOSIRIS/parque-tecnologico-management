@@ -126,7 +126,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                           </section>
                           {newDates.length > 0 && (
                             <>
-                              <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto" />
+                              <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto"/>
                               <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
                                 Fechas reservadas:{" "}
                               </p>
@@ -140,9 +140,9 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                                       # Fecha reservada:{" "}
                                       {dates.id_reservacion_espacio}
                                     </p>
-                                    <section className=" flex items-center justify-between mx-10 px-10">
+                                    <section className=" flex-center gap-5 mx-10 px-10">
                                       <div>
-                                        <p className="mt-2">
+                                        <p>
                                           <strong>Fecha de Inicio: </strong>
                                           {formatDate(dates.fecha_inicio, true)}
                                         </p>
@@ -273,7 +273,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                   category,
                 ]) && (
                     )} */}
-                  <ButtonTable text="Gestionar fechas" icon="calendar-range" />
                 </div>
               </div>
               <TableCalendarSite

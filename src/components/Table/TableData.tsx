@@ -51,6 +51,10 @@ const TableData: React.FC<Props> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const userSession = data?.user ?? {
+    name: "default",
+    email: "useremail",
+  };
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -150,7 +154,9 @@ const TableData: React.FC<Props> = ({
                         <ButtonTable
                           text="Agenda general"
                           icon="calendar2-check"
-                          onClick={() => router.push(`/categories/${category}/calendary`)}
+                          onClick={() =>
+                            router.push(`/categories/${category}/calendary`)
+                          }
                           type="button"
                         />
                         <Badge
@@ -162,7 +168,9 @@ const TableData: React.FC<Props> = ({
                           <ButtonTable
                             text="Solicitudes"
                             icon="exclamation-circle"
-                            onClick={() => router.push(`/categories/${category}/requests`)}
+                            onClick={() =>
+                              router.push(`/categories/${category}/requests`)
+                            }
                             type="button"
                           />
                         </Badge>
@@ -262,7 +270,7 @@ const TableData: React.FC<Props> = ({
                                       </div>
                                     </div>
                                   </>
-                                </Modal>
+                                </Modal>;
                               }
                               if (
                                 stringIncludes(cell.column.id, [
@@ -299,6 +307,10 @@ const TableData: React.FC<Props> = ({
                                       >
                                         <i className="bi bi-calendar2-check m-2 text-xl"></i>
                                       </span>
+                                      {/* {includesString(userSession.rols ?? [], [
+                                        "superadmin",
+                                        category,
+                                      ]) && ( */}
                                       <>
                                         <span
                                           title="Editar datos"
@@ -312,7 +324,7 @@ const TableData: React.FC<Props> = ({
                                           <i className="bi bi-pen m-2 text-xl"></i>
                                         </span>
                                         <span
-                                          title="Editar datos"
+                                          title="Editar imagenes"
                                           onClick={() =>
                                             router.push(
                                               `/sites/${cell.row.original.id}/edit/images`
@@ -329,6 +341,7 @@ const TableData: React.FC<Props> = ({
                                           ></i>
                                         </span>
                                       </>
+                                      {/* )} */}
                                     </div>
                                   </td>
                                 );

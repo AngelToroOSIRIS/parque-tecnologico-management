@@ -221,7 +221,7 @@ const Header = () => {
               <Modal
                 isOpen={showModal}
                 setIsOpen={setShowModal}
-                classContainer="w-[95%] max-w-[500px]"
+                classContainer="max-w-[700px]"
               >
                 <>
                   <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">

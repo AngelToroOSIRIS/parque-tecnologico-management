@@ -1,13 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import ImageUploading from "react-images-uploading";
 import Button from "./Button";
+import useFormData from "@/hooks/UseFormData";
+import fetchFileFn from "@/libs/fetchFileFn";
+import { useSession } from "next-auth/react";
 
-export function ContentImageEdit() {
-  const [images, setImages] = React.useState([]);
-  const maxNumber = 69;
+export function ContentImageEdit(
+//   {
+// 	params,
+// }: {
+//   params: { id: number};
+// }
+) {
+  const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
+  const [action, setAction] = useState<1 | 2 | 3>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { data: session } = useSession();
+  // const { setFilesField, setData } = useFormData({
+  //   minFiles: 1,
+  //   maxFiles: 1,
+  //   fdFilesName: "images",
+  // });
+
+  // setFilesField(images.map((image) => image.file));
+  // const fd = setData({
+  //   id_espacio: 1,
+  //   id_imagen: 1,
+  //   email: session?.user.emailHash,
+  //   action: action,
+  // });
+
+  // const updateImages = async () => {
+  //   setLoading(true);
+  //   const response = await fetchFileFn(`/updateImagePlace`, {
+  //     method: "PUT",
+  //     formData: fd,
+  //   });
+  // };
 
   const onChange = (imageList: any, addUpdateIndex: any) => {
-    // data for submit
     console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
@@ -33,9 +64,6 @@ export function ContentImageEdit() {
         }) => (
           // write your building UI
           <>
-            <h1 className="text-3xl text-center font-semibold mt-5 mb-2 text-primary">
-              Cambiar imágen
-            </h1>
             {imageList.length > 0 && (
               <div className="text-center mt-5 p-5 gap-7 mx-auto">
                 {imageList.map((image, index) => (
@@ -68,7 +96,7 @@ export function ContentImageEdit() {
               {imageList.length === 0 && (
                 <div className="p-2 md:p-10 justify-center rounded-lg mx-auto">
                   <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                    * Puede subir una fotos. <br /> Resolución recomendada: 1920
+                    * Puede subir una foto. <br /> Resolución recomendada: 1920
                     x 1080 *
                     <br />
                     extensiones de archivo: jpg, png, jpeg
@@ -93,7 +121,7 @@ export function ContentImageEdit() {
                   onClick={onImageRemoveAll}
                 >
                   <i className="bi bi-trash3 text-xl mr-2 font-medium"></i>
-                  Eliminar imágen
+                  Eliminar imagen
                 </button>
               </div>
             )}
@@ -101,7 +129,7 @@ export function ContentImageEdit() {
               <div className="text-center m-2">
                 {errors.maxNumber && (
                   <span className="text-primary font-semibold">
-                    Solo puede agregar una imágen.
+                    Solo puede agregar una imagen.
                   </span>
                 )}
                 {errors.acceptType && (
