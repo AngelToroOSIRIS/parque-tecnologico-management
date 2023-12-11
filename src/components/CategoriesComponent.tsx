@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/redux/hook";
-import { Chip, ChipProps, SelectItem } from "@nextui-org/react";
+import { Chip, ChipProps, ScrollShadow, SelectItem } from "@nextui-org/react";
 import InputForm from "./forms/InputForm";
 import SelectForm from "./forms/SelectForm";
 import TextareaForm from "./forms/TextareaForm";
@@ -13,10 +13,12 @@ import Modal from "./Modal";
 import toast from "react-hot-toast";
 import useValidateForm from "@/hooks/useValidateForm";
 import { TailSpin } from "react-loader-spinner";
+import { CategoryComplete } from "@/types/d";
 
 const CategoriesComponent = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [dataCategory, setDataCategory] = useState<CategoryComplete[]>();
   const [contentModal, setContentModal] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -25,6 +27,7 @@ const CategoriesComponent = () => {
     0: "danger",
   };
   const categories = useAppSelector((state) => state.categoriesReducer);
+
 
   const validData = useValidateForm([
     { name: "titulo", type: "str", required: true },
@@ -45,15 +48,11 @@ const CategoriesComponent = () => {
     if (!validData.validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
-    
-    setLoading(true);
-    const toastLoading = toast.loading("Guardando información...", {
-      id: "Save",
-    });
   };
-
+  
   useEffect(() => {
     if (status === "authenticated") {
+      setLoading(false);
     }
   }, []);
   return (
@@ -225,7 +224,7 @@ const CategoriesComponent = () => {
               </>
             )}
           </Modal>
-          <div className="w-full overflow-x mb-10 max-w-6xl mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+          <div className="w-full overflow-x mb-10 max-w-[1400px] mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/categories/add")}
@@ -244,7 +243,7 @@ const CategoriesComponent = () => {
                 <div className="w-[10%] text-center">OPCIONES</div>
               </article>
               {categories.data.map((category) => (
-                <article className="flex justify-between items-center h-20 mx-auto py-2">
+                <article key={category.id} className="flex justify-between items-center h-28 mx-auto py-2">
                   <div className="w-[20%] h-full px-2 items-center flex">
                     <p className="text-base font-semibold">{category.titulo}</p>
                   </div>
@@ -261,8 +260,10 @@ const CategoriesComponent = () => {
                       <p>{category.estado === "1" ? "Activo" : "Inactivo"}</p>
                     </Chip>
                   </div>
-                  <div className="w-[45%] h-full px-2 items-center overflow-y-auto rounded-lg pt-3">
-                    {category.descripcion}
+                  <div className="w-[45%] h-full px-2 items-center rounded-lg pt-3">
+                    <ScrollShadow className="h-[80px]" size={20}>
+                      {category.descripcion}
+                    </ScrollShadow>
                   </div>
                   <div className="w-[10%] h-full px-2 items-center text-center text-xl flex-center">
                     <i

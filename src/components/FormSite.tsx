@@ -10,7 +10,7 @@ import Button from "./Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { Category, Enlace, Site, States } from "@/types/d";
+import { CategoryComplete, Enlace, Site, States } from "@/types/d";
 import SectionImage from "@/components/forms/SectionImage";
 import { TailSpin } from "react-loader-spinner";
 import TextareaForm from "./forms/TextareaForm";
@@ -256,7 +256,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   }>({ time_start: "", time_end: "", valid: false });
   const [dataAdittional, setDataAdittional] = useState<{}>({});
   const [dataFilters, setDataFilters] = useState<{
-    categorias: Category[];
+    categorias: CategoryComplete[];
     estadoEspacios: States[];
     identificadoresEnlace: Enlace[];
   }>({ categorias: [], estadoEspacios: [], identificadoresEnlace: [] });
@@ -332,7 +332,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       }
 
       setContent("images");
-      return toast.dismiss(toastLoading);
+      return toast.success(toastLoading);
     }
   };
 
@@ -716,7 +716,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 text="Continuar"
               />
             </div>
-            <p>Páginas 1/3</p>
+            <p>{`Páginas 1/${idSite ? "2" : "3" }` }</p>
           </form>
         </div>
       )}
@@ -739,17 +739,20 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               <div className="lg:flex justify-center items-center m-5 lg:px-10 mb-7 gap-20">
                 <InputMoney
                   name="hora"
+                  defaultValue={dataEdit?.tarifas_espacio.hora}
                   label="Precio por hora:"
                   required={true}
                   onChange={dataPaid.setField}
                 />
                 <InputMoney
                   name="dia"
+                  defaultValue={dataEdit?.tarifas_espacio.dia}
                   label="Precio por día:"
                   onChange={dataPaid.setField}
                 />
                 <InputMoney
                   name="mes"
+                  defaultValue={dataEdit?.tarifas_espacio.mes}
                   label="Precio por mes:"
                   onChange={dataPaid.setField}
                 />
@@ -859,7 +862,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
                 <Button type="submit" text="Continuar" />
               </div>
-              <p>Páginas 2/3</p>
+              <p>{`Páginas 2/${idSite ? "2" : "3" }` }</p>
             </form>
           </div>
         </>

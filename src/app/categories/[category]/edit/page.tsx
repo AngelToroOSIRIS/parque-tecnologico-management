@@ -1,6 +1,5 @@
 import CategoryForm from "@/components/CategoryForm";
 import Header from "@/components/Header";
-import { Category } from "@/types/d";
 
  export async function generateMetadata() {
     return {

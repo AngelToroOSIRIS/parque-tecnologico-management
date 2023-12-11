@@ -6,14 +6,6 @@ export type CategoryTextShort =
   | "classrooms"
   | "maximus_classrooms";
 
-export interface Category {
-  id: number;
-  descripcion: string;
-  identificador: string;
-  titulo: string;
-  estado: string;
-}
-
 export interface States {
   id: number;
   descripcion: string;
@@ -164,7 +156,6 @@ export interface ReservationCategory {
   persona_info: PersonRequest;
 }
 
-
 export interface Site {
   id: number;
   categoria: string;
@@ -238,17 +229,23 @@ export interface SiteTbl {
   fecha_actualizacion: string;
 }
 
+export interface ImageCategory {
+  image: string;
+  id_image: number;
+}
+[];
+
 export interface CategoryComplete {
-	id: number;
-	descripcion: string;
-	identificador: string;
-	titulo: string;
-	estado: string;
-	fecha_creacion: string;
-	fecha_actualizacion: string;
-	imagenes: {
-		id: number;
-		img: string;
-		id_categoria: number;
-	}[];
+  id: number;
+  descripcion: string;
+  identificador: string;
+  titulo: string;
+  estado: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+  imagenes: {
+    id: number;
+    img: string;
+    id_categoria: number;
+  }[];
 }

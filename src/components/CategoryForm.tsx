@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import fetchFileFn from "@/libs/fetchFileFn";
 import useFormData from "@/hooks/UseFormData";
-import { Category } from "@/types/d";
 0
 const CategoryForm = () => {
   const { data: session } = useSession();
@@ -37,15 +36,6 @@ const CategoryForm = () => {
     { name: "descripcion", type: "str", required: true },
   ]);
 
-  const getData = async () => {
-    const res = await fetchFn(process.env.NEXT_PUBLIC_API_BASEURL + `/categories`, {
-      externalUrl: true,
-    });
-    if(res.code !== 200){
-      toast.error("No se ha podido obtener la información")
-    }
-    console.log(res.data);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,7 +98,6 @@ const CategoryForm = () => {
   };
 
   useEffect(() => {
-    getData()
     if (session?.user.rols || session?.user.interno) {
       if (session?.user.interno) {
         return router.push("/categories");
@@ -194,7 +183,7 @@ const CategoryForm = () => {
                     text="Continuar"
                     disabled={!validData.validData}
                   />
-                  <Button text="Cancelar" />
+                  <Button text="Cancelar" onClick={()=>{router.push("/categories")}} />
                 </div>
               </form>
             </div>
@@ -219,7 +208,7 @@ const CategoryForm = () => {
               dragProps,
               errors,
             }) => (
-              <div className="w-[90%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
+              <div className="w-[75%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
                 <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
                   Subir imágenes
                 </h1>

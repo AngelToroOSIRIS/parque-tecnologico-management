@@ -10,7 +10,11 @@ import TableCalendar from "@/components/pages/TableCalendar";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import Modal from "../Modal";
-import { convertToCurrency, formatDate, includesString } from "@/libs/functionsStrings";
+import {
+  convertToCurrency,
+  formatDate,
+  includesString,
+} from "@/libs/functionsStrings";
 import Input from "../forms/Input";
 import GraySubtitle from "../GraySubtitle";
 import Button from "../Button";
@@ -120,7 +124,9 @@ export default function CalendaryCategory({
                     {contentModal === "info" && (
                       <>
                         <div>
-                        <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">Información de la reserva: </p>
+                          <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
+                            Información de la reserva:{" "}
+                          </p>
                           <section className="flex items-center justify-between gap-2 mb-4 py-3 px-8">
                             <div>
                               <p>
@@ -158,11 +164,15 @@ export default function CalendaryCategory({
                               </p>
                               <p>
                                 <strong>Valor descuento: </strong>
-                                {convertToCurrency(selectedReservation?.valor_descuento)}
+                                {convertToCurrency(
+                                  selectedReservation?.valor_descuento
+                                )}
                               </p>
                               <p>
                                 <strong>Valor pagado: </strong>
-                                {convertToCurrency(selectedReservation?.valor_pagado)}
+                                {convertToCurrency(
+                                  selectedReservation?.valor_pagado
+                                )}
                               </p>
                               <p>
                                 <strong>Estado del pago: </strong>
@@ -174,7 +184,9 @@ export default function CalendaryCategory({
                           {/* <h1 className="text-center text-xl m-5 font-bold text-primary mx-auto justify-center items-center">
                         Información del usuario
                       </h1> */}
-                            <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">Información del cliente: </p>
+                          <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
+                            Información del cliente:{" "}
+                          </p>
                           <section className="flex items-center justify-between gap-2 mb-4 py-3 px-8">
                             <div>
                               <p>
@@ -292,15 +304,6 @@ export default function CalendaryCategory({
                 </div>
                 <div className="flex items-center gap-2 justify-center text-center">
                   <ButtonTable text="Reservar espacio" icon="calendar-event" />
-                  {includesString(userSession.rols ?? [], [
-                    "superadmin",
-                    category,
-                  ]) && (
-                    <ButtonTable
-                      text="Gestionar fechas"
-                      icon="calendar-range"
-                    />
-                  )}
                 </div>
               </div>
               <TableCalendar

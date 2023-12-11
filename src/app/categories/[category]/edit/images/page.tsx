@@ -19,7 +19,7 @@ export default async function EditCategoryImagePage({
         <h1 className="margin-header mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
           Editar Imágenes
         </h1>
-        <EditImagesCategory />
+        <EditImagesCategory category={params.category} />
       </main>
     </>
   );

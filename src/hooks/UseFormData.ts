@@ -14,7 +14,7 @@ const useFormData = ({
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [validFiles, setValidFiles] = useState<boolean>(minFiles === 0);
 
-  const setFilesField = (files: FileList| File[] | null) => {
+  const setFilesField = (files: FileList | File[] | null) => {
     const newFd = formData;
     newFd.delete(fdFilesName);
 

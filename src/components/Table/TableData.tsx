@@ -25,6 +25,7 @@ import {
   stringIncludes,
 } from "@/libs/functionsStrings";
 import Modal from "../Modal";
+import { useSession } from "next-auth/react";
 
 interface Props {
   columnsArray: { accessor: string; header: string }[];
@@ -51,9 +52,11 @@ const TableData: React.FC<Props> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const userSession = data?.user ?? {
+  const { data: session, status } = useSession();
+  const userSession = session?.user ?? {
     name: "default",
     email: "useremail",
+    rols: [],
   };
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -159,27 +162,27 @@ const TableData: React.FC<Props> = ({
                           }
                           type="button"
                         />
-                        <Badge
-                          content={<i className="bi bi-bell-fill text-sm"></i>}
-                          color="primary"
-                          size="lg"
-                          className="animate-pulse"
-                        >
-                          <ButtonTable
-                            text="Solicitudes"
-                            icon="exclamation-circle"
-                            onClick={() =>
-                              router.push(`/categories/${category}/requests`)
-                            }
-                            type="button"
-                          />
-                        </Badge>
-                        <ButtonTable
-                          text="Añadir sitio"
-                          icon="plus-circle"
-                          onClick={() => router.push("/sites/add")}
-                          type="button"
-                        />
+                        {includesString(userSession.rols ?? [], [
+                          "superadmin",
+                          category,
+                        ]) && (
+                          <>
+                            <ButtonTable
+                              text="Solicitudes"
+                              icon="exclamation-circle"
+                              onClick={() =>
+                                router.push(`/categories/${category}/requests`)
+                              }
+                              type="button"
+                            />
+                            <ButtonTable
+                              text="Añadir sitio"
+                              icon="plus-circle"
+                              onClick={() => router.push("/sites/add")}
+                              type="button"
+                            />
+                          </>
+                        )}
                       </div>
                     </>
                   )}
@@ -307,41 +310,41 @@ const TableData: React.FC<Props> = ({
                                       >
                                         <i className="bi bi-calendar2-check m-2 text-xl"></i>
                                       </span>
-                                      {/* {includesString(userSession.rols ?? [], [
+                                      {includesString(userSession.rols ?? [], [
                                         "superadmin",
                                         category,
-                                      ]) && ( */}
-                                      <>
-                                        <span
-                                          title="Editar datos"
-                                          onClick={() =>
-                                            router.push(
-                                              `/sites/${cell.row.original.id}/edit`
-                                            )
-                                          }
-                                          className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
-                                        >
-                                          <i className="bi bi-pen m-2 text-xl"></i>
-                                        </span>
-                                        <span
-                                          title="Editar imagenes"
-                                          onClick={() =>
-                                            router.push(
-                                              `/sites/${cell.row.original.id}/edit/images`
-                                            )
-                                          }
-                                          className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
-                                        >
-                                          <i className="bi bi-images m-2 text-xl"></i>
-                                        </span>
-                                        <span title="Inhabilitar sitio">
-                                          <i
-                                            onClick={() => setShowModal(true)}
-                                            className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
-                                          ></i>
-                                        </span>
-                                      </>
-                                      {/* )} */}
+                                      ]) && (
+                                        <>
+                                          <span
+                                            title="Editar datos"
+                                            onClick={() =>
+                                              router.push(
+                                                `/sites/${cell.row.original.id}/edit`
+                                              )
+                                            }
+                                            className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                          >
+                                            <i className="bi bi-pen m-2 text-xl"></i>
+                                          </span>
+                                          <span
+                                            title="Editar imagenes"
+                                            onClick={() =>
+                                              router.push(
+                                                `/sites/${cell.row.original.id}/edit/images`
+                                              )
+                                            }
+                                            className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                          >
+                                            <i className="bi bi-images m-2 text-xl"></i>
+                                          </span>
+                                          <span title="Inhabilitar sitio">
+                                            <i
+                                              onClick={() => setShowModal(true)}
+                                              className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
+                                            ></i>
+                                          </span>
+                                        </>
+                                      )}
                                     </div>
                                   </td>
                                 );

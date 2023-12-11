@@ -1,45 +1,54 @@
 import React, { useState } from "react";
 import ImageUploading from "react-images-uploading";
-import Button from "./Button";
 import useFormData from "@/hooks/UseFormData";
 import fetchFileFn from "@/libs/fetchFileFn";
 import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
-export function ContentImageEdit(
-//   {
-// 	params,
-// }: {
-//   params: { id: number};
-// }
-) {
+export function ContentImageEdit({
+  idSite,
+  idImage,
+  action,
+  onSuccessUpload,
+}: {
+  idSite?: any;
+  idImage?: number;
+  action: 1 | 2 | 3;
+  onSuccessUpload?: () => any;
+}) {
   const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
-  const [action, setAction] = useState<1 | 2 | 3>();
-  const [loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
-  // const { setFilesField, setData } = useFormData({
-  //   minFiles: 1,
-  //   maxFiles: 1,
-  //   fdFilesName: "images",
-  // });
 
-  // setFilesField(images.map((image) => image.file));
-  // const fd = setData({
-  //   id_espacio: 1,
-  //   id_imagen: 1,
-  //   email: session?.user.emailHash,
-  //   action: action,
-  // });
+  const { setFilesField, setData } = useFormData({
+    minFiles: 1,
+    maxFiles: 1,
+    fdFilesName: "images",
+  });
 
-  // const updateImages = async () => {
-  //   setLoading(true);
-  //   const response = await fetchFileFn(`/updateImagePlace`, {
-  //     method: "PUT",
-  //     formData: fd,
-  //   });
-  // };
+  const updateImages = async () => {
+    const toastLoading = toast.loading("Guardando imagen...");
+    setFilesField(images.map((image) => image.file));
+
+    const fd = setData({
+      id_espacio: idSite ?? 0,
+      id_imagen: idImage ?? 0,
+      id_image_category: idImage ?? 0,
+      email: session?.user.emailHash,
+      action: action,
+    });
+    const response = await fetchFileFn(`/updateImagePlace`, {
+      method: "PUT",
+      formData: fd,
+    });
+    if (response.code !== 200) {
+      toast.error("Ha ocurrido un error", { id: toastLoading });
+      return;
+    }
+    toast.success("Imagen guardada", { id: toastLoading });
+    if (onSuccessUpload) onSuccessUpload();
+  };
 
   const onChange = (imageList: any, addUpdateIndex: any) => {
-    console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
 
@@ -74,17 +83,24 @@ export function ContentImageEdit(
                       alt=""
                       width="800px"
                     />
-                    <div className="flex justify-between gap-2 px-48 my-5">
-                      <div className="text-center w-[50%] lg:w-[35%] mx-auto">
-                        <Button text="Guardar" />
-                      </div>
-                      <div className="text-center w-[50%] lg:w-[35%] mx-auto">
-                        <Button
-                          text="Eliminar"
+                    <div className="flex-center gap-1 px-20 my-5">
+                      <div className="text-center flex-center w-[70%] lg:w-[55%]">
+                        <button
+                          className=" bg-default-white border-2 hover:font-semibold border-borders-light hover:border-soft-blue rounded-lg m-2 p-2 hover:text-soft-blue font-medium transition-all"
+                          onClick={updateImages}
+                        >
+                          <i className="bi bi-floppy text-xl mr-2 font-medium"></i>
+                          Guardar
+                        </button>
+                        <button
+                          className=" bg-default-white border-2 hover:font-semibold border-borders-light hover:border-primary rounded-lg m-2 p-2 hover:text-primary font-medium transition-all"
                           onClick={() => {
                             onImageRemove(index);
                           }}
-                        />
+                        >
+                          <i className="bi bi-x-lg text-xl mr-2 font-medium"></i>
+                          Quitar
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -96,9 +112,7 @@ export function ContentImageEdit(
               {imageList.length === 0 && (
                 <div className="p-2 md:p-10 justify-center rounded-lg mx-auto">
                   <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                    * Puede subir una foto. <br /> Resolución recomendada: 1920
-                    x 1080 *
-                    <br />
+                    * Puede subir una foto. <br />
                     extensiones de archivo: jpg, png, jpeg
                   </p>
                 </div>
@@ -114,14 +128,6 @@ export function ContentImageEdit(
                 >
                   <i className="bi bi-upload text-xl mr-2 font-medium"></i>
                   Seleccionar o Arrastrar
-                </button>
-                &nbsp;
-                <button
-                  className=" bg-default-white border-2 hover:font-semibold border-borders-light hover:border-primary rounded-lg m-2 p-2 hover:text-primary font-medium transition-all"
-                  onClick={onImageRemoveAll}
-                >
-                  <i className="bi bi-trash3 text-xl mr-2 font-medium"></i>
-                  Eliminar imagen
                 </button>
               </div>
             )}
