@@ -36,7 +36,6 @@ const CategoryForm = () => {
     { name: "descripcion", type: "str", required: true },
   ]);
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validData.validData) {

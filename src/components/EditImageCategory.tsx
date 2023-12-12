@@ -11,15 +11,17 @@ import { ContentImageEdit } from "./ContentImageEdit";
 import { useSession } from "next-auth/react";
 import useFormData from "@/hooks/UseFormData";
 import fetchFileFn from "@/libs/fetchFileFn";
+import { useAppSelector } from "@/redux/hook";
 
 export function EditImagesCategory({ category }: { category: string }) {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [contentModal, setContentModal] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [action, setAction] = useState<1 | 2 | 3>(1);
   const [imageCategory, setImageCategory] = useState<ImageCategory[]>([]);
   const { data: session } = useSession();
   const [idImageSelected, setIdImageSelected] = useState<number>(0);
+  const [idCategory, setIdCategory] = useState<number>(0);
 
   const getImages = async () => {
     setLoading(true);
@@ -30,6 +32,8 @@ export function EditImagesCategory({ category }: { category: string }) {
     setImageCategory(response.data);
     setLoading(false);
   };
+
+  const categories = useAppSelector((state) => state.categoriesReducer);
 
   const { setData } = useFormData({
     minFiles: 1,
@@ -44,6 +48,7 @@ export function EditImagesCategory({ category }: { category: string }) {
     }
     const toastLoading = toast.loading("Eliminando imagen...");
     const fd = setData({
+      id_category: idCategory,
       id_image_category: idImageSelected,
       email: session?.user.emailHash,
       action: 3,
@@ -64,6 +69,14 @@ export function EditImagesCategory({ category }: { category: string }) {
   useEffect(() => {
     getImages();
   }, []);
+
+  useEffect(() => {
+    if (categories.data.length > 0) {
+      setIdCategory(
+        categories.data.find((item) => item.identificador === category)?.id ?? 0
+      );
+    }
+  }, [categories]);
 
   return (
     <>
@@ -87,6 +100,7 @@ export function EditImagesCategory({ category }: { category: string }) {
                 <ContentImageEdit
                   idImage={idImageSelected}
                   action={action}
+                  idCategory={idCategory}
                   onSuccessUpload={() => {
                     setShowModal(false);
                     getImages();
@@ -182,6 +196,9 @@ export function EditImagesCategory({ category }: { category: string }) {
                 </div>
               )}
             </div>
+            <p className="text-default-400 text-sm p-2 font-medium select-none">
+              *Debe haber mínimo una foto, máximo 5*
+            </p>
           </div>
         </>
       )}

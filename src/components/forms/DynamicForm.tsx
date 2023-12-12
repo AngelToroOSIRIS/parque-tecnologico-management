@@ -5,7 +5,9 @@ import InputForm from "./InputForm";
 
 const DynamicForm = ({
   onChangeValue,
+  defaultValues,
 }: {
+  defaultValues: { nombre: string; descripcion: string }[];
   onChangeValue: ([]: {
     nombre: string;
     descripcion: string;
@@ -14,7 +16,18 @@ const DynamicForm = ({
   const [value, setValue] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const mappedValues = Object.entries(value)
+    if (defaultValues.length > 0) {
+      const defaultObj = {};
+      for (let item of defaultValues) {
+        //@ts-ignore
+        defaultObj[item.nombre as any] = item.descripcion;
+      }
+      setValue(defaultObj);
+    }
+  }, []);
+
+  useEffect(() => {
+    const mappedValues = Object.entries(value);
     onChangeValue(
       mappedValues.map((property) => {
         return {

@@ -7,12 +7,14 @@ import toast from "react-hot-toast";
 
 export function ContentImageEdit({
   idSite,
+  idCategory,
   idImage,
   action,
   onSuccessUpload,
 }: {
   idSite?: any;
   idImage?: number;
+  idCategory?: number;
   action: 1 | 2 | 3;
   onSuccessUpload?: () => any;
 }) {
@@ -31,12 +33,21 @@ export function ContentImageEdit({
 
     const fd = setData({
       id_espacio: idSite ?? 0,
-      id_imagen: idImage ?? 0,
+      id_imagen: idImage ?? 0,      
+      id_category: idCategory ?? 0,
       id_image_category: idImage ?? 0,
       email: session?.user.emailHash,
       action: action,
     });
-    const response = await fetchFileFn(`/updateImagePlace`, {
+    console.log({
+      id_espacio: idSite ?? 0,
+      id_imagen: idImage ?? 0,      
+      id_category: idCategory ?? 0,
+      id_image_category: idImage ?? 0,
+      email: session?.user.emailHash,
+      action: action,
+    })
+    const response = await fetchFileFn(idSite ? `/updateImagePlace` : `/updateImageCategory`, {
       method: "PUT",
       formData: fd,
     });

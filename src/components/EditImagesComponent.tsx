@@ -26,7 +26,7 @@ export function EditImagesComponent({ id }: { id?: string }) {
     setLoading(true);
     const response = await fetchFn(`/getPlace/${id}`);
     if (response.code !== 200) {
-      return toast.error("No se ha podido obtener la info", { id: "1" });
+      return toast.error("No se ha podido obtener la información", { id: "1" });
     }
     setDataSite(response.data);
     setLoading(false);
@@ -190,6 +190,7 @@ export function EditImagesComponent({ id }: { id?: string }) {
                   </div>
                 )}
               </div>
+              <p className="text-default-400 text-sm p-2 font-medium select-none">*Debe haber mínimo tres foto, máximo diez*</p>
             </>
           </div>
         </>

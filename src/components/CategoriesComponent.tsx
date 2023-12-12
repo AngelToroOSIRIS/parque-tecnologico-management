@@ -14,11 +14,14 @@ import toast from "react-hot-toast";
 import useValidateForm from "@/hooks/useValidateForm";
 import { TailSpin } from "react-loader-spinner";
 import { CategoryComplete } from "@/types/d";
+import fetchFn from "@/libs/fetchFn";
 
 const CategoriesComponent = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [dataCategory, setDataCategory] = useState<CategoryComplete[]>();
+  const [category, setCategory] = useState<CategoryComplete>();
+  const [loadingData, setLoadingData] = useState<boolean>(true);
   const [contentModal, setContentModal] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -28,33 +31,73 @@ const CategoriesComponent = () => {
   };
   const categories = useAppSelector((state) => state.categoriesReducer);
 
-
-  const validData = useValidateForm([
-    { name: "titulo", type: "str", required: true },
+  const validData = useValidateForm(
+    [
+      {
+        name: "titulo",
+        type: "str",
+        required: true,
+        value: category?.id ? category?.titulo : undefined,
+      },
+      {
+        name: "identificador",
+        type: "str",
+        required: true,
+        value: category?.id ? category?.identificador : undefined,
+      },
+      {
+        name: "descripcion",
+        type: "str",
+        required: true,
+        value: category?.id ? category?.descripcion : undefined,
+      },
+      {
+        name: "estado",
+        type: "str",
+        required: true,
+      },
+    ],
     {
-      name: "identificador",
-      type: "str",
-      required: true,
-    },
-    {
-      name: "descripcion",
-      type: "str",
-      required: true,
-    },
-  ]);
+      loadData: category?.id ? true : false,
+      status: loadingData ? "loading" : "charged",
+    }
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validData.validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
+    setLoading(true);
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
+
+    const response = await fetchFn("/updateCategory", {
+      method: "PUT",
+      body: {
+        email: session?.user.emailHash,
+        id_category: category?.id,
+        identificador: validData.getData.identificador,
+        descripcion: validData.getData.descripcion,
+        titulo: validData.getData.titulo,
+        estado: validData.getData.estado,
+      },
+    });
+    if (response.code !== 200) {
+      return toast.error("No se ha podido actualizar", { id: toastLoading });
+    }
+    toast.success("La categoría se ha actualizado exitosamente", {
+      id: toastLoading,
+    });
   };
-  
+
   useEffect(() => {
     if (status === "authenticated") {
       setLoading(false);
     }
   }, []);
+
   return (
     <>
       {!loading && (
@@ -140,7 +183,7 @@ const CategoriesComponent = () => {
             {contentModal === "Editar" && (
               <>
                 <h1 className="m-5 text-center text-2xl font-bold text-primary mx-auto justify-center items-center">
-                  Editar categoria
+                  Editar datos {category?.titulo}
                 </h1>
                 <div className="mx-auto rounded-lg">
                   <form
@@ -151,6 +194,7 @@ const CategoriesComponent = () => {
                       name="titulo"
                       label={{ required: true, value: "Nombre:" }}
                       placeholder="Nombre de la categoría"
+                      defaultValue={category?.titulo}
                       onChange={validData.setField}
                       validations={{
                         required: "Este campo es obligatorio",
@@ -162,6 +206,7 @@ const CategoriesComponent = () => {
                     />
                     <InputForm
                       name="identificador"
+                      defaultValue={category?.identificador}
                       placeholder="Identificador de la categoría"
                       validations={{
                         required: "Este campo es obligatorio",
@@ -172,11 +217,12 @@ const CategoriesComponent = () => {
                       }}
                       label={{ required: true, value: "Nombre identificador:" }}
                       onChange={validData.setField}
-                      description="*Por favor ingresar un nombre válido en minúscula y sin caracteres especiales (Ejemplo: Nombre: Deportes, identificador: sports)*"
+                      description="*Por favor ingresar un nombre válido en minúscula, sin caracteres especiales y sin espacios (Ejemplo: Nombre: Deportes, identificador: sports)*"
                     />
 
                     <SelectForm
                       name="state_category"
+                      defaultValue={category?.estado === "1" ? "1" : "2"}
                       required={true}
                       onChange={() => {}}
                       label={{ required: true, value: "Estado:" }}
@@ -187,6 +233,7 @@ const CategoriesComponent = () => {
                     </SelectForm>
                     <TextareaForm
                       name="descripcion"
+                      defaultValue={category?.descripcion}
                       placeholder="Descripción de la categoría"
                       onChange={validData.setField}
                       minRows={5}
@@ -211,8 +258,19 @@ const CategoriesComponent = () => {
                     <div className="flex-center justify-between my-5 gap-6 px-10">
                       <Button
                         type="submit"
-                        text="Continuar"
+                        text="Guardar"
                         disabled={!validData.validData}
+                        onClick={() => {
+                          if (!validData) {
+                            return toast.error(
+                              "Por favor complete el formulario",
+                              {
+                                id: "empty",
+                              }
+                            );
+                          } else {
+                          }
+                        }}
                       />
                       <Button
                         text="Cancelar"
@@ -243,7 +301,10 @@ const CategoriesComponent = () => {
                 <div className="w-[10%] text-center">OPCIONES</div>
               </article>
               {categories.data.map((category) => (
-                <article key={category.id} className="flex justify-between items-center h-28 mx-auto py-2">
+                <article
+                  key={category.id}
+                  className="flex justify-between items-center h-28 mx-auto py-2"
+                >
                   <div className="w-[20%] h-full px-2 items-center flex">
                     <p className="text-base font-semibold">{category.titulo}</p>
                   </div>
@@ -272,6 +333,7 @@ const CategoriesComponent = () => {
                       onClick={() => {
                         setShowModal(true);
                         setContentModal("Editar");
+                        setCategory(category);
                       }}
                     ></i>
                     <i

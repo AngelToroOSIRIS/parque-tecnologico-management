@@ -230,20 +230,21 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   );
 
   const [content, setContent] = useState<"sites" | "reservation" | "images">(
-    "sites"
+    "reservation"
   );
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [additionalsInfo, setAdditionalsInfo] = useState<
     { nombre: string; descripcion: string }[]
   >([]);
-  const [selected, setSelected] = useState([
+
+  const [siteId, setSiteId] = useState<number>(0);
+  const [selectedDays, setSelectedDays] = useState<string[]>([
     "lunes",
     "martes",
     "miercoles",
     "jueves",
     "viernes",
   ]);
-  const [siteId, setSiteId] = useState<number>(0);
   const [additionalInfo, setAdditionalInfo] = useState<{
     activo_coworking: boolean;
     activo_interno: boolean;
@@ -254,7 +255,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     time_end: string;
     valid: boolean;
   }>({ time_start: "", time_end: "", valid: false });
-  const [dataAdittional, setDataAdittional] = useState<{}>({});
   const [dataFilters, setDataFilters] = useState<{
     categorias: CategoryComplete[];
     estadoEspacios: States[];
@@ -268,9 +268,34 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     if (idSite) {
       const data = await fetchFn(`/getPlace/${idSite}`);
       if (data.code !== 200) {
-        return toast.error("No se ha podido obtener la info", { id: "2" });
+        return toast.error("No se ha podido obtener la información", { id: "2" });
       }
-      setdataEdit(data.data);
+      const responseData: Site = data.data;
+
+      const days = [];
+      for (let item in responseData.dias_disponibilidad_espacio) {
+        //@ts-ignore
+        if (responseData.dias_disponibilidad_espacio[item] === "1") {
+          days.push(item);
+        }
+      }
+
+      if (responseData.caracteristicas_espacio.adicionales) {
+        const properties = [];
+
+        for (let item of responseData.caracteristicas_espacio.adicionales.split(
+          "\\n"
+        )) {
+          properties.push({
+            nombre: item.split(":")[0],
+            descripcion: item.split(":")[1],
+          });
+        }
+        setAdditionalsInfo(properties);
+      }
+
+      setSelectedDays(days);
+      setdataEdit(responseData);
     }
 
     const response = await fetchFn(
@@ -344,6 +369,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       }
     }
   }, [status]);
+  
   const classCheck = "m-2 p-2 rounded-xl border-2 border-borders-light";
   return (
     <>
@@ -651,6 +677,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               </h3>
               <div className="p-2 lg:w-[40%] mx-auto rounded-xl">
                 <DynamicForm
+                  defaultValues={additionalsInfo}
                   onChangeValue={(data) => setAdditionalsInfo(data)}
                 />
               </div>
@@ -716,7 +743,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 text="Continuar"
               />
             </div>
-            <p>{`Páginas 1/${idSite ? "2" : "3" }` }</p>
+            <p>{`Páginas 1/${idSite ? "2" : "3"}`}</p>
           </form>
         </div>
       )}
@@ -765,6 +792,18 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   onChange={({ time_end, time_start, valid }) => {
                     setInfoHorary({ time_end, time_start, valid });
                   }}
+                  defaultValues={
+                    idSite
+                      ? {
+                          time_start:
+                            dataEdit?.dias_disponibilidad_espacio.hora_inicio ??
+                            "",
+                          time_end:
+                            dataEdit?.dias_disponibilidad_espacio.hora_fin ??
+                            "",
+                        }
+                      : undefined
+                  }
                 />
               </div>
               <div className="w-full mb-20">
@@ -774,9 +813,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <div className="lg:flex items-center justify-center m-7">
                   <CheckboxGroup
                     isRequired={true}
-                    value={selected}
+                    value={selectedDays}
                     orientation="horizontal"
-                    onValueChange={setSelected}
+                    onValueChange={setSelectedDays}
                     className="text-center"
                   >
                     {[
@@ -822,9 +861,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <div className="lg:flex items-center justify-center">
                   <CheckboxGroup
                     isRequired={true}
-                    value={selected}
+                    value={selectedDays}
                     orientation="horizontal"
-                    onValueChange={setSelected}
+                    onValueChange={setSelectedDays}
                     className="text-center"
                   >
                     {[
@@ -862,7 +901,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
                 <Button type="submit" text="Continuar" />
               </div>
-              <p>{`Páginas 2/${idSite ? "2" : "3" }` }</p>
+              <p>{`Páginas 2/${idSite ? "2" : "3"}`}</p>
             </form>
           </div>
         </>

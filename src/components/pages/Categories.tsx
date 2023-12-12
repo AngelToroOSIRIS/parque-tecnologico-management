@@ -1,6 +1,5 @@
 "use client";
 
-import Table from "@/components/Table";
 import fetchFn from "@/libs/fetchFn";
 import { CategoryTextShort, Site, SiteTbl } from "@/types/d";
 import { createTable } from "@tanstack/react-table";
@@ -57,8 +56,6 @@ export default function Categories({
     <>
       {!loading && (
         <>
-          {/* <Table category={category} dataSite={[]} /> */}
-          {/* <div className="bg-default-white mb-36 w-[95%] rounded-xl overflow-x-auto shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto text-sm text-center p-3"> */}
           <TableData
            category={category}
             columnsArray={columns}
@@ -66,7 +63,6 @@ export default function Categories({
             createdTable={table}
             description="Sitios"
             />
-            {/* </div> */}
         </>
       )}
       {loading && (
