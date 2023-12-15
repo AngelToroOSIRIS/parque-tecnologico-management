@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
 import TableData from "../Table/TableData";
 import { setSitesInTable } from "@/libs/setDataInTable";
+import { setCategories } from "@/redux/features/categoriesSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 export default function Categories({
   category,
@@ -33,6 +35,26 @@ export default function Categories({
     name: "default",
     email: "useremail",
   };
+  const categories = useAppSelector((state) => state.categoriesReducer);
+  const dispatch = useAppDispatch();
+
+  const getCategories = async () => {
+    const response = await fetchFn(
+      process.env.NEXT_PUBLIC_API_BASEURL + "/categories",
+      {
+        externalUrl: true,
+      }
+    );
+
+    if (response.code !== 200) {
+      return toast.error("No se han podido cargar las categorías", {
+        id: "error1",
+      });
+    }
+
+    dispatch(setCategories(response.data));
+  };
+
   const getData = async () => {
     setLoading(true);
     const response = await fetchFn(`/places?categoria=${category}`);
@@ -47,8 +69,9 @@ export default function Categories({
   };
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === "authenticated" && categories.data.length > 0) {
       getData();
+      getCategories();
     }
   }, [status]);
 
@@ -57,12 +80,12 @@ export default function Categories({
       {!loading && (
         <>
           <TableData
-           category={category}
+            category={category}
             columnsArray={columns}
             dataArray={setSitesInTable(dataSite)}
             createdTable={table}
             description="Sitios"
-            />
+          />
         </>
       )}
       {loading && (

@@ -21,6 +21,7 @@ import Button from "../Button";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
+import { useRouter } from "next/navigation";
 
 export default function CalendaryCategory({
   category,
@@ -32,6 +33,7 @@ export default function CalendaryCategory({
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
   const [selectedReservation, setSelectedReservation] =
     useState<ReservationCategory>();
+  const router = useRouter();
   const [contentModal, setContentModal] = useState<string>("");
   {
     const { data: session, status } = useSession();
@@ -76,7 +78,7 @@ export default function CalendaryCategory({
             Agenda de {categoryFound?.name}
           </p>
           {!loading && (
-            <div className="w-[95%] m-5 p-8 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
+            <div className="w-[95%] m-5 p-4 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
               <Modal
                 isOpen={showModal}
                 setIsOpen={setShowModal}
@@ -96,7 +98,6 @@ export default function CalendaryCategory({
                         <Calendar idPlace={1} customFn={() => {}} />{" "}
                       </div>
                     )}
-
                     {contentModal === "day" && (
                       <>
                         <div className="flex py-2 gap-5 m-3 justify-between">
@@ -226,7 +227,6 @@ export default function CalendaryCategory({
                         </div>
                       </>
                     )}
-
                     {contentModal === "range" && (
                       <>
                         <div className="flex gap-5 py-2 m-3 justify-between">
@@ -274,7 +274,7 @@ export default function CalendaryCategory({
               </Modal>
               <div className="flex justify-between font-medium items-center gap-3 ">
                 <div className="flex justify-center items-center text-center gap-2">
-                  <ButtonTable
+                  {/* <ButtonTable
                     text="Filtrar por Hora"
                     type="button"
                     icon="calendar-event"
@@ -300,10 +300,7 @@ export default function CalendaryCategory({
                       setShowModal(true);
                       setContentModal("range");
                     }}
-                  />
-                </div>
-                <div className="flex items-center gap-2 justify-center text-center">
-                  <ButtonTable text="Reservar espacio" icon="calendar-event" />
+                  /> */}
                 </div>
               </div>
               <TableCalendar

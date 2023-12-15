@@ -13,9 +13,11 @@ import toast from "react-hot-toast";
 import { ReservationSite } from "@/types/d";
 import TableCalendarSite from "../TableCalendarSite";
 import { convertToCurrency, formatDate } from "@/libs/functionsStrings";
+import { useRouter } from "next/navigation";
 
 const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
   const [selectedReservation, setSelectedReservation] =
     useState<ReservationSite>();
   const [reservationSite, setReservationSite] = useState<ReservationSite[]>([]);
@@ -65,8 +67,8 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
           Reservaciones
         </p>
         <>
-          {reservationSite.length >= 1 && !loading && (
-            <div className="w-[95%] m-5 p-8 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
+          {!loading && (
+            <div className="w-[95%] m-5 p-4 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
               <Modal
                 isOpen={showModal}
                 setIsOpen={setShowModal}
@@ -126,7 +128,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                           </section>
                           {newDates.length > 0 && (
                             <>
-                              <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto"/>
+                              <hr className="w-[90%] border-1 rounded-lg text-default-300 mx-auto" />
                               <p className="text-primary mt-4 text-xl mb-3 text-center font-semibold">
                                 Fechas reservadas:{" "}
                               </p>
@@ -212,7 +214,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                         <Calendar idPlace={1} customFn={() => {}} />{" "}
                       </div>
                     )}
-
                     {contentModal === "day" && (
                       <DtCalendar
                         onChange={setDate}
@@ -222,7 +223,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                         minDate={minDate}
                       />
                     )}
-
                     {contentModal === "range" && (
                       <DtCalendar
                         onChange={setDate}
@@ -232,13 +232,18 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                         minDate={minDate}
                       />
                     )}
+                    {contentModal === "reservation" && (
+                      <>
+                        <p>Prueba</p>
+                      </>
+                    )}
                   </div>
                 </div>
               </Modal>
 
               <div className="flex justify-between font-medium items-center gap-3 ">
                 <div className="flex justify-center items-center text-center gap-2">
-                  <ButtonTable
+                  {/* <ButtonTable
                     text="Filtrar por Hora"
                     type="button"
                     icon="calendar-event"
@@ -264,15 +269,24 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                       setShowModal(true);
                       setContentModal("range");
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="flex items-center gap-2 justify-center text-center">
-                  <ButtonTable text="Reservar espacio" icon="calendar-event" />
-                  {/* {includesString(userSession.rols ?? [], [
-                  "superadmin",
-                  category,
-                ]) && (
-                    )} */}
+                  <ButtonTable
+                    text="Administrar fechas"
+                    onClick={() => {
+                      router.push(`/sites/${idPlace}/dates`);
+                    }}
+                    icon="calendar-week"
+                  />
+                  <ButtonTable
+                    onClick={() => {
+                      setContentModal("reservation");
+                      setShowModal(true);
+                    }}
+                    text="Reservar espacio"
+                    icon="calendar-event"
+                  />
                 </div>
               </div>
               <TableCalendarSite
@@ -299,14 +313,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
             justifyContent: "center",
           }}
         />
-      )}
-      {reservationSite.length === 0 && !loading && (
-        <>
-          <div className="text-center text-default-300 select-none mt-[7%]">
-            <i className="bi bi-x-circle text-7xl"></i>
-            <p className="text-4xl mt-[1%]">No se encuentran reservaciones</p>
-          </div>
-        </>
       )}
     </>
   );

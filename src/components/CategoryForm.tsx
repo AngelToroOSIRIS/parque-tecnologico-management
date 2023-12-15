@@ -109,7 +109,7 @@ const CategoryForm = () => {
       {!loading && (
         <>
           {content === "add" && (
-            <div className="w-[95%] max-w-[1000px] mx-auto p-1 bg-gray-box normal-shadow rounded-lg mb-10">
+            <div className="w-[95%] max-w-[800px] mx-auto p-1 bg-gray-box normal-shadow rounded-lg mb-10">
               <form
                 onSubmit={handleSubmit}
                 className="W-full m-2 bg-default-white p-2 px-16 rounded-lg pt-7 gap-2"
@@ -171,8 +171,8 @@ const CategoryForm = () => {
                     },
                     maxLength: {
                       message:
-                        "Se admiten máximo 200 caracteres en la observación",
-                      value: 200,
+                        "Se admiten máximo 100 caracteres en la observación",
+                      value: 100,
                     },
                   }}
                 />

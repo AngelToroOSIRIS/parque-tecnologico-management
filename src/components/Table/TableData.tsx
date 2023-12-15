@@ -10,13 +10,12 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import useColumnsRows from "../../hooks/useColumnsRows";
-import Link from "next/link";
 import FilterTable from "./FilterTable";
 import Input from "../forms/Input";
 import Select from "../forms/Select";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
-import { Badge, SelectItem, Tooltip } from "@nextui-org/react";
+import { SelectItem } from "@nextui-org/react";
 import ButtonTable from "../ButtonTable";
 import { CategoryTextShort } from "@/types/d";
 import {
@@ -26,6 +25,7 @@ import {
 } from "@/libs/functionsStrings";
 import Modal from "../Modal";
 import { useSession } from "next-auth/react";
+import fetchFn from "@/libs/fetchFn";
 
 interface Props {
   columnsArray: { accessor: string; header: string }[];
@@ -34,12 +34,14 @@ interface Props {
   category: CategoryTextShort;
   description: string;
   className?: string;
+  idSite?: number;
 }
 
 const TableData: React.FC<Props> = ({
   columnsArray,
   category,
   dataArray,
+  idSite,
   createdTable,
   description,
   className = "",
@@ -51,6 +53,7 @@ const TableData: React.FC<Props> = ({
   const [data] = useState<any>(dataArray);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [statusSite, setStatusSite] = useState<"activo" | "inactivo" | "">("");
   const [currentPage, setCurrentPage] = useState<number>(0);
   const { data: session, status } = useSession();
   const userSession = session?.user ?? {
@@ -93,6 +96,12 @@ const TableData: React.FC<Props> = ({
     .getFilteredRowModel()
     .rows.map((row) => row.original);
 
+  const updateData = async () => {
+    const response = fetchFn(
+      `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`
+    );
+  };
+
   useEffect(() => {
     const totalPages = instance.getPageCount();
     const pQuery = 1;
@@ -111,6 +120,44 @@ const TableData: React.FC<Props> = ({
   if (!loading)
     return (
       <Fragment>
+        <Modal
+          isOpen={showModal}
+          setIsOpen={setShowModal}
+          classContainer="w-[95%] max-w-[500px]"
+        >
+          <>
+            <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
+              Inhabilitar sitio
+            </h1>
+            <div>
+              <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+                ¿Seguro que quiere Inhabilitar el sitio?
+              </p>
+            </div>
+            <div className="flex items-center gap-7 pb-3 justify-center text-center">
+              <div className="mt-5">
+                <button
+                  type="button"
+                  className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
+                >
+                  Inhabilitar sitio
+                </button>
+              </div>
+              <div className="mt-5">
+                <button
+                  type="button"
+                  className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
+                  onClick={() => {
+                    setShowModal(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </>
+        </Modal>
+        ;
         {instance.getFilteredRowModel().rows.length === 0 && (
           <>
             <div className="text-center text-default-300 select-none">
@@ -220,61 +267,10 @@ const TableData: React.FC<Props> = ({
                       {instance.getRowModel().rows.map((row: any) => {
                         return (
                           <tr className="" key={row.id}>
-                            {description === "Dispositivos" && (
-                              <Link href={`/device/${row.original?.["id"]}`}>
-                                <td
-                                  className="text-center text-gray transition-all cursor-pointer hover:bg-hover"
-                                  title="Ver detalles"
-                                >
-                                  <i className="bi bi-eye-fill"></i>
-                                </td>
-                              </Link>
-                            )}
                             {row.getVisibleCells().map((cell: any) => {
-                              console.log(cell.column);
                               const valueRender = cell
                                 .renderCell()
                                 .props.cell.getValue();
-                              {
-                                <Modal
-                                  isOpen={showModal}
-                                  setIsOpen={setShowModal}
-                                  classContainer="w-[95%] max-w-[500px]"
-                                >
-                                  <>
-                                    <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
-                                      Inhabilitar sitio
-                                    </h1>
-                                    <div>
-                                      <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
-                                        ¿Seguro que quiere Inhabilitar el sitio{" "}
-                                        {cell.row.original.nombre}
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center gap-7 pb-3 justify-center text-center">
-                                      <div className="mt-5">
-                                        <button
-                                          type="button"
-                                          className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
-                                        >
-                                          Inhabilitar sitio
-                                        </button>
-                                      </div>
-                                      <div className="mt-5">
-                                        <button
-                                          type="button"
-                                          className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
-                                          onClick={() => {
-                                            setShowModal(false);
-                                          }}
-                                        >
-                                          Cancelar
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </>
-                                </Modal>;
-                              }
                               if (
                                 stringIncludes(cell.column.id, [
                                   "fecha_creacion",
@@ -287,6 +283,12 @@ const TableData: React.FC<Props> = ({
                                   </td>
                                 );
                               }
+                              if (
+                                stringIncludes(cell.column.id, [
+                                  "estado_espacio",
+                                ])
+                              ) {
+                              }
                               if (stringIncludes(cell.column.id, ["options"])) {
                                 return (
                                   <td className="p-2" key={cell.id}>
@@ -294,7 +296,7 @@ const TableData: React.FC<Props> = ({
                                       <a
                                         title="Ver sitio"
                                         target="_blank"
-                                        href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/`}
+                                        href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/${cell.row.original.id}`}
                                         className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
                                       >
                                         <i className="bi bi-eye m-2 text-2xl"></i>
@@ -337,12 +339,11 @@ const TableData: React.FC<Props> = ({
                                           >
                                             <i className="bi bi-images m-2 text-xl"></i>
                                           </span>
-                                          <span title="Inhabilitar sitio">
-                                            <i
-                                              onClick={() => setShowModal(true)}
-                                              className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
-                                            ></i>
-                                          </span>
+                                          <i
+                                            title="Inhabilitar sitio"
+                                            onClick={() => setShowModal(true)}
+                                            className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
+                                          ></i>
                                         </>
                                       )}
                                     </div>

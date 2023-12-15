@@ -9,8 +9,8 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Administración de Co-working",
-  description: "App Web para adminisración de espacios Co-Working",
+  title: "Administración de Coworking",
+  description: "App Web para adminisración de espacios Coworking",
 };
 
 export default function RootLayout({

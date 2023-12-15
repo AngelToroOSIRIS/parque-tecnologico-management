@@ -38,10 +38,28 @@ export interface UsersAndRoles {
 }
 
 export interface PlaceCard {
-  id: number;
-  nombre: string;
-  descripcion_corta: string;
-  img_card: string;
+	id: number;
+	nombre: string;
+	descripcion_corta: string;
+	img_card: string;
+	caracteristicas_espacio: {
+		id: number;
+		dimensiones?: string;
+		escritorios?: number;
+		sillas?: number;
+		mesa_reuniones?: number;
+		televisores?: number;
+		computadores?: number;
+		tablero?: number;
+		video_beam?: number;
+		adicionales?: string;
+	};
+	tarifas_espacio: {
+		id: number;
+		hora: number;
+		dia?: number;
+		mes?: number;
+	};
 }
 
 export interface RequestInfo {

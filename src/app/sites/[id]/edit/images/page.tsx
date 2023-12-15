@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 
  export async function generateMetadata() {
     return {
-      title: `Editar Imagenes | Administración Co-working`,
+      title: `Editar Imagenes | Administración Coworking`,
     };
   }
   

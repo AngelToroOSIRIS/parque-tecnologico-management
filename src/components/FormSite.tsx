@@ -230,7 +230,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   );
 
   const [content, setContent] = useState<"sites" | "reservation" | "images">(
-    "reservation"
+    "sites"
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [additionalsInfo, setAdditionalsInfo] = useState<
@@ -380,7 +380,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
             onSubmit={handleSubmit}
           >
             <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
-              {idSite ? "Editar" : "Añadir"} sitio
+              {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
             </h1>
             <div className="items-center justify-center gap-10 lg:flex py-1">
               <InputForm
@@ -758,7 +758,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               onSubmit={handleSubmit}
             >
               <h1 className="text-center text-3xl text-primary font-medium mt-4 mb-10">
-                Disponibilidad del sitio
+                Disponibilidad del sitio {dataEdit?.nombre}
               </h1>
               <h2 className="text-center text-2xl text-primary font-medium mt-4 mb-7">
                 Precios
@@ -899,7 +899,10 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 </div>
               </div>
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
-                <Button type="submit" text="Continuar" />
+                <Button type="submit" text="Guardar" />
+                {idSite &&(
+                  <Button type="button" onClick={()=>{setContent("sites")}} text="Atrás" />
+                )}
               </div>
               <p>{`Páginas 2/${idSite ? "2" : "3"}`}</p>
             </form>

@@ -214,7 +214,6 @@ export default function TableCalendarSite({
           emptyContent={"No se han encontrado reservaciones para este sitio"}
         >
           {reservationSite.map((resevation) => {
-            console.log(resevation)
             return (
               <TableRow key={resevation.id}>
                 {(columnKey) => (

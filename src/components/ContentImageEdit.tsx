@@ -39,14 +39,6 @@ export function ContentImageEdit({
       email: session?.user.emailHash,
       action: action,
     });
-    console.log({
-      id_espacio: idSite ?? 0,
-      id_imagen: idImage ?? 0,      
-      id_category: idCategory ?? 0,
-      id_image_category: idImage ?? 0,
-      email: session?.user.emailHash,
-      action: action,
-    })
     const response = await fetchFileFn(idSite ? `/updateImagePlace` : `/updateImageCategory`, {
       method: "PUT",
       formData: fd,

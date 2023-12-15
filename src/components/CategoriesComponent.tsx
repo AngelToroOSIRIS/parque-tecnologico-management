@@ -2,26 +2,24 @@
 
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { useAppSelector } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Chip, ChipProps, ScrollShadow, SelectItem } from "@nextui-org/react";
-import InputForm from "./forms/InputForm";
-import SelectForm from "./forms/SelectForm";
-import TextareaForm from "./forms/TextareaForm";
-import Button from "./Button";
 import Modal from "./Modal";
-import toast from "react-hot-toast";
 import useValidateForm from "@/hooks/useValidateForm";
 import { TailSpin } from "react-loader-spinner";
 import { CategoryComplete } from "@/types/d";
+import ModalEditCategory from "./ModalEditCategory";
+import toast from "react-hot-toast";
 import fetchFn from "@/libs/fetchFn";
+import { setCategories } from "@/redux/features/categoriesSlice";
+import { useSession } from "next-auth/react";
 
 const CategoriesComponent = () => {
-  const { data: session, status } = useSession();
   const router = useRouter();
-  const [dataCategory, setDataCategory] = useState<CategoryComplete[]>();
+  const { data: session, status } = useSession();
+  const dispatch = useAppDispatch();
+
   const [category, setCategory] = useState<CategoryComplete>();
-  const [loadingData, setLoadingData] = useState<boolean>(true);
   const [contentModal, setContentModal] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -31,57 +29,39 @@ const CategoriesComponent = () => {
   };
   const categories = useAppSelector((state) => state.categoriesReducer);
 
-  const validData = useValidateForm(
-    [
+  const getCategories = async () => {
+    const response = await fetchFn(
+      process.env.NEXT_PUBLIC_API_BASEURL + "/categories",
       {
-        name: "titulo",
-        type: "str",
-        required: true,
-        value: category?.id ? category?.titulo : undefined,
-      },
-      {
-        name: "identificador",
-        type: "str",
-        required: true,
-        value: category?.id ? category?.identificador : undefined,
-      },
-      {
-        name: "descripcion",
-        type: "str",
-        required: true,
-        value: category?.id ? category?.descripcion : undefined,
-      },
-      {
-        name: "estado",
-        type: "str",
-        required: true,
-      },
-    ],
-    {
-      loadData: category?.id ? true : false,
-      status: loadingData ? "loading" : "charged",
-    }
-  );
+        externalUrl: true,
+      }
+    );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!validData.validData) {
-      return toast.error("Por favor complete el formulario", { id: "empty" });
+    if (response.code !== 200) {
+      return toast.error("No se han podido cargar las categorías", {
+        id: "error1",
+      });
     }
-    setLoading(true);
-    const toastLoading = toast.loading("Guardando información...", {
-      id: "Save",
+
+    dispatch(setCategories(response.data));
+  };
+
+  const disabledCategory = async (state: "1" | "0") => {
+    if (!category) {
+      return toast.error("Ha ocurrido un error", { id: "empty" });
+    }
+    const toastLoading = toast.loading("Actualizando categoría...", {
+      id: "toast",
     });
-
     const response = await fetchFn("/updateCategory", {
       method: "PUT",
       body: {
         email: session?.user.emailHash,
         id_category: category?.id,
-        identificador: validData.getData.identificador,
-        descripcion: validData.getData.descripcion,
-        titulo: validData.getData.titulo,
-        estado: validData.getData.estado,
+        identificador: category?.identificador,
+        descripcion: category?.descripcion,
+        titulo: category?.titulo,
+        estado: state,
       },
     });
     if (response.code !== 200) {
@@ -90,13 +70,15 @@ const CategoriesComponent = () => {
     toast.success("La categoría se ha actualizado exitosamente", {
       id: toastLoading,
     });
+    getCategories();
+    setShowModal(false);
   };
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (categories.data.length > 0) {
       setLoading(false);
     }
-  }, []);
+  }, [categories]);
 
   return (
     <>
@@ -124,8 +106,10 @@ const CategoriesComponent = () => {
                 <div className="flex items-center gap-7 pb-3 justify-center text-center">
                   <div className="mt-5">
                     <button
-                      onClick={() => {}}
                       type="button"
+                      onClick={() => {
+                        disabledCategory("0");
+                      }}
                       className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
                     >
                       Inhabilitar categoría
@@ -158,7 +142,9 @@ const CategoriesComponent = () => {
                 <div className="flex items-center gap-7 pb-3 justify-center text-center">
                   <div className="mt-5">
                     <button
-                      onClick={() => {}}
+                      onClick={() => {
+                        disabledCategory("1");
+                      }}
                       type="button"
                       className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
                     >
@@ -181,105 +167,13 @@ const CategoriesComponent = () => {
             )}
 
             {contentModal === "Editar" && (
-              <>
-                <h1 className="m-5 text-center text-2xl font-bold text-primary mx-auto justify-center items-center">
-                  Editar datos {category?.titulo}
-                </h1>
-                <div className="mx-auto rounded-lg">
-                  <form
-                    onSubmit={handleSubmit}
-                    className="W-full m-2 rounded-lg px-12 gap-2"
-                  >
-                    <InputForm
-                      name="titulo"
-                      label={{ required: true, value: "Nombre:" }}
-                      placeholder="Nombre de la categoría"
-                      defaultValue={category?.titulo}
-                      onChange={validData.setField}
-                      validations={{
-                        required: "Este campo es obligatorio",
-                        maxLength: {
-                          value: 30,
-                          message: "Maxímo se pueden ingresar 30 caracteres",
-                        },
-                      }}
-                    />
-                    <InputForm
-                      name="identificador"
-                      defaultValue={category?.identificador}
-                      placeholder="Identificador de la categoría"
-                      validations={{
-                        required: "Este campo es obligatorio",
-                        maxLength: {
-                          value: 30,
-                          message: "Maxímo se pueden ingresar 30 caracteres",
-                        },
-                      }}
-                      label={{ required: true, value: "Nombre identificador:" }}
-                      onChange={validData.setField}
-                      description="*Por favor ingresar un nombre válido en minúscula, sin caracteres especiales y sin espacios (Ejemplo: Nombre: Deportes, identificador: sports)*"
-                    />
-
-                    <SelectForm
-                      name="state_category"
-                      defaultValue={category?.estado === "1" ? "1" : "2"}
-                      required={true}
-                      onChange={() => {}}
-                      label={{ required: true, value: "Estado:" }}
-                      placeholder="Seleccionar estado"
-                    >
-                      <SelectItem key={1}>Activo</SelectItem>
-                      <SelectItem key={2}>Inactivo</SelectItem>
-                    </SelectForm>
-                    <TextareaForm
-                      name="descripcion"
-                      defaultValue={category?.descripcion}
-                      placeholder="Descripción de la categoría"
-                      onChange={validData.setField}
-                      minRows={5}
-                      label={{
-                        required: true,
-                        value: "Descripción:",
-                      }}
-                      validations={{
-                        required: "La observación del sitio es obligatoria",
-                        minLength: {
-                          message:
-                            "Se requiere mínimo 15 caracteres en la observación",
-                          value: 15,
-                        },
-                        maxLength: {
-                          message:
-                            "Se admiten máximo 200 caracteres en la observación",
-                          value: 200,
-                        },
-                      }}
-                    />
-                    <div className="flex-center justify-between my-5 gap-6 px-10">
-                      <Button
-                        type="submit"
-                        text="Guardar"
-                        disabled={!validData.validData}
-                        onClick={() => {
-                          if (!validData) {
-                            return toast.error(
-                              "Por favor complete el formulario",
-                              {
-                                id: "empty",
-                              }
-                            );
-                          } else {
-                          }
-                        }}
-                      />
-                      <Button
-                        text="Cancelar"
-                        onClick={() => setShowModal(false)}
-                      />
-                    </div>
-                  </form>
-                </div>
-              </>
+              <ModalEditCategory
+                category={category}
+                onCloseModal={() => {
+                  setShowModal(false);
+                  setCategory(undefined);
+                }}
+              />
             )}
           </Modal>
           <div className="w-full overflow-x mb-10 max-w-[1400px] mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
@@ -303,7 +197,7 @@ const CategoriesComponent = () => {
               {categories.data.map((category) => (
                 <article
                   key={category.id}
-                  className="flex justify-between items-center h-28 mx-auto py-2"
+                  className="flex justify-between items-center h-24 mx-auto py-2"
                 >
                   <div className="w-[20%] h-full px-2 items-center flex">
                     <p className="text-base font-semibold">{category.titulo}</p>
@@ -329,7 +223,7 @@ const CategoriesComponent = () => {
                   <div className="w-[10%] h-full px-2 items-center text-center text-xl flex-center">
                     <i
                       title="Editar categoría"
-                      className="mr-2 ml-1 block bi bi-pencil text-borders hover:text-custom-black"
+                      className="mr-2 ml-1 block bi bi-pencil cursor-pointer text-borders hover:text-custom-black"
                       onClick={() => {
                         setShowModal(true);
                         setContentModal("Editar");
@@ -343,7 +237,7 @@ const CategoriesComponent = () => {
                           `/categories/${category.identificador}/edit/images`
                         );
                       }}
-                      className="mr-2 ml-1 block bi bi-images text-borders hover:text-custom-black transition-all"
+                      className="mr-2 ml-1 block bi bi-images cursor-pointer text-borders hover:text-custom-black transition-all"
                     ></i>
                     <i
                       title={
@@ -356,11 +250,12 @@ const CategoriesComponent = () => {
                         setContentModal(
                           category.estado === "1" ? "Inhabilitar" : "Habilitar"
                         );
+                        setCategory(category);
                       }}
                       className={
                         category.estado === "1"
-                          ? "mr-2 ml-1 block bi bi-dash-circle text-borders hover:text-primary transition-all"
-                          : "mr-2 ml-1 block bi bi-plus-circle text-borders hover:text-primary transition-all"
+                          ? "mr-2 ml-1 block bi bi-dash-circle cursor-pointer text-borders hover:text-primary transition-all"
+                          : "mr-2 ml-1 block bi bi-plus-circle cursor-pointer text-borders hover:text-primary transition-all"
                       }
                     ></i>
                   </div>
