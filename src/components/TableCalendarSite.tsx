@@ -48,7 +48,7 @@ export default function TableCalendarSite({
     },
     {
       key: "nombre_usuario",
-      label: "NOMBRE USUARIO",
+      label: "USUARIO",
     },
     {
       key: "estado_reservacion",

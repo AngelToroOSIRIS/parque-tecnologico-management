@@ -92,8 +92,8 @@ const FormUser = () => {
               required: "Se requiere un email",
               validateEmail: true,
               maxLength: {
-                value: 50,
-                message: "El email debe contener máximo 50 caracteres.",
+                value: 100,
+                message: "El email debe contener máximo 100 caracteres.",
               },
             }}
             onChange={({ value }) => setEmailUser(value)}

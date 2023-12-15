@@ -66,7 +66,6 @@ const Calendar = ({
         dateTimeStart: "",
         dateTimeEnd: "",
         totalTime: "",
-        value: 0,
         valid: false,
       });
     }
@@ -98,7 +97,6 @@ const Calendar = ({
         dateTimeStart,
         dateTimeEnd,
         totalTime: response.data.time,
-        value: response.data.value,
         valid: true,
       });
     }

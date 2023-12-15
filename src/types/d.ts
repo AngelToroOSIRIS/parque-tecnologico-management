@@ -21,7 +21,6 @@ export interface ReservationDateDetails {
   id?: number;
   dateTimeEnd: string;
   totalTime: string;
-  value: number;
   valid: boolean;
 }
 

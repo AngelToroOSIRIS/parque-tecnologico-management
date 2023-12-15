@@ -13,6 +13,7 @@ import { formatDate } from "@/libs/functionsStrings";
 import { categoriesObj } from "@/libs/staticData";
 import { TailSpin } from "react-loader-spinner";
 import ValidateNewRequestDates from "./ValidateNewRequestDates";
+import Link from "next/link";
 
 interface Props {
   params: { category: CategoryTextShort };
@@ -111,14 +112,13 @@ const Requests = ({ params }: Props) => {
                   </section>
                   <section className="flex justify-between px-3 gap-10 text-center mb-10">
                     <p className="min-w-[250px] max-h-10">
-                      <strong>Numero de Factura:</strong> #
+                      <strong>Numero de Factura: </strong>
                       {selectedRequest?.cancelar_reservacion?.factura}
                     </p>
-                    <p className="text-blue ml-2 text-base hover:underline select-none cursor-pointer transition-all">
-                      Cuenta bancaria:{" "}
-                      {selectedRequest?.cancelar_reservacion?.cuenta_bancaria}
+                    <Link target="_blank" href={`${process.env.NEXT_PUBLIC_API_BASEURL}/document?name_document=${selectedRequest?.cancelar_reservacion?.cuenta_bancaria}`} className="text-blue ml-2 text-base hover:underline select-none cursor-pointer transition-all">
+                      Cuenta bancaria{" "}
                       <i className="bi bi-file-earmark-text ml-1"></i>
-                    </p>
+                    </Link>
                   </section>
                 </>
               )}

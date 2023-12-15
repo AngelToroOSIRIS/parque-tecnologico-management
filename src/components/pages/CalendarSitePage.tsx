@@ -292,7 +292,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                 </div>
                 <div className="flex items-center gap-2 justify-center text-center">
                   <ButtonTable
-                    text="Administrar fechas"
+                    text="Fechas de disponibilidad"
                     onClick={() => {
                       router.push(`/sites/${idPlace}/dates`);
                     }}

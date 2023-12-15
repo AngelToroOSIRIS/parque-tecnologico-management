@@ -317,6 +317,25 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     }
     setLoading(true);
 
+    console.log({
+      ...dataForm,
+      tarifas_espacio: dataPaid.getData,
+      dias_disponibilidad: {
+        ...dataDays.getData,
+        hora_inicio: infoHorary.time_start,
+        hora_fin: infoHorary.time_end,
+      },
+      caracteristicas_espacio: {
+        ...dataInfoSite.getData,
+        adicionales: additionalsInfo,
+      },
+      activo_coworking: idSite ? dataForm.activo_coworking : "0",
+      activo_interno: idSite ? dataForm.activo_interno : "0",
+      id_estado_espacio: idSite ? dataForm.id_estado_espacio : dataFilters.estadoEspacios.find(
+        (estado) => estado.descripcion === "Inactivo"
+      )?.id ,
+    })
+
     const res = await fetchFn(
       idSite
         ? `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`
@@ -335,11 +354,11 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
             ...dataInfoSite.getData,
             adicionales: additionalsInfo,
           },
-          activo_coworking: "0",
-          activo_interno: "0",
-          id_estado_espacio: dataFilters.estadoEspacios.find(
+          activo_coworking: idSite ? dataForm.activo_coworking : "0",
+          activo_interno: idSite ? dataForm.activo_interno : "0",
+          id_estado_espacio: idSite ? dataForm.id_estado_espacio : dataFilters.estadoEspacios.find(
             (estado) => estado.descripcion === "Inactivo"
-          )?.id,
+          )?.id ,
         },
       }
     );
@@ -384,7 +403,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
             <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
               {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
             </h1>
-            <div className="items-center justify-center gap-10 lg:flex py-1">
+            <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
               <InputForm
                 onChange={setField}
                 type="text"
@@ -423,7 +442,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 ))}
               </SelectForm>
             </div>
-            <div className="items-center justify-center gap-10 lg:flex py-1">
+            <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
               <SelectForm
                 name="id_categoria"
                 defaultValue={
@@ -467,7 +486,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 ))}
               </SelectForm>
             </div>
-            <div className="items-center w-full justify-center gap-10 lg:flex py-1">
+            <div className="items-center px-14 justify-center gap-10 lg:flex py-1">
               <div className="lg:w-[50%]">
                 <TextareaForm
                   classContainer="w-[50%]"
@@ -510,8 +529,8 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                     validations={{
                       required: "Este campo es obligatorio",
                       maxLength: {
-                        message: "Maximos caracteres 15",
-                        value: 15,
+                        message: "Maximos caracteres 50",
+                        value: 50,
                       },
                     }}
                   />
@@ -690,7 +709,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <p> Visible coworking: </p>
                 <Switch
                   defaultEnabled={
-                    dataEdit
+                    idSite
                       ? dataEdit?.activo_coworking === "1"
                         ? true
                         : false
@@ -710,7 +729,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 <p>Visible internos: </p>
                 <Switch
                   defaultEnabled={
-                    dataEdit
+                    idSite
                       ? dataEdit?.activo_interno === "1"
                         ? true
                         : false

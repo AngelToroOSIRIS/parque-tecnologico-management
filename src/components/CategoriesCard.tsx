@@ -61,7 +61,7 @@ const CategoriesCards = () => {
 												href={`/categories/${identificador}`}
 												className="mt-2 text-primary hover:underline text-center select-none cursor-pointer"
 											>
-												Más información{" "}
+												Administrar{" "}
 												<i className="bi bi-arrow-right-circle mr-1"></i>
 											</Link>
 										</div>

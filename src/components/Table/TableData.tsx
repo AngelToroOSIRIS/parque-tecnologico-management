@@ -148,7 +148,7 @@ const TableData: React.FC<Props> = ({
                   type="button"
                   className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
                   onClick={() => {
-                    setShowModal(false);
+                    setShowModal(false)
                   }}
                 >
                   Cancelar
@@ -157,7 +157,6 @@ const TableData: React.FC<Props> = ({
             </div>
           </>
         </Modal>
-        ;
         {instance.getFilteredRowModel().rows.length === 0 && (
           <>
             <div className="text-center text-default-300 select-none">
@@ -189,7 +188,7 @@ const TableData: React.FC<Props> = ({
                   {instance.getFilteredRowModel().rows.length > 0 && (
                     <>
                       <div className="flex justify-between font-medium items-center gap-3">
-                        <CSVLink
+                        {/* <CSVLink
                           headers={columnsForCsv}
                           data={dataForCsv}
                           separator=";"
@@ -200,7 +199,7 @@ const TableData: React.FC<Props> = ({
                         >
                           Exportar en .CSV
                           <i className="bi bi-file-earmark-spreadsheet hidden lg:flex text-xl ml-2"></i>
-                        </CSVLink>
+                        </CSVLink> */}
                         <ButtonTable
                           text="Agenda general"
                           icon="calendar2-check"
@@ -297,7 +296,7 @@ const TableData: React.FC<Props> = ({
                                         title="Ver sitio"
                                         target="_blank"
                                         href={`${process.env.NEXT_PUBLIC_COWORKING_URL}/sites/${cell.row.original.id}`}
-                                        className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                        className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
                                       >
                                         <i className="bi bi-eye m-2 text-2xl"></i>
                                       </a>
@@ -308,7 +307,7 @@ const TableData: React.FC<Props> = ({
                                             `/sites/${cell.row.original.id}/calendar`
                                           )
                                         }
-                                        className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                        className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
                                       >
                                         <i className="bi bi-calendar2-check m-2 text-xl"></i>
                                       </span>
@@ -324,7 +323,7 @@ const TableData: React.FC<Props> = ({
                                                 `/sites/${cell.row.original.id}/edit`
                                               )
                                             }
-                                            className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                            className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
                                           >
                                             <i className="bi bi-pen m-2 text-xl"></i>
                                           </span>
@@ -335,14 +334,14 @@ const TableData: React.FC<Props> = ({
                                                 `/sites/${cell.row.original.id}/edit/images`
                                               )
                                             }
-                                            className="text-lg outline-none text-borders cursor-pointer hover:text-custom-black transition-all"
+                                            className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
                                           >
                                             <i className="bi bi-images m-2 text-xl"></i>
                                           </span>
                                           <i
                                             title="Inhabilitar sitio"
                                             onClick={() => setShowModal(true)}
-                                            className="bi bi-dash-circle text-lg hover:text-primary m-2 transition-all"
+                                            className="bi bi-dash-circle text-lg hover:text-primary text-default-400 m-2 transition-all"
                                           ></i>
                                         </>
                                       )}

@@ -122,8 +122,8 @@ const CategoryForm = () => {
                   validations={{
                     required: "Este campo es obligatorio",
                     maxLength: {
-                      value: 30,
-                      message: "Maxímo se pueden ingresar 30 caracteres",
+                      value: 25,
+                      message: "Maxímo se pueden ingresar 25 caracteres",
                     },
                   }}
                 />
@@ -133,8 +133,8 @@ const CategoryForm = () => {
                   validations={{
                     required: "Este campo es obligatorio",
                     maxLength: {
-                      value: 30,
-                      message: "Maxímo se pueden ingresar 30 scaracteres",
+                      value: 50,
+                      message: "Maxímo se pueden ingresar 50 caracteres",
                     },
                   }}
                   label={{ required: true, value: "Nombre identificador:" }}
@@ -171,8 +171,8 @@ const CategoryForm = () => {
                     },
                     maxLength: {
                       message:
-                        "Se admiten máximo 100 caracteres en la observación",
-                      value: 100,
+                        "Se admiten máximo 150 caracteres en la observación",
+                      value: 150,
                     },
                   }}
                 />
