@@ -234,7 +234,12 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                     )}
                     {contentModal === "reservation" && (
                       <>
-                        <p>Prueba</p>
+                        <p className="text-primary text-xl text-center mt-4 mb-3 font-semibold">
+                          Reservar espacio
+                        </p>
+                        <div className="m-5">
+                          <Calendar idPlace={1} />
+                        </div>
                       </>
                     )}
                   </div>

@@ -12,24 +12,32 @@ interface Props {
   icon?: string;
 }
 
-const Button = ({ route, text, onClick, type, icon, disabled = false }: Props) => {
+const Button = ({
+  route,
+  text,
+  onClick,
+  type,
+  icon,
+  disabled = false,
+}: Props) => {
   const router = useRouter();
-  const classbtn = "w-full h-10 border-2 select-none justify-center items-center rounded-xl text-base font-medium items-center shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:font-semibold border-borders-light hover:border-primary bg-default-white hover:text-primary transition-all"
+  const classbtn =
+    "w-full h-10 border-2 select-none justify-center items-center rounded-xl text-base font-medium items-center shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:font-semibold border-borders-light hover:border-primary bg-default-white hover:text-primary transition-all";
   return (
     <button
-    disabled={disabled}
-    className={
-      disabled
-      ? "w-full h-10 border-2 select-none rounded-xl text-base shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] text-borders opacity-50 hover:none transition-all"
-      : classbtn
-    }
+      disabled={disabled}
+      className={
+        disabled
+          ? "w-full h-10 border-2 select-none rounded-xl text-base shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] text-borders opacity-50 hover:none transition-all"
+          : classbtn
+      }
       onClick={() => {
         if (onClick) return onClick();
         if (route) return router.push(route);
       }}
       type={type ?? "button"}
     >
-      <i className={`bi bi-${icon} text-xl`}></i>
+      <i className={`bi bi-${icon ? `${icon} mr-2` : ""} text-xl`}></i>
       {text}
     </button>
   );
