@@ -82,7 +82,7 @@ export function ContentImageEdit({
                   <div key={index} className="mx-auto">
                     <img
                       src={image["data_url"]}
-                      className="border-3 text-xl mx-auto shadow-xl border-borders-light rounded-lg h-[460px]"
+                      className="border-3 text-xl mx-auto shadow-xl object-cover border-borders-light rounded-lg h-[460px]"
                       alt=""
                       width="800px"
                     />

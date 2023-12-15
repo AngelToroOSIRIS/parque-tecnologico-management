@@ -76,7 +76,6 @@ const useValidateForm = (
   };
 
   useEffect(() => {
-    console.log(defaultValues)
     if (defaultValues.status === "charged") {
       if (!data) return createInitialState();
     }

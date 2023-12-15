@@ -25,7 +25,7 @@ const Dates = () => {
           </h1>
           <div>
             <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
-              ¿Seguro que quiere elimnar horario?
+              ¿Seguro que quiere eliminar horario?
             </p>
           </div>
           <div className="flex items-center gap-7 pb-3 justify-center text-center">
@@ -65,7 +65,6 @@ const Dates = () => {
         <h2 className="text-center text-primary font-bold justify-center text-2xl items-center mx-auto">
           Fechas disponibles del sitio
         </h2>
-        <div className="w-[150px]"></div>
       </div>
       <button
         className="flex gap-3 mt-7 mx-auto text-primary font-bold text-xl bg-hover rounded-2xl px-4"
@@ -117,7 +116,6 @@ const Dates = () => {
                 className="bi bi-x-circle text-2xl px-10 text-default-400 hover:text-primary transition-all"
               ></i>
             </div>
-            750718
           </article>
           <article className="my-5 flex w-auto justify-between items-center">
             <div className="w-[20%]">08:00 AM</div>

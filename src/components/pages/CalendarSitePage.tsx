@@ -10,14 +10,15 @@ import Modal from "../Modal";
 import Calendar from "../Calendar";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
-import { ReservationSite } from "@/types/d";
+import { ReservationSite, Site } from "@/types/d";
 import TableCalendarSite from "../TableCalendarSite";
 import { convertToCurrency, formatDate } from "@/libs/functionsStrings";
 import { useRouter } from "next/navigation";
 
 const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
+  const router = useRouter(); 
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
+  const [dataSite, setDataSite] = useState<Site>();
   const [selectedReservation, setSelectedReservation] =
     useState<ReservationSite>();
   const [reservationSite, setReservationSite] = useState<ReservationSite[]>([]);
@@ -55,16 +56,29 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
     setLoading(false);
   };
 
+  const getDataPlace = async () => {
+    setLoading(true);
+    const response = await fetchFn(`/getPlace/${idPlace}`);
+    if (response.code !== 200) {
+      return toast.error("No se ha podido obtener la información.", {
+        id: "1",
+      });
+    }
+
+    setDataSite(response.data);
+    setLoading(false);
+  };
   useEffect(() => {
     if (status === "authenticated") {
       getData();
+      getDataPlace()
     }
   }, [status]);
   return (
     <>
       <div>
         <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
-          Reservaciones
+          Reservaciones de {dataSite?.nombre}
         </p>
         <>
           {!loading && (
@@ -235,10 +249,10 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                     {contentModal === "reservation" && (
                       <>
                         <p className="text-primary text-xl text-center mt-4 mb-3 font-semibold">
-                          Reservar espacio
+                          Reservar espacio {String(dataSite?.nombre)}
                         </p>
                         <div className="m-5">
-                          <Calendar idPlace={1} />
+                          <Calendar idPlace={idPlace} />
                         </div>
                       </>
                     )}

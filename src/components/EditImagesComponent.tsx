@@ -144,6 +144,7 @@ export function EditImagesComponent({ id }: { id?: string }) {
                 {dataSite.images.map((image) => (
                   <div key={image.id} className="grid">
                     <Image
+                    isBlurred
                       src={`${process.env.NEXT_PUBLIC_API_BASEURL}/image?imageName=${image.img_big}`}
                       className="border-[10px] border-default-300 rounded-lg"
                       alt="Imagen lugar"

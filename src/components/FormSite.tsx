@@ -268,7 +268,9 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     if (idSite) {
       const data = await fetchFn(`/getPlace/${idSite}`);
       if (data.code !== 200) {
-        return toast.error("No se ha podido obtener la información", { id: "2" });
+        return toast.error("No se ha podido obtener la información", {
+          id: "2",
+        });
       }
       const responseData: Site = data.data;
 
@@ -314,51 +316,51 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
     setLoading(true);
-    const toastLoading = toast.loading("Guardando información...", {
-      id: "Save",
-    });
+
+    const res = await fetchFn(
+      idSite
+        ? `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`
+        : `/place?email=${session?.user.emailHash}`,
+      {
+        method: idSite ? "PUT" : "POST",
+        body: {
+          ...dataForm,
+          tarifas_espacio: dataPaid.getData,
+          dias_disponibilidad: {
+            ...dataDays.getData,
+            hora_inicio: infoHorary.time_start,
+            hora_fin: infoHorary.time_end,
+          },
+          caracteristicas_espacio: {
+            ...dataInfoSite.getData,
+            adicionales: additionalsInfo,
+          },
+          activo_coworking: "0",
+          activo_interno: "0",
+          id_estado_espacio: dataFilters.estadoEspacios.find(
+            (estado) => estado.descripcion === "Inactivo"
+          )?.id,
+        },
+      }
+    );
+
+    setLoading(false);
+    setSiteId(res.data.id);
+    if (res.data.message) {
+      return toast.error(res.data.message, { id: "1" });
+    }
+
+    if (res.code !== 200) {
+      return toast.error("No se ha podido guardar", { id: "2" });
+    }
 
     if (!idSite) {
-      const res = await fetchFn(
-        idSite
-          ? `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`
-          : `/place?email=${session?.user.emailHash}`,
-        {
-          method: idSite ? "PUT" : "POST",
-          body: {
-            ...dataForm,
-            tarifas_espacio: dataPaid.getData,
-            dias_disponibilidad: {
-              ...dataDays.getData,
-              hora_inicio: infoHorary.time_start,
-              hora_fin: infoHorary.time_end,
-            },
-            caracteristicas_espacio: {
-              ...dataInfoSite.getData,
-              adicionales: additionalsInfo,
-            },
-            activo_coworking: "0",
-            activo_interno: "0",
-            id_estado_espacio: dataFilters.estadoEspacios.find(
-              (estado) => estado.descripcion === "Inactivo"
-            )?.id,
-          },
-        }
-      );
-
-      setLoading(false);
-      setSiteId(res.data.id);
-      if (res.data.message) {
-        return toast.error(res.data.message, { id: toastLoading });
-      }
-
-      if (res.code !== 200) {
-        return toast.error("No se ha podido guardar", { id: toastLoading });
-      }
-
       setContent("images");
-      return toast.success(toastLoading);
     }
+    router.back()
+    return toast.success("Se ha guardado la información", {
+      id: "Save",
+    });
   };
 
   useEffect(() => {
@@ -369,7 +371,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
       }
     }
   }, [status]);
-  
+
   const classCheck = "m-2 p-2 rounded-xl border-2 border-borders-light";
   return (
     <>
@@ -900,8 +902,14 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               </div>
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
                 <Button type="submit" text="Guardar" />
-                {idSite &&(
-                  <Button type="button" onClick={()=>{setContent("sites")}} text="Atrás" />
+                {idSite && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setContent("sites");
+                    }}
+                    text="Atrás"
+                  />
                 )}
               </div>
               <p>{`Páginas 2/${idSite ? "2" : "3"}`}</p>
