@@ -23,8 +23,8 @@ const CategoryForm = () => {
   const [content, setContent] = useState<"add" | "images">("add");
   const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
   const { setFilesField, setData } = useFormData({
-    minFiles: 3,
-    maxFiles: 10,
+    minFiles: 1,
+    maxFiles: 5,
     fdFilesName: "images",
   });
   const router = useRouter();
@@ -86,6 +86,11 @@ const CategoryForm = () => {
       method: "POST",
       formData: fd,
     });
+    console.log({
+      email: session?.user.emailHash,
+      id_category: categoryId,
+    })
+    console.log(res)
     setLoading(false);
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
@@ -141,17 +146,6 @@ const CategoryForm = () => {
                   onChange={validData.setField}
                   description="*Por favor ingresar un nombre válido en minúscula y sin caracteres especiales (Ejemplo: Nombre: Deportes, identificador: sports)*"
                 />
-
-                {/* <SelectForm
-                  name="state_category"
-                  required={true}
-                  onChange={() => {}}
-                  label={{ required: true, value: "Estado:" }}
-                  placeholder="Seleccionar estado"
-                >
-                  <SelectItem key={1}>Activo</SelectItem>
-                  <SelectItem key={2}>Inactivo</SelectItem>
-                </SelectForm> */}
 
                 <TextareaForm
                   name="descripcion"
@@ -215,11 +209,9 @@ const CategoryForm = () => {
                   {imageList.length === 0 && (
                     <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
                       <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                        * Puede subir mínimo 3 fotos, máximo 5. <br />{" "}
-                        Resolución recomendada: 1920 x 1080 *
-                        <br />
-                        extensiones de archivo: jpg, png, jpeg
-                      </p>
+                    * Puede subir mínimo 1 imagen, máximo 5 imagen. <br />
+                    extensiones de archivo: jpg, png, jpeg
+                  </p>
                     </div>
                   )}
                   <button

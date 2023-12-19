@@ -4,14 +4,18 @@ import Dates from "@/components/pages/Dates";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default async function DatesPages(){
+export default async function DatesPages({
+    params,
+  }: {
+    params: { id: string };
+  }){
       const session = await getServerSession(authOptions)
       if (session?.user.interno) return redirect("/sites")
     return(
         <>
         <Header/>
-        <main>
-            <Dates />
+        <main className="margin-header">
+            <Dates idSite={params.id} />
         </main>
         </>
     )

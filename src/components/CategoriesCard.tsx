@@ -16,7 +16,7 @@ const CategoriesCards = () => {
   if (categories.length > 0) {
     return (
       <section
-        className="sm:grid lg:grid-cols-3 sm:grid-cols-2 md:grid-col-3 gap-5 mt-10 mx-auto mb-10 items-center"
+        className="sm:grid lg:grid-cols-3 sm:grid-cols-2 md:grid-col-3 xl:grid-cols-4 gap-5 mt-10 mx-auto mb-10 items-center"
         style={{
           scrollSnapType: "x proximity",
         }}

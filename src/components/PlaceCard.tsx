@@ -1,12 +1,9 @@
 "use client";
 
-import { convertToCurrency } from "@/libs/functionsStrings";
 import { PlaceCard } from "@/types/d";
-import { Badge, Image, ScrollShadow } from "@nextui-org/react";
+import { Image, ScrollShadow } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import TableSvg from "./icons/TableSvg";
-import ChairSvg from "./icons/ChairSvg";
 
 const PlaceCard = ({ place }: { place: PlaceCard }) => {
 	const router = useRouter();

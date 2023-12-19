@@ -15,7 +15,7 @@ import Input from "../forms/Input";
 import Select from "../forms/Select";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
-import { SelectItem } from "@nextui-org/react";
+import { Chip, ChipProps, SelectItem } from "@nextui-org/react";
 import ButtonTable from "../ButtonTable";
 import { CategoryTextShort, SiteTbl } from "@/types/d";
 import {
@@ -62,6 +62,12 @@ const TableData: React.FC<Props> = ({
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const statusColorMap: Record<string, ChipProps["color"]> = {
+    Activo: "success",
+    Inactivo: "danger",
+    Mantenimiento: "warning"
+  };
 
   const instance = useTableInstance(table, {
     data,
@@ -116,7 +122,13 @@ const TableData: React.FC<Props> = ({
             <div className="text-center text-default-300 select-none">
               <i className="bi bi-x-circle text-7xl"></i>
               <p className="text-4xl mt-[1%]">
-                No se existen espacios para está categoría
+                No existen espacios para está categoría <br />
+                <p
+                  className="py-2 text-center hover:text-blue transition-all hover:underline text-2xl cursor-pointer"
+                  onClick={() => router.push("/sites/add")}
+                >
+                  Click para crear sitio
+                </p>
               </p>
             </div>
           </>
@@ -240,7 +252,19 @@ const TableData: React.FC<Props> = ({
                                 stringIncludes(cell.column.id, [
                                   "estado_espacio",
                                 ])
-                              )console.log(valueRender); {
+                              ) {
+                                return (
+                                  <Chip
+                                    className="capitalize border-none gap-1"
+                                    color={
+                                      statusColorMap[valueRender]
+                                    }
+                                    size="lg"
+                                    variant="dot"
+                                  >
+                                    {valueRender}
+                                  </Chip>
+                                );
                               }
                               if (stringIncludes(cell.column.id, ["options"])) {
                                 return (

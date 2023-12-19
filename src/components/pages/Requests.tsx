@@ -231,7 +231,7 @@ const Requests = ({ params }: Props) => {
               <div className="text-center text-default-300 select-none mt-[7%]">
                 <i className="bi bi-x-circle text-7xl"></i>
                 <p className="text-4xl mt-[1%]">
-                  No se encuentran solicitudes <br /> para {categoryFound?.name}
+                  No existen solicitudes <br /> para {categoryFound?.name}
                 </p>
               </div>
             </>

@@ -23,10 +23,6 @@ const CategoriesComponent = () => {
   const [contentModal, setContentModal] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const statusColorMap: Record<string, ChipProps["color"]> = {
-    1: "success",
-    0: "danger",
-  };
   const categories = useAppSelector((state) => state.categoriesReducer);
 
   const getCategories = async () => {
@@ -208,7 +204,7 @@ const CategoriesComponent = () => {
                   <div className="w-[10%] h-full px-2 items-center text-center flex-center">
                     <Chip
                       className="capitalize border-none gap-1"
-                      color={statusColorMap[category.estado]}
+                      color={category.estado === "1"? "success": "danger"}
                       size="lg"
                       variant="dot"
                     >

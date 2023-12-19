@@ -21,7 +21,6 @@ const ModalEditCategory = ({
   onCloseModal: () => any;
 }) => {
   const { data: session, status } = useSession();
-  const [stateCategory, setStateCategory] = useState<0 | 1>(0);
   const dispatch = useAppDispatch();
 
   const getCategories = async () => {
@@ -48,12 +47,6 @@ const ModalEditCategory = ({
         type: "str",
         required: true,
         value: category?.id ? category?.titulo : undefined,
-      },
-      {
-        name: "identificador",
-        type: "str",
-        required: true,
-        value: category?.id ? category?.identificador : undefined,
       },
       {
         name: "descripcion",
@@ -87,10 +80,9 @@ const ModalEditCategory = ({
       body: {
         email: session?.user.emailHash,
         id_category: category?.id,
-        identificador: categoryInfo.getData.identificador,
         descripcion: categoryInfo.getData.descripcion,
         titulo: categoryInfo.getData.titulo,
-        estado: stateCategory ?? categoryInfo.getData.estado,
+        estado: categoryInfo.getData.estado,
       },
     });
     if (response.code !== 200) {
@@ -127,32 +119,16 @@ const ModalEditCategory = ({
               },
             }}
           />
-          <InputForm
-            name="identificador"
-            defaultValue={category?.identificador}
-            placeholder="Identificador de la categoría"
-            validations={{
-              required: "Este campo es obligatorio",
-              maxLength: {
-                value: 30,
-                message: "Maxímo se pueden ingresar 30 caracteres",
-              },
-            }}
-            label={{ required: true, value: "Nombre identificador:" }}
-            onChange={categoryInfo.setField}
-            description="*Por favor ingresar un nombre válido en minúscula, sin caracteres especiales y sin espacios (Ejemplo: Nombre: Deportes, identificador: sports)*"
-          />
-
           <SelectForm
-            name="state_category"
-            defaultValue={category?.estado === "1" ? "1" : "2"}
+            name="estado"
+            defaultValue={category?.estado}
             required={true}
-            onChange={() => {}}
+            onChange={categoryInfo.setField}
             label={{ required: true, value: "Estado:" }}
             placeholder="Seleccionar estado"
           >
-            <SelectItem key={1}>Activo</SelectItem>
-            <SelectItem key={2}>Inactivo</SelectItem>
+            <SelectItem key={1} value="1">Activo</SelectItem>
+            <SelectItem key={2} value="0">Inactivo</SelectItem>
           </SelectForm>
           <TextareaForm
             name="descripcion"

@@ -32,8 +32,6 @@ export default function ModalImage({
   const onChange = (imageList: ImageListType) =>
     setImages(imageList as never[]);
 
-  console.log(siteId)
-
   const sendImages = async () => {
     if (status === "loading") {
       return toast.error("Cargando información del usuario...");
@@ -58,6 +56,7 @@ export default function ModalImage({
       method: "POST",
       formData: fd,
     });
+    console.log(response)
     if (response.code !== 200) {
       setLoading(false);
       return toast.error("Ha ocurrido un error", { id: toastLoading });

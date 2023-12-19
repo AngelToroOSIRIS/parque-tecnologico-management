@@ -266,12 +266,52 @@ const Header = () => {
             </div>
           )}
           {user.interno && (
-            <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-90 rounded-lg my-2">
-              <i
-                onClick={() => setShowModal(true)}
-                className="bi bi-box-arrow-right text-xl hover:text-primary m-2 transition-all"
-              ></i>
-            </div>
+            <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-90 rounded-lg lg:rounded-lg lg:rounded-l-none my-2">
+            <Modal
+              isOpen={showModal}
+              setIsOpen={setShowModal}
+              classContainer="max-w-[450px]"
+            >
+              <>
+                <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
+                  Cerrar sesión
+                </h1>
+                <div>
+                  <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+                    ¿Seguro que quiere cerrar sesión?
+                  </p>
+                </div>
+                <div className="flex items-center gap-7 pb-3 justify-center text-center">
+                  <div className="mt-5">
+                    <button
+                      onClick={() => {
+                        signOut({ callbackUrl: "/" });
+                      }}
+                      type="button"
+                      className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                  <div className="mt-5">
+                    <button
+                      type="button"
+                      className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
+                      onClick={() => {
+                        setShowModal(false);
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              </>
+            </Modal>
+            <i
+              onClick={() => setShowModal(true)}
+              className="bi bi-box-arrow-right text-xl hover:text-primary m-2 transition-all"
+            ></i>
+          </div>
           )}
         </section>
       </nav>

@@ -36,6 +36,12 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
         value: idSite ? dataEdit?.id_categoria : undefined,
       },
       {
+        name: "id_identificador_enlace",
+        type: "int",
+        required: false,
+        value: idSite ? dataEdit?.id_identificador_enlace : undefined,
+      },
+      {
         name: "id_estado_espacio",
         type: "int",
         required: true,
@@ -338,12 +344,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
         },
       }
     );
-
     setLoading(false);
-    if (res.data.message) {
-      return toast.error(res.data.message, { id: "1" });
-    }
-
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: "2" });
     }
@@ -398,28 +399,26 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   },
                 }}
               />
-              {!idSite && (
-                <SelectForm
-                  name="id_identificador_enlace"
-                  defaultValue={
-                    dataEdit?.id_identificador_enlace
-                      ? String(dataEdit?.id_identificador_enlace)
-                      : undefined
-                  }
-                  placeholder="Seleccionar Identificador de enlace"
-                  label={{
-                    required: false,
-                    value: "Identificador de enlace:",
-                  }}
-                  onChange={setField}
-                >
-                  {dataFilters.identificadoresEnlace.map((enlace) => (
-                    <SelectItem key={enlace.id} value={enlace.id}>
-                      {enlace.llave}
-                    </SelectItem>
-                  ))}
-                </SelectForm>
-              )}
+              <SelectForm
+                name="id_identificador_enlace"
+                defaultValue={
+                  dataEdit?.id_identificador_enlace
+                    ? String(dataEdit?.id_identificador_enlace)
+                    : undefined
+                }
+                placeholder="Seleccionar Identificador de enlace"
+                label={{
+                  required: false,
+                  value: "Identificador de enlace:",
+                }}
+                onChange={setField}
+              >
+                {dataFilters.identificadoresEnlace.map((enlace) => (
+                  <SelectItem key={enlace.id} value={enlace.id}>
+                    {enlace.llave}
+                  </SelectItem>
+                ))}
+              </SelectForm>
             </div>
             <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
               <SelectForm

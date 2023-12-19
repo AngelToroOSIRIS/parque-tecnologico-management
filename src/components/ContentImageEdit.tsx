@@ -43,6 +43,9 @@ export function ContentImageEdit({
       method: "PUT",
       formData: fd,
     });
+
+    console.log(response)
+
     if (response.code !== 200) {
       toast.error("Ha ocurrido un error", { id: toastLoading });
       return;

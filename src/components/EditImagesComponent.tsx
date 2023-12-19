@@ -54,6 +54,8 @@ export function EditImagesComponent({ id }: { id?: string }) {
       method: "PUT",
       formData: fd,
     });
+
+
     if (response.code !== 200) {
       toast.error("Ha ocurrido un error", { id: toastLoading });
       return;

@@ -10,13 +10,14 @@ import Modal from "../Modal";
 import Calendar from "../Calendar";
 import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
-import { ReservationSite, Site } from "@/types/d";
+import { RequestData, ReservationSite, Site } from "@/types/d";
 import TableCalendarSite from "../TableCalendarSite";
 import { convertToCurrency, formatDate } from "@/libs/functionsStrings";
 import { useRouter } from "next/navigation";
+import ReservationRecordCard from "../ReservationRecordCard";
 
 const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [dataSite, setDataSite] = useState<Site>();
   const [selectedReservation, setSelectedReservation] =
@@ -24,6 +25,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   const [reservationSite, setReservationSite] = useState<ReservationSite[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [contentModal, setContentModal] = useState<string>("");
+  const [selectedRequest, setSelectedRequest] = useState<RequestData>();
   const { data, status } = useSession();
   const userSession = data?.user ?? {
     name: "default",
@@ -71,7 +73,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   useEffect(() => {
     if (status === "authenticated") {
       getData();
-      getDataPlace()
+      getDataPlace();
     }
   }, [status]);
   return (
@@ -254,6 +256,21 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                         <div className="m-5">
                           <Calendar idPlace={idPlace} />
                         </div>
+                      </>
+                    )}
+                    {contentModal === "history" && (
+                      <>
+                        <p className="text-xl m-5 font-semibold text-primary text-center">
+                          Historial de actualizaciones
+                        </p>
+                        <section className="flex flex-col gap-5">
+                          {selectedRequest?.historial.map((record) => (
+                            <ReservationRecordCard
+                              record={record}
+                              key={record.id}
+                            />
+                          ))}
+                        </section>
                       </>
                     )}
                   </div>
