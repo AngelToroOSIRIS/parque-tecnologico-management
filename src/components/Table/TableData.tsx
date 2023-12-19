@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
 import { SelectItem } from "@nextui-org/react";
 import ButtonTable from "../ButtonTable";
-import { CategoryTextShort } from "@/types/d";
+import { CategoryTextShort, SiteTbl } from "@/types/d";
 import {
   formatDate,
   includesString,
@@ -34,14 +34,12 @@ interface Props {
   category: CategoryTextShort;
   description: string;
   className?: string;
-  idSite?: number;
 }
 
 const TableData: React.FC<Props> = ({
   columnsArray,
   category,
   dataArray,
-  idSite,
   createdTable,
   description,
   className = "",
@@ -53,7 +51,6 @@ const TableData: React.FC<Props> = ({
   const [data] = useState<any>(dataArray);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [statusSite, setStatusSite] = useState<"activo" | "inactivo" | "">("");
   const [currentPage, setCurrentPage] = useState<number>(0);
   const { data: session, status } = useSession();
   const userSession = session?.user ?? {
@@ -96,12 +93,6 @@ const TableData: React.FC<Props> = ({
     .getFilteredRowModel()
     .rows.map((row) => row.original);
 
-  const updateData = async () => {
-    const response = fetchFn(
-      `/updatePlace?email=${session?.user.emailHash}&id_espacio=${idSite}`
-    );
-  };
-
   useEffect(() => {
     const totalPages = instance.getPageCount();
     const pQuery = 1;
@@ -120,43 +111,6 @@ const TableData: React.FC<Props> = ({
   if (!loading)
     return (
       <Fragment>
-        <Modal
-          isOpen={showModal}
-          setIsOpen={setShowModal}
-          classContainer="w-[95%] max-w-[500px]"
-        >
-          <>
-            <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
-              Inhabilitar sitio
-            </h1>
-            <div>
-              <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
-                ¿Seguro que quiere Inhabilitar el sitio?
-              </p>
-            </div>
-            <div className="flex items-center gap-7 pb-3 justify-center text-center">
-              <div className="mt-5">
-                <button
-                  type="button"
-                  className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
-                >
-                  Inhabilitar sitio
-                </button>
-              </div>
-              <div className="mt-5">
-                <button
-                  type="button"
-                  className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
-                  onClick={() => {
-                    setShowModal(false)
-                  }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </>
-        </Modal>
         {instance.getFilteredRowModel().rows.length === 0 && (
           <>
             <div className="text-center text-default-300 select-none">
@@ -235,7 +189,7 @@ const TableData: React.FC<Props> = ({
                 </div>
               </section>
               <section className="overflow-hidden rounded-lg border border-borders-light">
-                <section className="overflow-x-scroll overflow-y-hidden">
+                <section className="overflow-y-auto 2xl:overflow-hidden">
                   <table
                     className={`table-data min-w-[1800PX] border-collapse overflow-hidden ${className}`}
                   >
@@ -286,7 +240,7 @@ const TableData: React.FC<Props> = ({
                                 stringIncludes(cell.column.id, [
                                   "estado_espacio",
                                 ])
-                              ) {
+                              )console.log(valueRender); {
                               }
                               if (stringIncludes(cell.column.id, ["options"])) {
                                 return (
@@ -338,11 +292,6 @@ const TableData: React.FC<Props> = ({
                                           >
                                             <i className="bi bi-images m-2 text-xl"></i>
                                           </span>
-                                          <i
-                                            title="Inhabilitar sitio"
-                                            onClick={() => setShowModal(true)}
-                                            className="bi bi-dash-circle text-lg hover:text-primary text-default-400 m-2 transition-all"
-                                          ></i>
                                         </>
                                       )}
                                     </div>
@@ -361,160 +310,162 @@ const TableData: React.FC<Props> = ({
                     </tbody>
                   </table>
                 </section>
-                <section className="md:grid md:grid-cols-3 w-full px-4 border-t border-borders-light bg-gray-box items-center text-center">
-                  <div className="hidden md:flex items-center gap-3">
-                    <p className="font-medium text-dark-gray">Página: </p>
-                    <Input
-                      className="my-0 py-1 max-w-[70px]"
-                      type="number"
-                      value={(currentPage + 1).toString()}
-                      onChange={({ value }) => {
-                        if (Number(value) <= instance.getPageCount()) {
-                          const page = value ? Number(value) - 1 : 0;
-                          instance.setPageIndex(page);
-                          setCurrentPage(page);
+                {instance.getFilteredRowModel().rows.length > 5 && (
+                  <section className="md:grid md:grid-cols-3 w-full px-4 border-t border-borders-light bg-gray-box items-center text-center">
+                    <div className="hidden md:flex items-center gap-3">
+                      <p className="font-medium text-dark-gray">Página: </p>
+                      <Input
+                        className="my-0 py-1 max-w-[80px]  "
+                        type="number"
+                        value={(currentPage + 1).toString()}
+                        onChange={({ value }) => {
+                          if (Number(value) <= instance.getPageCount()) {
+                            const page = value ? Number(value) - 1 : 0;
+                            instance.setPageIndex(page);
+                            setCurrentPage(page);
+                          }
+                        }}
+                      />
+                      <p className="font-medium text-dark-gray">
+                        Cantidad de filas:{" "}
+                      </p>
+                      <Select
+                        placeholder="Seleccionar"
+                        className="my-0 py-1 max-w-[80px]"
+                        defaultValue={String(
+                          instance.getState().pagination.pageSize
+                        )}
+                        onChange={({ value }) => {
+                          instance.setPageSize(Number(value));
+                        }}
+                      >
+                        {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                          <SelectItem key={pageSize} value={pageSize}>
+                            {pageSize}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    </div>
+                    <div className="flex my-3 md:my-0 justify-center items-center gap-2 h-full">
+                      <button
+                        className={
+                          instance.getCanPreviousPage()
+                            ? nextPageClass
+                            : nextPageClassDisabled
                         }
-                      }}
-                    />
-                    <p className="font-medium text-dark-gray">
-                      Cantidad de filas:{" "}
+                        onClick={() => {
+                          setCurrentPage(0);
+                          instance.setPageIndex(0);
+                        }}
+                        disabled={!instance.getCanPreviousPage()}
+                        title="Primer página"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        className={
+                          instance.getCanPreviousPage()
+                            ? nextPageClass
+                            : nextPageClassDisabled
+                        }
+                        onClick={() => {
+                          setCurrentPage(currentPage - 1);
+                          instance.previousPage();
+                        }}
+                        disabled={!instance.getCanPreviousPage()}
+                        title="Página anterior"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.75 19.5L8.25 12l7.5-7.5"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        className={
+                          instance.getCanNextPage()
+                            ? nextPageClass
+                            : nextPageClassDisabled
+                        }
+                        onClick={() => {
+                          setCurrentPage(currentPage + 1);
+                          instance.nextPage();
+                        }}
+                        disabled={!instance.getCanNextPage()}
+                        title="Página siguiente"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        className={
+                          instance.getCanNextPage()
+                            ? nextPageClass
+                            : nextPageClassDisabled
+                        }
+                        onClick={() => {
+                          setCurrentPage(instance.getPageCount() - 1);
+                          instance.setPageIndex(instance.getPageCount() - 1);
+                        }}
+                        disabled={!instance.getCanNextPage()}
+                        title="Última página"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <p className="font-medium text-borders text-end">
+                      {description} encontrados:{" "}
+                      {instance.getFilteredRowModel().rows.length}
                     </p>
-                    <Select
-                      placeholder="Seleccionar"
-                      className="my-0 py-1 max-w-[70px]"
-                      defaultValue={String(
-                        instance.getState().pagination.pageSize
-                      )}
-                      onChange={({ value }) => {
-                        instance.setPageSize(Number(value));
-                      }}
-                    >
-                      {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                        <SelectItem key={pageSize} value={pageSize}>
-                          {pageSize}
-                        </SelectItem>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className="flex my-3 md:my-0 justify-center items-center gap-2 h-full">
-                    <button
-                      className={
-                        instance.getCanPreviousPage()
-                          ? nextPageClass
-                          : nextPageClassDisabled
-                      }
-                      onClick={() => {
-                        setCurrentPage(0);
-                        instance.setPageIndex(0);
-                      }}
-                      disabled={!instance.getCanPreviousPage()}
-                      title="Primer página"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      className={
-                        instance.getCanPreviousPage()
-                          ? nextPageClass
-                          : nextPageClassDisabled
-                      }
-                      onClick={() => {
-                        setCurrentPage(currentPage - 1);
-                        instance.previousPage();
-                      }}
-                      disabled={!instance.getCanPreviousPage()}
-                      title="Página anterior"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.75 19.5L8.25 12l7.5-7.5"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      className={
-                        instance.getCanNextPage()
-                          ? nextPageClass
-                          : nextPageClassDisabled
-                      }
-                      onClick={() => {
-                        setCurrentPage(currentPage + 1);
-                        instance.nextPage();
-                      }}
-                      disabled={!instance.getCanNextPage()}
-                      title="Página siguiente"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      className={
-                        instance.getCanNextPage()
-                          ? nextPageClass
-                          : nextPageClassDisabled
-                      }
-                      onClick={() => {
-                        setCurrentPage(instance.getPageCount() - 1);
-                        instance.setPageIndex(instance.getPageCount() - 1);
-                      }}
-                      disabled={!instance.getCanNextPage()}
-                      title="Última página"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <p className="font-medium text-borders text-end">
-                    {description} encontrados:{" "}
-                    {instance.getFilteredRowModel().rows.length}
-                  </p>
-                </section>
+                  </section>
+                )}
               </section>
             </div>
           </>

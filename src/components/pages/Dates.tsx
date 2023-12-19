@@ -1,17 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputForm from "../forms/InputForm";
 import ButtonTable from "../ButtonTable";
 import Button from "../Button";
 import { useRouter } from "next/navigation";
 import TextareaForm from "../forms/TextareaForm";
 import Modal from "../Modal";
+import useValidateForm from "@/hooks/useValidateForm";
+import toast from "react-hot-toast";
+import fetchFn from "@/libs/fetchFn";
+import { useSession } from "next-auth/react";
+import { Availability } from "@/types/d";
+import { DtPicker } from "../react-calendar-datetime-picker/dist";
 
 const Dates = () => {
   const [adittion, setAdittion] = useState<boolean>(false);
+  const [dataAvail, setDataAvail] = useState<Availability>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const dataDates = useValidateForm([
+    { name: "fecha_inicio", type: "str", required: true },
+    { name: "fecha_fin", type: "str", required: true },
+    { name: "observation", type: "str", required: true },
+  ]);
+  const { data: session, status } = useSession();
+  const userSession = session?.user ?? {
+    name: "default",
+    email: "useremail",
+    rols: [],
+  };
   const router = useRouter();
+
+  const getData = async ()=>{
+    const res = await fetchFn(`/availabilityPlaces?email=${session?.user.emailHash}&id_place=`, {
+    })
+    if(res.code !== 200) {
+      return toast.error("No se ha podido obtener la información", {id: "1"})
+    }
+    setDataAvail(res.data)
+  }
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
+    e.preventDefault();
+    if(!dataDates.validData){
+      return toast.error("Por favor complete el formulario", { id: "empty" });
+    }
+    setLoading(true);
+    const toastLoading = toast.loading("Guardando información...", {
+      id: "Save",
+    });
+
+    const response = await fetchFn(`/createAvailabilityPlace?email=${session?.user.emailHash}`, {
+      method: "POST",
+      body: {
+        id_place: 1,
+        start_date: dataDates.getData,
+        end_date: dataDates.getData,
+        observations: dataDates.getData,
+    
+      }
+    })
+
+  }
+
+  useEffect(() => {
+
+  }, [])
+  
+
   return (
     <>
       <Modal
@@ -52,7 +110,10 @@ const Dates = () => {
           </div>
         </>
       </Modal>
-      <div className="w-[75%] mx-auto margin-header flex justify-between">
+      <h2 className="margin-header text-center text-primary font-bold justify-center text-2xl items-center mx-auto">
+        Fechas disponibles del sitio
+      </h2>
+      <div className="w-[75%] mx-auto flex justify-between">
         <div className="w-[150px]">
           <ButtonTable
             text="Volver"
@@ -62,9 +123,6 @@ const Dates = () => {
             }}
           />
         </div>
-        <h2 className="text-center text-primary font-bold justify-center text-2xl items-center mx-auto">
-          Fechas disponibles del sitio
-        </h2>
       </div>
       <button
         className="flex gap-3 mt-7 mx-auto text-primary font-bold text-xl bg-hover rounded-2xl px-4"
@@ -78,18 +136,43 @@ const Dates = () => {
       </button>
       {adittion && (
         <>
-          <div className="w-full max-w-[40%] mx-auto mt-5 p-5 normal-shadow rounded-xl bg-default-white">
-            <div className="flex-center gap-10">
-              <InputForm name="Fecha Inicio" type="date" onChange={() => {}} />
-              <InputForm name="Fecha Fin" type="date" onChange={() => {}} />
+          <form className="w-full max-w-[42%] mx-auto mt-5 p-7 normal-shadow rounded-xl bg-default-white">
+            <div className="flex-center gap-10 m-2">
+              <InputForm
+                name="fecha_inicio"
+                label={{ value: "Fecha Inicio", required: true }}
+                type="date"
+                onChange={() => {dataDates.setField}}
+              />
+              <InputForm
+                name="fecha_fin"
+                type="date"
+                label={{ value: "Fecha fin", required: true }}
+                onChange={() => {dataDates.setField}}
+              />
             </div>
             <div className="mt-5">
-              <TextareaForm name="Observation" onChange={() => {}} />
+              <TextareaForm
+                name="observation"
+                validations={{
+                  maxLength: {
+                    value: 200,
+                    message: "Se reciben máximo 200 caracteres",
+                  },
+                  minLength: {
+                    value: 15,
+                    message: "Se requieren mínimo 15 caracteres",
+                  },
+                }}
+                placeholder="Ingresar observación"
+                label={{ value: "Observaciones", required: true }}
+                onChange={() => {dataDates.setField}}
+              />
             </div>
             <div className="w-[35%] mx-auto p-2">
-              <Button text="Guardar" onClick={() => {}} />
+              <Button text="Guardar" disabled={!dataDates.validData} onClick={() => {}} />
             </div>
-          </div>
+          </form>
         </>
       )}
       <section className="w-[75%] mt-6 overflow-x mb-10 mx-auto normal-shadow p-3 rounded-xl bg-default-white">
@@ -101,8 +184,8 @@ const Dates = () => {
             <div className="w-[10%]">OPCIONES</div>
           </article>
           <article className="my-5 flex w-auto justify-between items-center">
-            <div className="w-[20%]">08:00 AM</div>
-            <div className="w-[20%]">18:00 AM</div>
+            <div className="w-[20%] px-2">08:00 AM</div>
+            <div className="w-[20%] px-2">18:00 AM</div>
             <div className="w-[50%]">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
               nemo sint vitae velit voluptatem exercitationem fuga earum, ipsa,
@@ -118,8 +201,8 @@ const Dates = () => {
             </div>
           </article>
           <article className="my-5 flex w-auto justify-between items-center">
-            <div className="w-[20%]">08:00 AM</div>
-            <div className="w-[20%]">14:00 AM</div>
+            <div className="w-[20%] px-2">08:00 AM</div>
+            <div className="w-[20%] px-2">14:00 AM</div>
             <div className="w-[50%]">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
               nemo sint vitae velit voluptatem exercitationem fuga earum, ipsa,
@@ -135,8 +218,8 @@ const Dates = () => {
             </div>
           </article>
           <article className="my-5 flex w-auto justify-between items-center">
-            <div className="w-[20%]">02:00 AM</div>
-            <div className="w-[20%]">05:00 AM</div>
+            <div className="w-[20%] px-2">02:00 AM</div>
+            <div className="w-[20%] px-2">05:00 AM</div>
             <div className="w-[50%]">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
               nemo sint vitae velit voluptatem exercitationem fuga earum, ipsa,

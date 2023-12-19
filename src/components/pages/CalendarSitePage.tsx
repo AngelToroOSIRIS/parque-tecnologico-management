@@ -77,7 +77,7 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   return (
     <>
       <div>
-        <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
+        <p className="text-center text-primary margin-header md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
           Reservaciones de {dataSite?.nombre}
         </p>
         <>

@@ -44,6 +44,7 @@ const Header = () => {
     if (categories.data.length < 1) getCategories();
   }, [categories]);
 
+
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start shadow-md bg-gray-box border-b border-borders-light z-40 select-none">
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
@@ -67,7 +68,7 @@ const Header = () => {
                 className="flex p-1 items-center w-[40px] lg:w-[100px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
                 <i className="bi bi-house-door text-primary text-xl"></i>
-                <p className="ml-2 hidden lg:block">Inicio</p>
+                <p className="ml-2 hidden md:block">Inicio</p>
               </Link>
             )}
 
@@ -77,7 +78,7 @@ const Header = () => {
                 className="flex p-1 items-center w-[40px] lg:w-[100px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
               >
                 <i className="bi bi-house-door text-primary text-xl"></i>
-                <p className="ml-2 hidden lg:block">Inicio</p>
+                <p className="ml-2 hidden md:block">Inicio</p>
               </Link>
             )}
 
@@ -103,7 +104,7 @@ const Header = () => {
                   >
                     <Menu.Button as="li" className={"flex px-2 w-full"}>
                       <i className="bi bi-layers text-lg text-primary"></i>{" "}
-                      <p className="ml-2 hidden cursor-pointer lg:flex">
+                      <p className="ml-2 hidden cursor-pointer md:flex">
                         Categorías
                       </p>
                     </Menu.Button>
@@ -181,7 +182,7 @@ const Header = () => {
                       className="flex p-2 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
                     >
                       <i className="bi bi-people text-primary text-xl"></i>
-                      <p className="ml-2 hidden lg:block">Usuarios</p>
+                      <p className="ml-2 hidden md:block">Usuarios</p>
                     </Link>
                   )}
               </div>
@@ -209,8 +210,8 @@ const Header = () => {
 
               {status === "authenticated" && (
                 <>
-                  <p className="text-xs mx-auto text-center border-b-2 w-[85%] border-borders-light hover:border-primary hover:font-semibold transition-all">
-                    {user.name}
+                  <p className="text-xs mx-auto text-center text-default-700 font-semibold">
+                    {user.name?.split(" ")[0]}
                   </p>
                 </>
               )}

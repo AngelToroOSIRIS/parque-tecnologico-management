@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import ButtonTable from "../ButtonTable";
 import Calendar from "@/components/Calendar";
 import { DtCalendar } from "../react-calendar-datetime-picker/dist";
 import { categoriesObj } from "@/libs/staticData";
@@ -74,7 +73,7 @@ export default function CalendaryCategory({
     return (
       <>
         <>
-          <p className="text-center text-primary mt-[20%] md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
+          <p className="text-center text-primary margin-header md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
             Agenda de {categoryFound?.name}
           </p>
           {!loading && (

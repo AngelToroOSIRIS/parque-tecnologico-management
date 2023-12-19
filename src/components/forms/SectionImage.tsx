@@ -32,6 +32,8 @@ export default function ModalImage({
   const onChange = (imageList: ImageListType) =>
     setImages(imageList as never[]);
 
+  console.log(siteId)
+
   const sendImages = async () => {
     if (status === "loading") {
       return toast.error("Cargando información del usuario...");
@@ -85,7 +87,7 @@ export default function ModalImage({
           dragProps,
           errors,
         }) => (
-          <div className="w-[80%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
+          <div className="w-[90%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
             <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
               Subir imágenes
             </h1>
@@ -134,7 +136,7 @@ export default function ModalImage({
             )}
 
             {imageList.length > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-5 p-5 gap-7">
+              <div className="grid grid-cols-1 lg:grid-cols-2 text-center m-3 p-5 gap-7">
                 {imageList.map((image, index) => (
                   <div key={index} className="mx-auto">
                     <img

@@ -11,6 +11,14 @@ export interface States {
   descripcion: string;
 }
 
+export interface Availability {
+  id: number,
+	id_espacio: number,
+	fecha_inicio: string,
+	fecha_fin: string,
+	observaciones: string
+}
+
 export interface Enlace {
   id: number;
   llave: string;

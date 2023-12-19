@@ -41,12 +41,6 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
         required: true,
         value: idSite ? dataEdit?.id_estado_espacio : undefined,
       },
-      {
-        name: "id_identificador_enlace",
-        type: "int",
-        required: false,
-        value: idSite ? dataEdit?.id_identificador_enlace : undefined,
-      },
       { name: "nombre", type: "str", required: true, value: dataEdit?.nombre },
       {
         name: "descripcion_corta",
@@ -310,31 +304,11 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     setLoadingData(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!validData) {
       return toast.error("Por favor complete el formulario", { id: "empty" });
     }
     setLoading(true);
-
-    console.log({
-      ...dataForm,
-      tarifas_espacio: dataPaid.getData,
-      dias_disponibilidad: {
-        ...dataDays.getData,
-        hora_inicio: infoHorary.time_start,
-        hora_fin: infoHorary.time_end,
-      },
-      caracteristicas_espacio: {
-        ...dataInfoSite.getData,
-        adicionales: additionalsInfo,
-      },
-      activo_coworking: idSite ? dataForm.activo_coworking : "0",
-      activo_interno: idSite ? dataForm.activo_interno : "0",
-      id_estado_espacio: idSite ? dataForm.id_estado_espacio : dataFilters.estadoEspacios.find(
-        (estado) => estado.descripcion === "Inactivo"
-      )?.id ,
-    })
 
     const res = await fetchFn(
       idSite
@@ -356,15 +330,16 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
           },
           activo_coworking: idSite ? dataForm.activo_coworking : "0",
           activo_interno: idSite ? dataForm.activo_interno : "0",
-          id_estado_espacio: idSite ? dataForm.id_estado_espacio : dataFilters.estadoEspacios.find(
-            (estado) => estado.descripcion === "Inactivo"
-          )?.id ,
+          id_estado_espacio: idSite
+            ? dataForm.id_estado_espacio
+            : dataFilters.estadoEspacios.find(
+                (estado) => estado.descripcion === "Inactivo"
+              )?.id,
         },
       }
     );
 
     setLoading(false);
-    setSiteId(res.data.id);
     if (res.data.message) {
       return toast.error(res.data.message, { id: "1" });
     }
@@ -372,11 +347,13 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: "2" });
     }
+    setSiteId(res.data.id);
 
     if (!idSite) {
       setContent("images");
+    } else {
+      router.back();
     }
-    router.back()
     return toast.success("Se ha guardado la información", {
       id: "Save",
     });
@@ -395,10 +372,10 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
   return (
     <>
       {!loadingData && content === "sites" && (
-        <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
+        <div className="md:w-[80%] w-[90%] bg-gray-box normal-shadow rounded-lg mb-44 mx-auto p-1">
           <form
-            className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-10 m-2"
-            onSubmit={handleSubmit}
+            className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-4 md:p-10 m-2"
+            onSubmit={(e) => e.preventDefault()}
           >
             <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
               {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
@@ -421,26 +398,28 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   },
                 }}
               />
-              <SelectForm
-                name="id_identificador_enlace"
-                defaultValue={
-                  dataEdit?.id_identificador_enlace
-                    ? String(dataEdit?.id_identificador_enlace)
-                    : undefined
-                }
-                placeholder="Seleccionar Identificador de enlace"
-                label={{
-                  required: false,
-                  value: "Identificador de enlace:",
-                }}
-                onChange={setField}
-              >
-                {dataFilters.identificadoresEnlace.map((enlace) => (
-                  <SelectItem key={enlace.id} value={enlace.id}>
-                    {enlace.llave}
-                  </SelectItem>
-                ))}
-              </SelectForm>
+              {!idSite && (
+                <SelectForm
+                  name="id_identificador_enlace"
+                  defaultValue={
+                    dataEdit?.id_identificador_enlace
+                      ? String(dataEdit?.id_identificador_enlace)
+                      : undefined
+                  }
+                  placeholder="Seleccionar Identificador de enlace"
+                  label={{
+                    required: false,
+                    value: "Identificador de enlace:",
+                  }}
+                  onChange={setField}
+                >
+                  {dataFilters.identificadoresEnlace.map((enlace) => (
+                    <SelectItem key={enlace.id} value={enlace.id}>
+                      {enlace.llave}
+                    </SelectItem>
+                  ))}
+                </SelectForm>
+              )}
             </div>
             <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
               <SelectForm
@@ -696,7 +675,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
               <h3 className="text-primary text-center text-lg font-medium m-2">
                 Caracteristicas adicionales:
               </h3>
-              <div className="p-2 lg:w-[40%] mx-auto rounded-xl">
+              <div className="p-2 w-[80%] lg:w-[60%] mx-auto rounded-xl">
                 <DynamicForm
                   defaultValues={additionalsInfo}
                   onChangeValue={(data) => setAdditionalsInfo(data)}
@@ -764,19 +743,19 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 text="Continuar"
               />
             </div>
-            <p>{`Páginas 1/${idSite ? "2" : "3"}`}</p>
+            <p className="m-2">{`Páginas 1/${idSite ? "2" : "3"}`}</p>
           </form>
         </div>
       )}
-      {content === "images" && (
+      {content === "images" && !loading && (
         <SectionImage siteId={siteId} additionalInfo={additionalInfo} />
       )}
       {!loadingData && content === "reservation" && (
         <>
-          <div className="w-[80%] bg-gray-box min-w-unit-8 normal-shadow rounded-lg mb-44 mx-auto p-1">
+          <div className="md:w-[80%] w-[90%] bg-gray-box normal-shadow rounded-lg mb-44 mx-auto p-1">
             <form
-              className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-10 m-2"
-              onSubmit={handleSubmit}
+              className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-4 md:p-10 m-2"
+              onSubmit={(e) => e.preventDefault()}
             >
               <h1 className="text-center text-3xl text-primary font-medium mt-4 mb-10">
                 Disponibilidad del sitio {dataEdit?.nombre}
@@ -920,7 +899,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                 </div>
               </div>
               <div className="flex items-center mx-auto w-full md:w-[520px] justify-center mt-8 gap-5">
-                <Button type="submit" text="Guardar" />
+                <Button onClick={handleSubmit} type="submit" text="Guardar" />
                 {idSite && (
                   <Button
                     type="button"
@@ -931,7 +910,7 @@ const FormSite = ({ idSite }: { idSite?: number }) => {
                   />
                 )}
               </div>
-              <p>{`Páginas 2/${idSite ? "2" : "3"}`}</p>
+              <p className="m-2">{`Páginas 2/${idSite ? "2" : "3"}`}</p>
             </form>
           </div>
         </>
