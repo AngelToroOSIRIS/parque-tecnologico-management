@@ -16,7 +16,13 @@ import { convertToCurrency, formatDate } from "@/libs/functionsStrings";
 import { useRouter } from "next/navigation";
 import ReservationRecordCard from "../ReservationRecordCard";
 
-const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
+const CalendarSitePage = ({
+  idPlace,
+  category,
+}: {
+  idPlace: number;
+  category: string;
+}) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [dataSite, setDataSite] = useState<Site>();
@@ -76,7 +82,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
     }
   }, [status]);
 
-  console.log(selectedReservation)
 
   return (
     <>
@@ -266,12 +271,12 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                           Historial de actualizaciones
                         </p>
                         <section className="flex flex-col gap-5">
-                          {/* {selectedReservation?.his.map((record) => (
+                          {selectedReservation?.historial.map((record) => (
                             <ReservationRecordCard
                               record={record}
                               key={record.id}
                             />
-                          ))} */}
+                          ))}
                         </section>
                       </>
                     )}
@@ -281,19 +286,21 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
 
               <div className="flex justify-between font-medium items-center gap-3 ">
                 <div>
-                <ButtonTable
-                text="Volver"
-                icon="arrow-left"
-                onClick={() => {
-                  router.back();
-                }}
-              />
+                  <ButtonTable
+                    text="Volver"
+                    icon="arrow-left"
+                    onClick={() => {
+                      router.back();
+                    }}
+                  />
                 </div>
                 <div className="flex items-center gap-2 justify-center text-center">
                   <ButtonTable
                     text="Fechas de disponibilidad"
                     onClick={() => {
-                      router.push(`/sites/${idPlace}/dates`);
+                      router.push(
+                        `/categories/${category}/sites/${idPlace}/edit/dates`
+                      );
                     }}
                     icon="calendar-week"
                   />

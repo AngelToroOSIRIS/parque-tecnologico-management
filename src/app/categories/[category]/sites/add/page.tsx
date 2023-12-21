@@ -8,14 +8,18 @@ export const metadata = {
   title: "Crear sitio",
 };
 
-export default async function CreatePage() {
+export default async function CreatePage({
+  params,
+}: {
+  params: { id: string, category: string };
+}) {
   const session = await getServerSession(authOptions)
       if(session?.user.interno) return redirect("/sites")
   return (
     <>
       <Header />
         <main className="margin-header mb-9">
-          <FormSite/>
+          <FormSite categoryParam={params.category} />
         </main>
     </>
   );

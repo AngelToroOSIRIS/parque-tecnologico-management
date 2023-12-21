@@ -1,5 +1,6 @@
 import ButtonTable from "@/components/ButtonTable";
 import Header from "@/components/Header";
+import ImagesGallery from "@/components/ImageGallery";
 // import ImagesGallery from "@/components/ImagesGallery";
 import ChairSvg from "@/components/icons/ChairSvg";
 import TableSvg from "@/components/icons/TableSvg";
@@ -110,7 +111,7 @@ export default async function DetailsPlacePage({
 			<Header />
 			<main className="margin-header container mb-9">
 				<h1 className="font-semibold text-primary text-3xl text-center m-8">{place.nombre}</h1>
-				{/* <section className="lg:flex gap-4 items-start lg:max-h-[599px] justify-between pt-4">
+				<section className="lg:flex gap-4 items-start lg:max-h-[599px] justify-between pt-4">
 					<ImagesGallery
 						images={place.images.map((image) => {
 							return {
@@ -120,8 +121,8 @@ export default async function DetailsPlacePage({
 							};
 						})}
 					/>
-					<DetailsPlace place={place} />
-				</section> */}
+					{/* <DetailsPlace place={place} /> */}
+				</section>
 
 				<section className="md:flex gap-3">
 					<article className="w-full mt-5">

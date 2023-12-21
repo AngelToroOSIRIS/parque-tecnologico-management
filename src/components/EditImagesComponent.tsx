@@ -139,10 +139,25 @@ export function EditImagesComponent({ id }: { id?: string }) {
               </>
             )}
           </Modal>
-          <h1 className="margin-header mb-10 text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
-            Editar imágenes {dataSite.nombre}
-          </h1>
+          <div className="margin-header flex-center justify-between w-[85%] mx-auto mb-10">
+            <div>
+            <ButtonTable
+                  text="Volver"
+                  icon="arrow-left"
+                  onClick={() => {
+                    router.back();
+                  }}
+                />
+            </div>
+            <h1 className="text-center text-3xl font-bold text-primary mx-auto justify-center items-center">
+              Editar imágenes {dataSite.nombre}
+            </h1>
+            <div>
+                
+              </div>
+          </div>
           <div className="mx-auto w-[85%] rounded-lg shadow-xl bg-gray-box mb-14 text-center ">
+            
             <>
               <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto m-5 p-5 gap-7">
                 {dataSite.images.map((image) => (

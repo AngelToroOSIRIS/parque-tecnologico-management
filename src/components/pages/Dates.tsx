@@ -34,7 +34,7 @@ const Dates = ({ idSite }: { idSite: string }) => {
   const dataDates = useValidateForm([
     { name: "start_date", type: "str", required: true },
     { name: "end_date", type: "str", required: true },
-    { name: "observations", type: "str", required: true },
+    { name: "observations", type: "str", required: false },
   ]);
 
   const getData = async () => {
@@ -208,7 +208,7 @@ const Dates = ({ idSite }: { idSite: string }) => {
                       },
                     }}
                     placeholder="Ingresar observación"
-                    label={{ value: "Observaciones", required: true }}
+                    label={{ value: "Observaciones", required: false }}
                     onChange={dataDates.setField}
                   />
                 </div>
@@ -242,7 +242,7 @@ const Dates = ({ idSite }: { idSite: string }) => {
                         {formatDate(date.fecha_inicio, true)}
                       </div>
                       <div className="w-[20%] px-2">
-                        {formatDate(date.fecha_inicio, true)}
+                        {formatDate(date.fecha_fin, true)}
                       </div>
                       <div className="w-[50%]">{date.observaciones}</div>
                       <div className="w-[10%]">

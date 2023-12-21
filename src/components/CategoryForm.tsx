@@ -86,11 +86,6 @@ const CategoryForm = () => {
       method: "POST",
       formData: fd,
     });
-    console.log({
-      email: session?.user.emailHash,
-      id_category: categoryId,
-    });
-    console.log(res);
     setLoading(false);
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });

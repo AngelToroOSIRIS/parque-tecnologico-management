@@ -142,12 +142,17 @@ export default function TableComponent({
       }
       if (columnKey === "info_reservation") {
         return (
-          <i
-            onClick={() => {
-              onClickAction(reservation, "info");
-            }}
-            className="bi bi-info-circle  text-xl text-default-400 hover:text-custom-black transition-all"
-          ></i>
+          <>
+            <i
+              onClick={() => {
+                onClickAction(reservation, "info");
+              }}
+              className="bi bi-info-circle text-xl text-default-400 hover:text-custom-black transition-all"
+            ></i>
+            <i onClick={() => {
+                onClickAction(reservation, "history");
+              }} title="Historial" className="bi bi-clock-history text-xl text-default-400 ml-4 hover:text-custom-black transition-all cursor-pointer"></i>
+          </>
         );
       }
     },

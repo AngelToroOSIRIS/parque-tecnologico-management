@@ -21,7 +21,7 @@ export default async function EditPage({ params }: { params: { id: string, categ
     <>
       <Header />
         <main className="margin-header mb-9">
-          <FormSite idSite={idSite} category={params.category}/>
+          <FormSite idSite={idSite} categoryParam={params.category}/>
         </main>
     </>
   );

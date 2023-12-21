@@ -134,6 +134,7 @@ export interface ReservationSite {
   nombre_espacio: string;
   estado_reservacion: string;
   valor: number;
+  historial: HistoryRequest[];
   valor_descuento: number;
   valor_pagado: number;
   estado_pago: string;
@@ -164,6 +165,7 @@ export interface ReservationCategory {
   id: number;
   id_usuario: number;
   id_espacio: number;
+  historial: HistoryRequest[];
   nombre_espacio: string;
   estado_reservacion: string;
   valor: number;
@@ -259,6 +261,7 @@ export interface SiteInter {
   nombre: string;
   descripcion_corta: string;
   img_card: string;
+  images: ImageSite[];
   caracteristicas_espacio: {
     id: number;
     dimensiones: string;

@@ -145,7 +145,7 @@ export default function TableCalendarSite({
               }} title="información" className="bi bi-info-circle text-xl text-default-400 hover:text-custom-black transition-all mr-4"></i>
               <i onClick={()=>{
                 onClickAction(reservation, "history")
-              }} title="Historial" className="bi bi-clock-history text-xl text-default-400 hover:text-custom-black transition-all"></i>
+              }} title="Historial" className="bi bi-clock-history text-xl text-default-400 hover:text-custom-black transition-all cursor-pointer"></i>
             </>
         )
       }

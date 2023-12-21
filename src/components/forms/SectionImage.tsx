@@ -59,13 +59,12 @@ export default function ModalImage({
       method: "POST",
       formData: fd,
     });
-    console.log(response)
     if (response.code !== 200) {
       setLoading(false);
       return toast.error("Ha ocurrido un error", { id: toastLoading });
     }
     toast.success("Imágenes guardadas", { id: toastLoading });
-    router.push("/");
+    router.push(`/categories/${category}`);
     return;
   };
 

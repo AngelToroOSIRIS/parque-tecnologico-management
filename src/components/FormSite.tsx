@@ -19,11 +19,15 @@ import InputMoney from "./InputMoney";
 import DynamicForm from "./forms/DynamicForm";
 import SelectTime from "./SelectTime";
 import ButtonTable from "./ButtonTable";
+import { useAppSelector } from "@/redux/hook";
 
-const FormSite = ({ idSite , category }: { idSite?: number, category: string }) => {
+const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: string }) => {
   const [dataEdit, setdataEdit] = useState<Site>();
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const { data: session, status } = useSession();
+
+  const categories = useAppSelector((state) => state.categoriesReducer);
+
   const {
     validData,
     getData: dataForm,
@@ -375,6 +379,13 @@ const FormSite = ({ idSite , category }: { idSite?: number, category: string }) 
     }
   }, [status]);
 
+  useEffect(() => {
+    if(!idSite && categories.data.length > 0){
+      const category = categories.data.find(i => i.identificador === categoryParam); 
+      setField({name: "id_categoria", value: String(category?.id) ?? "0"})
+    }
+  }, [categories.data]);
+
   const classCheck = "m-2 p-2 rounded-xl border-2 border-borders-light";
   return (
     <>
@@ -400,7 +411,7 @@ const FormSite = ({ idSite , category }: { idSite?: number, category: string }) 
                     text="Editar imagenes"
                     icon="images"
                     onClick={() => {
-                      router.push(`/categories/${category}/sites/${idSite}/edit/images`);
+                      router.push(`/categories/${categoryParam}/sites/${idSite}/edit/images`);
                     }}
                   />
                 )}
@@ -933,7 +944,7 @@ const FormSite = ({ idSite , category }: { idSite?: number, category: string }) 
                   onClick={handleSubmit}
                   type="submit"
                   text="Guardar"
-                  disabled={!dataPaid.validData && !infoHorary.valid}
+                  disabled={!infoHorary.valid || !dataPaid.validData}
                 />
                 <Button
                   type="button"
@@ -949,7 +960,7 @@ const FormSite = ({ idSite , category }: { idSite?: number, category: string }) 
         </>
       )}
       {content === "images" && !loadingData && (
-        <SectionImage siteId={siteId} additionalInfo={additionalInfo} category={category} />
+        <SectionImage siteId={siteId} additionalInfo={additionalInfo} category={categoryParam} />
       )}
       {loadingData && (
         <TailSpin

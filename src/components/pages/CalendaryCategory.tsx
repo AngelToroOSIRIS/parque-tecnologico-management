@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Calendar from "@/components/Calendar";
 import { DtCalendar } from "../react-calendar-datetime-picker/dist";
 import { categoriesObj } from "@/libs/staticData";
-import { CategoryTextShort, ReservationCategory } from "@/types/d";
+import { CategoryTextShort, RequestData, ReservationCategory } from "@/types/d";
 import TableCalendar from "@/components/pages/TableCalendar";
 import { useSession } from "next-auth/react";
 import moment from "moment";
@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
 import ButtonTable from "../ButtonTable";
+import ReservationRecordCard from "../ReservationRecordCard";
 
 export default function CalendaryCategory({
   category,
@@ -31,6 +32,7 @@ export default function CalendaryCategory({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
+  const [selectedRequest, setSelectedRequest] = useState<RequestData>();
   const [selectedReservation, setSelectedReservation] =
     useState<ReservationCategory>();
   const router = useRouter();
@@ -62,6 +64,7 @@ export default function CalendaryCategory({
           id: "1",
         });
       }
+      console.log(response.data)
       setReserCategory(response.data);
       setLoading(false);
     };
@@ -75,7 +78,7 @@ export default function CalendaryCategory({
       <>
         <>
           <p className="text-center text-primary margin-header md:mt-[10%] lg:mt-[6%] font-semibold text-3xl">
-            Agenda de {categoryFound?.name}
+            Reservaciones de {categoryFound?.name}
           </p>
           {!loading && (
             <div className="w-[95%] m-5 p-4 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
@@ -269,20 +272,32 @@ export default function CalendaryCategory({
                         </div>
                       </>
                     )}
+                    {contentModal === "history"&& (
+                      <>
+                      <p className="text-xl m-5 font-semibold text-primary text-center">
+                        Historial de actualizaciones
+                      </p>
+                      <section className="flex flex-col gap-5">
+                        {selectedRequest?.historial.map((record) => (
+                          <ReservationRecordCard record={record} key={record.id} />
+                        ))}
+                      </section>
+                    </>
+                    )}
                   </div>
                 </div>
               </Modal>
               <div className="flex justify-between font-medium items-center gap-3 ">
                 <div className="flex justify-center items-center text-center gap-2">
-                <div>
-                <ButtonTable
-                text="Volver"
-                icon="arrow-left"
-                onClick={() => {
-                  router.back();
-                }}
-              />
-                </div>
+                  <div>
+                    <ButtonTable
+                      text="Volver"
+                      icon="arrow-left"
+                      onClick={() => {
+                        router.back();
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
               <TableCalendar

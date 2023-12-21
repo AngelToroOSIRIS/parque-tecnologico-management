@@ -125,7 +125,7 @@ const TableData: React.FC<Props> = ({
                 No existen espacios para está categoría <br />
                 <p
                   className="py-2 text-center hover:text-blue transition-all hover:underline text-2xl cursor-pointer"
-                  onClick={() => router.push("/sites/add")}
+                  onClick={() => router.push(`/categories/${category}/sites/add`)}
                 >
                   Click para crear sitio
                 </p>
