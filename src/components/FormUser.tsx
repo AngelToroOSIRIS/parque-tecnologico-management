@@ -48,9 +48,9 @@ const FormUser = () => {
         method: "POST",
         body: {
           email: emailUser,
-          roles:  includesString(selectedRols, ["1"])
-          ? [1]
-          : selectedRols.map((rol) => Number(rol)),
+          roles: includesString(selectedRols, ["1"])
+            ? [1]
+            : selectedRols.map((rol) => Number(rol)),
         },
       }
     );
@@ -80,6 +80,9 @@ const FormUser = () => {
     <>
       {!loading && (
         <form onSubmit={newUser}>
+          <p className="mb-2 text-primary text-start text-sm select-none">
+            Campos obligatorios (<i className="bi bi-asterisk text-xs"></i>)
+          </p>
           <InputForm
             type="text"
             name="email"

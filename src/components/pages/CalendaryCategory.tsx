@@ -21,6 +21,7 @@ import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { TailSpin } from "react-loader-spinner";
 import { useRouter } from "next/navigation";
+import ButtonTable from "../ButtonTable";
 
 export default function CalendaryCategory({
   category,
@@ -273,33 +274,15 @@ export default function CalendaryCategory({
               </Modal>
               <div className="flex justify-between font-medium items-center gap-3 ">
                 <div className="flex justify-center items-center text-center gap-2">
-                  {/* <ButtonTable
-                    text="Filtrar por Hora"
-                    type="button"
-                    icon="calendar-event"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("hour");
-                    }}
-                  />
-                  <ButtonTable
-                    text="Filtrar por dia"
-                    type="button"
-                    icon="calendar-event"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("day");
-                    }}
-                  />
-                  <ButtonTable
-                    text="Filtrar por rango"
-                    type="button"
-                    icon="calendar-range"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("range");
-                    }}
-                  /> */}
+                <div>
+                <ButtonTable
+                text="Volver"
+                icon="arrow-left"
+                onClick={() => {
+                  router.back();
+                }}
+              />
+                </div>
                 </div>
               </div>
               <TableCalendar

@@ -23,6 +23,21 @@ export const validateString = (
   }
 };
 
+export const formatTime = (time: string | null) => {
+	if (!time) return "No registra";
+
+	const hour = Number(time.substring(0, 2));
+	const minutes = time.substring(3, 5);
+
+	const schedule = (!isNaN(hour) ? hour : 0) < 12 ? "AM" : "PM";
+
+	const resultHour = hour > 12 ? String(hour - 12) : String(hour);
+
+	return `${
+		resultHour.length < 2 ? "0" + resultHour : resultHour
+	}:${minutes} ${schedule}`;
+};
+
 export const emptyValue = (value: any, type: "str" | "int" = "str") => {
   if (!value) return true;
 

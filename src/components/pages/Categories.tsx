@@ -69,11 +69,14 @@ export default function Categories({
   };
 
   useEffect(() => {
-    if (status === "authenticated" && categories.data.length > 0) {
+    if (status === "authenticated") {
       getData();
+    }
+    if (status === "authenticated" && categories.data.length > 0) {
       getCategories();
     }
   }, [status]);
+
 
   return (
     <>

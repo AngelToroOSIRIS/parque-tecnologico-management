@@ -177,7 +177,7 @@ const SelectTime = ({
     return (
       <div className="w-full lg:w-[40%] flex gap-4 justify-center">
         <div className="w-full">
-          <GraySubtitle text="Hora inicio:" />
+          <GraySubtitle required text="Hora inicio:" />
           <Select
             name="time_start"
             placeholder="00:00 --"
@@ -197,7 +197,7 @@ const SelectTime = ({
           </Select>
         </div>
         <div className="w-full">
-          <GraySubtitle text="Hora fin:" />
+          <GraySubtitle required text="Hora fin:" />
           <Select
             defaultValue={
               defaultValues

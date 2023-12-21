@@ -210,7 +210,7 @@ const Header = () => {
 
               {status === "authenticated" && (
                 <>
-                  <p className="text-xs mx-auto text-center text-default-700 font-semibold">
+                  <p className="text-sm mx-auto text-center text-default-700 font-semibold">
                     {user.name?.split(" ")[0]}
                   </p>
                 </>

@@ -8,10 +8,12 @@ import fetchFileFn from "@/libs/fetchFileFn";
 import useFormData from "@/hooks/UseFormData";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import ButtonTable from "../ButtonTable";
 
 export default function ModalImage({
   additionalInfo,
   siteId,
+  category,
 }: {
   additionalInfo: {
     id_estado_espacio: string;
@@ -19,6 +21,7 @@ export default function ModalImage({
     activo_interno: boolean;
   };
   siteId: number;
+  category: string;
 }) {
   const [images, setImages] = useState<{ dataURL: string; file: File }[]>([]);
   const { data: session, status } = useSession();
@@ -87,6 +90,13 @@ export default function ModalImage({
           errors,
         }) => (
           <div className="w-[90%] border-[12px] border-gray-box min-w-unit-8 rounded-lg mb-44 mx-auto normal-shadow m-7 px-7 pt-4 pb-7">
+            <ButtonTable
+                text="Volver"
+                icon="arrow-left"
+                onClick={() => {
+                  router.push(`/categories/${category}/sites/${siteId}/edit/`);
+                }}
+              />
             <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
               Subir imágenes
             </h1>

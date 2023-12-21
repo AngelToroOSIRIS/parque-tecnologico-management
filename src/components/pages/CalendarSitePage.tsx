@@ -25,7 +25,6 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
   const [reservationSite, setReservationSite] = useState<ReservationSite[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [contentModal, setContentModal] = useState<string>("");
-  const [selectedRequest, setSelectedRequest] = useState<RequestData>();
   const { data, status } = useSession();
   const userSession = data?.user ?? {
     name: "default",
@@ -76,6 +75,9 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
       getDataPlace();
     }
   }, [status]);
+
+  console.log(selectedReservation)
+
   return (
     <>
       <div>
@@ -264,12 +266,12 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
                           Historial de actualizaciones
                         </p>
                         <section className="flex flex-col gap-5">
-                          {selectedRequest?.historial.map((record) => (
+                          {/* {selectedReservation?.his.map((record) => (
                             <ReservationRecordCard
                               record={record}
                               key={record.id}
                             />
-                          ))}
+                          ))} */}
                         </section>
                       </>
                     )}
@@ -278,34 +280,14 @@ const CalendarSitePage = ({ idPlace }: { idPlace: number }) => {
               </Modal>
 
               <div className="flex justify-between font-medium items-center gap-3 ">
-                <div className="flex justify-center items-center text-center gap-2">
-                  {/* <ButtonTable
-                    text="Filtrar por Hora"
-                    type="button"
-                    icon="calendar-event"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("hour");
-                    }}
-                  />
-                  <ButtonTable
-                    text="Filtrar por dia"
-                    type="button"
-                    icon="calendar-range"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("day");
-                    }}
-                  />
-                  <ButtonTable
-                    text="Filtrar por rango"
-                    type="button"
-                    icon="calendar-event"
-                    onClick={() => {
-                      setShowModal(true);
-                      setContentModal("range");
-                    }}
-                  /> */}
+                <div>
+                <ButtonTable
+                text="Volver"
+                icon="arrow-left"
+                onClick={() => {
+                  router.back();
+                }}
+              />
                 </div>
                 <div className="flex items-center gap-2 justify-center text-center">
                   <ButtonTable

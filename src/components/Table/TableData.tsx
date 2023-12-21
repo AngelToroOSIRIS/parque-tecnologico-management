@@ -66,7 +66,7 @@ const TableData: React.FC<Props> = ({
   const statusColorMap: Record<string, ChipProps["color"]> = {
     Activo: "success",
     Inactivo: "danger",
-    Mantenimiento: "warning"
+    Mantenimiento: "warning",
   };
 
   const instance = useTableInstance(table, {
@@ -190,7 +190,7 @@ const TableData: React.FC<Props> = ({
                             <ButtonTable
                               text="Añadir sitio"
                               icon="plus-circle"
-                              onClick={() => router.push("/sites/add")}
+                              onClick={() => router.push(`/categories/${category}/sites/add`)}
                               type="button"
                             />
                           </>
@@ -255,10 +255,9 @@ const TableData: React.FC<Props> = ({
                               ) {
                                 return (
                                   <Chip
+                                    key={1}
                                     className="capitalize border-none gap-1"
-                                    color={
-                                      statusColorMap[valueRender]
-                                    }
+                                    color={statusColorMap[valueRender]}
                                     size="lg"
                                     variant="dot"
                                   >
@@ -282,7 +281,7 @@ const TableData: React.FC<Props> = ({
                                         title="Ver agenda de sitio"
                                         onClick={() =>
                                           router.push(
-                                            `/sites/${cell.row.original.id}/calendar`
+                                            `/categories/${category}/sites/${cell.row.original.id}/calendar`
                                           )
                                         }
                                         className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
@@ -298,7 +297,7 @@ const TableData: React.FC<Props> = ({
                                             title="Editar datos"
                                             onClick={() =>
                                               router.push(
-                                                `/sites/${cell.row.original.id}/edit`
+                                                `/categories/${category}/sites/${cell.row.original.id}/edit`
                                               )
                                             }
                                             className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"
@@ -309,7 +308,7 @@ const TableData: React.FC<Props> = ({
                                             title="Editar imagenes"
                                             onClick={() =>
                                               router.push(
-                                                `/sites/${cell.row.original.id}/edit/images`
+                                                `/categories/${category}/sites/${cell.row.original.id}/edit/images`
                                               )
                                             }
                                             className="text-lg outline-none text-default-400 cursor-pointer hover:text-custom-black transition-all"

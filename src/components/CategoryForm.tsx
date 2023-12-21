@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import fetchFileFn from "@/libs/fetchFileFn";
 import useFormData from "@/hooks/UseFormData";
-0
+0;
 const CategoryForm = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
@@ -89,8 +89,8 @@ const CategoryForm = () => {
     console.log({
       email: session?.user.emailHash,
       id_category: categoryId,
-    })
-    console.log(res)
+    });
+    console.log(res);
     setLoading(false);
     if (res.code !== 200) {
       return toast.error("No se ha podido guardar", { id: toastLoading });
@@ -119,6 +119,10 @@ const CategoryForm = () => {
                 onSubmit={handleSubmit}
                 className="W-full m-2 bg-default-white p-2 px-16 rounded-lg pt-7 gap-2"
               >
+                <p className="mb-2 text-primary text-start text-sm select-none">
+                  Campos obligatorios (
+                  <i className="bi bi-asterisk text-xs"></i>)
+                </p>
                 <InputForm
                   name="titulo"
                   label={{ required: true, value: "Nombre:" }}
@@ -176,7 +180,12 @@ const CategoryForm = () => {
                     text="Continuar"
                     disabled={!validData.validData}
                   />
-                  <Button text="Cancelar" onClick={()=>{router.push("/categories")}} />
+                  <Button
+                    text="Cancelar"
+                    onClick={() => {
+                      router.push("/categories");
+                    }}
+                  />
                 </div>
               </form>
             </div>
@@ -209,9 +218,9 @@ const CategoryForm = () => {
                   {imageList.length === 0 && (
                     <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
                       <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                    * Puede subir mínimo 1 imagen, máximo 5 imagen. <br />
-                    extensiones de archivo: jpg, png, jpeg
-                  </p>
+                        * Puede subir mínimo 1 imagen, máximo 5 imagen. <br />
+                        extensiones de archivo: jpg, png, jpeg
+                      </p>
                     </div>
                   )}
                   <button

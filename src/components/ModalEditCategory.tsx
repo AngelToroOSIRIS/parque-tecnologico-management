@@ -92,7 +92,7 @@ const ModalEditCategory = ({
       id: toastLoading,
     });
     onCloseModal();
-    getCategories()
+    getCategories();
   };
 
   return (
@@ -105,6 +105,9 @@ const ModalEditCategory = ({
           onSubmit={handleSubmit}
           className="W-full m-2 rounded-lg px-12 gap-2"
         >
+          <p className="mb-2 text-primary text-start text-sm select-none">
+            Campos obligatorios (<i className="bi bi-asterisk text-xs"></i>)
+          </p>
           <InputForm
             name="titulo"
             label={{ required: true, value: "Nombre:" }}
@@ -127,8 +130,12 @@ const ModalEditCategory = ({
             label={{ required: true, value: "Estado:" }}
             placeholder="Seleccionar estado"
           >
-            <SelectItem key={1} value="1">Activo</SelectItem>
-            <SelectItem key={2} value="0">Inactivo</SelectItem>
+            <SelectItem key={1} value="1">
+              Activo
+            </SelectItem>
+            <SelectItem key={2} value="0">
+              Inactivo
+            </SelectItem>
           </SelectForm>
           <TextareaForm
             name="descripcion"

@@ -9,7 +9,7 @@ export const metadata = {
   title: "Editar sitio",
 };
 
-export default async function EditPage({ params }: { params: { id: string } }) {
+export default async function EditPage({ params }: { params: { id: string, category: string } }) {
   const idSite = validateString(params.id, "int");
   //TODO:
   if (!idSite) {
@@ -21,7 +21,7 @@ export default async function EditPage({ params }: { params: { id: string } }) {
     <>
       <Header />
         <main className="margin-header mb-9">
-          <FormSite idSite={idSite}/>
+          <FormSite idSite={idSite} category={params.category}/>
         </main>
     </>
   );

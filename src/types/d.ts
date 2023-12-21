@@ -12,11 +12,11 @@ export interface States {
 }
 
 export interface Availability {
-  id: number,
-	id_espacio: number,
-	fecha_inicio: string,
-	fecha_fin: string,
-	observaciones: string
+  id: number;
+  id_espacio: number;
+  fecha_inicio: string;
+  fecha_fin: string;
+  observaciones: string;
 }
 
 export interface Enlace {
@@ -45,28 +45,22 @@ export interface UsersAndRoles {
 }
 
 export interface PlaceCard {
-	id: number;
-	nombre: string;
-	descripcion_corta: string;
-	img_card: string;
-	caracteristicas_espacio: {
-		id: number;
-		dimensiones?: string;
-		escritorios?: number;
-		sillas?: number;
-		mesa_reuniones?: number;
-		televisores?: number;
-		computadores?: number;
-		tablero?: number;
-		video_beam?: number;
-		adicionales?: string;
-	};
-	tarifas_espacio: {
-		id: number;
-		hora: number;
-		dia?: number;
-		mes?: number;
-	};
+  id: number;
+  nombre: string;
+  descripcion_corta: string;
+  img_card: string;
+  caracteristicas_espacio: {
+    id: number;
+    dimensiones?: string;
+    escritorios?: number;
+    sillas?: number;
+    mesa_reuniones?: number;
+    televisores?: number;
+    computadores?: number;
+    tablero?: number;
+    video_beam?: number;
+    adicionales?: string;
+  };
 }
 
 export interface RequestInfo {
@@ -259,6 +253,25 @@ export interface ImageCategory {
   id_image: number;
 }
 [];
+
+export interface SiteInter {
+  id: number;
+  nombre: string;
+  descripcion_corta: string;
+  img_card: string;
+  caracteristicas_espacio: {
+    id: number;
+    dimensiones: string;
+    escritorios: number;
+    sillas: number;
+    mesa_reuniones: number;
+    televisores: number;
+    computadores: number;
+    tablero: number;
+    video_beam: number;
+    adicionales: string;
+  };
+}
 
 export interface CategoryComplete {
   id: number;

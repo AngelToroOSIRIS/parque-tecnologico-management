@@ -123,16 +123,6 @@ const Requests = ({ params }: Props) => {
                 </>
               )}
 
-              {contentModal === "Solicitud cambio fecha" && (
-                <>
-                  <ValidateNewRequestDates
-                    newDates={selectedRequest?.cambio_fecha_reservacion ?? []}
-                    idPlace={selectedRequest?.reservacion.id_espacio ?? 0}
-                    onSubmitAction={(valid) => setValidInfo(valid)}
-                  />
-                </>
-              )}
-
               {contentModal === "history" && (
                 <>
                   <p className="text-xl m-5 font-semibold text-primary text-center">

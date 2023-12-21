@@ -12,6 +12,8 @@ import { ContentImageEdit } from "./ContentImageEdit";
 import useFormData from "@/hooks/UseFormData";
 import fetchFileFn from "@/libs/fetchFileFn";
 import { useSession } from "next-auth/react";
+import ButtonTable from "./ButtonTable";
+import { useRouter } from "next/navigation";
 
 export function EditImagesComponent({ id }: { id?: string }) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,6 +23,7 @@ export function EditImagesComponent({ id }: { id?: string }) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [dataSite, setDataSite] = useState<Site>(siteInitialState);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const getImages = async () => {
     setLoading(true);
@@ -54,7 +57,6 @@ export function EditImagesComponent({ id }: { id?: string }) {
       method: "PUT",
       formData: fd,
     });
-
 
     if (response.code !== 200) {
       toast.error("Ha ocurrido un error", { id: toastLoading });
@@ -146,7 +148,6 @@ export function EditImagesComponent({ id }: { id?: string }) {
                 {dataSite.images.map((image) => (
                   <div key={image.id} className="grid">
                     <Image
-                    isBlurred
                       src={`${process.env.NEXT_PUBLIC_API_BASEURL}/image?imageName=${image.img_big}`}
                       className="border-[10px] border-default-300 rounded-lg"
                       alt="Imagen lugar"
@@ -193,7 +194,9 @@ export function EditImagesComponent({ id }: { id?: string }) {
                   </div>
                 )}
               </div>
-              <p className="text-default-400 text-sm p-2 font-medium select-none">*Debe haber mínimo tres foto, máximo diez*</p>
+              <p className="text-default-400 text-sm p-2 font-medium select-none">
+                *Debe haber mínimo tres foto, máximo diez*
+              </p>
             </>
           </div>
         </>

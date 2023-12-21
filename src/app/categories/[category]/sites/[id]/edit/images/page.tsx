@@ -16,7 +16,6 @@ export default async function EditImagesSites({
     <>
         <Header />
       <main>
-        
         <EditImagesComponent id={params.id}/>
       </main>
     </>
