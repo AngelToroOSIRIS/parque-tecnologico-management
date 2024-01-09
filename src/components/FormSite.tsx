@@ -21,7 +21,13 @@ import SelectTime from "./SelectTime";
 import ButtonTable from "./ButtonTable";
 import { useAppSelector } from "@/redux/hook";
 
-const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: string }) => {
+const FormSite = ({
+  idSite,
+  categoryParam,
+}: {
+  idSite?: number;
+  categoryParam: string;
+}) => {
   const [dataEdit, setdataEdit] = useState<Site>();
   const [loadingData, setLoadingData] = useState<boolean>(true);
   const { data: session, status } = useSession();
@@ -380,9 +386,11 @@ const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: 
   }, [status]);
 
   useEffect(() => {
-    if(!idSite && categories.data.length > 0){
-      const category = categories.data.find(i => i.identificador === categoryParam); 
-      setField({name: "id_categoria", value: String(category?.id) ?? "0"})
+    if (!idSite && categories.data.length > 0) {
+      const category = categories.data.find(
+        (i) => i.identificador === categoryParam
+      );
+      setField({ name: "id_categoria", value: String(category?.id) ?? "0" });
     }
   }, [categories.data]);
 
@@ -401,24 +409,35 @@ const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: 
               className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-4 md:p-10 m-2"
               onSubmit={(e) => e.preventDefault()}
             >
+              <div className="flex w-full px-10 justify-between">
+                  <ButtonTable
+                    text="Volver"
+                    icon="arrow-left"
+                    onClick={() => {
+                      router.back();
+                    }}
+                  />
+                  {idSite && (
+                    <ButtonTable
+                      text="Editar imagenes"
+                      icon="images"
+                      onClick={() => {
+                        router.push(
+                          `/categories/${categoryParam}/sites/${idSite}/edit/images`
+                        );
+                      }}
+                    />
+                  )}
+                </div>
+              <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
+                {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
+              </h1>
               <div className="flex justify-between">
                 <p className="mb-2 text-primary text-start text-sm select-none">
                   Campos obligatorios (
                   <i className="bi bi-asterisk text-xs"></i>)
                 </p>
-                {idSite && (
-                  <ButtonTable
-                    text="Editar imagenes"
-                    icon="images"
-                    onClick={() => {
-                      router.push(`/categories/${categoryParam}/sites/${idSite}/edit/images`);
-                    }}
-                  />
-                )}
               </div>
-              <h1 className="text-3xl text-center font-semibold mb-5 text-primary">
-                {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
-              </h1>
               <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
                 <InputForm
                   onChange={setField}
@@ -460,7 +479,7 @@ const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: 
               </div>
               <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
                 {/* <SelectForm
-                  name="id_categoria"
+                  name="id_categori
                   defaultValue={
                     dataEdit?.id_categoria
                       ? String(dataEdit?.id_categoria)
@@ -960,7 +979,11 @@ const FormSite = ({ idSite , categoryParam }: { idSite?: number, categoryParam: 
         </>
       )}
       {content === "images" && !loadingData && (
-        <SectionImage siteId={siteId} additionalInfo={additionalInfo} category={categoryParam} />
+        <SectionImage
+          siteId={siteId}
+          additionalInfo={additionalInfo}
+          category={categoryParam}
+        />
       )}
       {loadingData && (
         <TailSpin

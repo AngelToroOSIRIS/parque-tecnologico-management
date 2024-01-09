@@ -14,6 +14,8 @@ import { categoriesObj } from "@/libs/staticData";
 import { TailSpin } from "react-loader-spinner";
 import Link from "next/link";
 import ValidateNewRequestDates from "./ValidateNewRequestDates";
+import ButtonTable from "../ButtonTable";
+import { useRouter } from "next/navigation";
 
 interface Props {
   params: { category: CategoryTextShort };
@@ -71,6 +73,8 @@ const Requests = ({ params }: Props) => {
   useEffect(() => {
     if (status === "authenticated") getData();
   }, [status]);
+
+  const router = useRouter();
 
   return (
     <>
@@ -237,6 +241,15 @@ const Requests = ({ params }: Props) => {
           )}
           {requests.length === 0 && (
             <>
+              <div className="absolute top-28 ml-[17%]">
+                <ButtonTable
+                  text="Volver"
+                  icon="arrow-left"
+                  onClick={() => {
+                    router.back();
+                  }}
+                />
+              </div>
               <div className="text-center text-default-300 select-none mt-[7%]">
                 <i className="bi bi-x-circle text-7xl"></i>
                 <p className="text-4xl mt-[1%]">

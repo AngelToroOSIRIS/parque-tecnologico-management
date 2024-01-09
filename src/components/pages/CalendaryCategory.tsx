@@ -32,7 +32,7 @@ export default function CalendaryCategory({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
-  const [selectedRequest, setSelectedRequest] = useState<RequestData>();
+  const [selectedReserCategory, setSelectedReserCategory] = useState<ReservationCategory>();
   const [selectedReservation, setSelectedReservation] =
     useState<ReservationCategory>();
   const router = useRouter();
@@ -81,7 +81,7 @@ export default function CalendaryCategory({
             Reservaciones de {categoryFound?.name}
           </p>
           {!loading && (
-            <div className="w-[95%] m-5 p-4 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] mx-auto bg-off-white rounded-xl">
+            <div className="w-[95%] m-5 p-4 normal-shadow mx-auto bg-off-white rounded-xl">
               <Modal
                 isOpen={showModal}
                 setIsOpen={setShowModal}
@@ -278,7 +278,7 @@ export default function CalendaryCategory({
                         Historial de actualizaciones
                       </p>
                       <section className="flex flex-col gap-5">
-                        {selectedRequest?.historial.map((record) => (
+                        {selectedReserCategory?.historial.map((record) => (
                           <ReservationRecordCard record={record} key={record.id} />
                         ))}
                       </section>
@@ -302,7 +302,7 @@ export default function CalendaryCategory({
               </div>
               <TableCalendar
                 onClickAction={(reservation, action) => {
-                  setSelectedReservation(reservation);
+                  setSelectedReserCategory(reservation);
                   setContentModal(action);
                   setShowModal(true);
                 }}

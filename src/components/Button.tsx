@@ -22,13 +22,13 @@ const Button = ({
 }: Props) => {
   const router = useRouter();
   const classbtn =
-    "w-full h-10 border-2 select-none justify-center items-center rounded-xl text-base font-medium items-center shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:font-semibold border-borders-light hover:border-primary bg-default-white hover:text-primary transition-all";
+    "w-full h-10 border-2 select-none justify-center items-center rounded-xl text-base font-medium items-center normal-shadow hover:font-semibold border-borders-light hover:border-primary bg-default-white hover:text-primary transition-all";
   return (
     <button
       disabled={disabled}
       className={
         disabled
-          ? "w-full h-10 border-2 select-none rounded-xl text-base shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] text-borders opacity-50 hover:none transition-all"
+          ? "w-full h-10 border-2 select-none rounded-xl text-base normal-shadow text-borders opacity-50 hover:none transition-all"
           : classbtn
       }
       onClick={() => {

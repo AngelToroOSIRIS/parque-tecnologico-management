@@ -231,7 +231,7 @@ export default async function DetailsPlacePage({
 								<div className="flex flex-col gap-2">
 									{extras.map((item, i) => (
 										<p
-											className="px-2 py-3 bg-gray-box rounded-2xl soft-shadow"
+											className="px-2 py-3 bg-gray-box rounded-2xl normal-shadow"
 											key={i}
 										>
 											<i className="bi bi-arrow-right-circle-fill text-primary"></i>{" "}

@@ -149,7 +149,7 @@ export default function ModalImage({
                   <div key={index} className="mx-auto">
                     <img
                       src={image.dataURL}
-                      className="border-3 text-xl shadow-xl border-borders-light rounded-lg h-[400px]"
+                      className="border-3 text-xl normal-shadow border-borders-light rounded-lg h-[400px]"
                       alt=""
                       width="800px"
                     />

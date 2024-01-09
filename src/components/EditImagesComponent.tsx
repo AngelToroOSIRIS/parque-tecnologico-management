@@ -156,7 +156,7 @@ export function EditImagesComponent({ id }: { id?: string }) {
                 
               </div>
           </div>
-          <div className="mx-auto w-[85%] rounded-lg shadow-xl bg-gray-box mb-14 text-center ">
+          <div className="mx-auto w-[85%] rounded-lg normal-shadow bg-gray-box mb-14 text-center ">
             
             <>
               <div className="grid grid-cols-1 lg:grid-cols-2 mx-auto m-5 p-5 gap-7">

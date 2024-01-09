@@ -188,6 +188,7 @@ export interface Site {
   id_dias_disponibilidad_espacio: number;
   id_identificador_enlace?: number;
   nombre: string;
+  historial: HistoryRequest;
   descripcion: string;
   descripcion_corta: string;
   fecha_creacion: string;

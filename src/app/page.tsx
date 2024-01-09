@@ -61,14 +61,14 @@ export default function Home() {
         <main>
           <div className="grid grid-cols-1">
             <div className="margin-header mx-auto justify-center items-center">
-              <h2 className="text-center border-b-3 border-primary justify-center text-3xl font-semibold mb-8 items-center mx-auto">
+              <h2 className="text-center justify-center text-3xl font-semibold mb-8 items-center mx-auto">
                 Acceso Rápido
               </h2>
             </div>
             <h2 className="text-center justify-center text-lg items-center mx-auto">
               Bienvenido a la administración de Coworking, Categorias Activas:
             </h2>
-            <div className="mx-auto w-[80%]">
+            <div className="mx-auto w-[90%]">
               <CategoriesCards />
             </div>
           </div>

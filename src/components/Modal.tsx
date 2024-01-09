@@ -43,7 +43,7 @@ const Modal = ({ isOpen, setIsOpen, classContainer = "", children }: Props) => {
             >
               <Dialog.Panel
                 className={
-                  "my-8 px-5 pb-5 pt-2 transform rounded-2xl bg-off-white text-left align-middle shadow-xl transition-all w-[95%] " +
+                  "my-8 px-5 pb-5 pt-2 transform rounded-2xl bg-off-white text-left align-middle normal-shadow transition-all w-[95%] " +
                   classContainer
                 }
               >

@@ -32,7 +32,7 @@ const Switch = ({
         aria-hidden="true"
         className={`${enabled ? "translate-x-5" : "translate-x-0"}
 
-            pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-default-white shadow-lg transition duration-100 ease-in-out`}
+            pointer-events-none inline-block h-[26px] w-[26px] transform rounded-full bg-default-white normal-shadow transition duration-100 ease-in-out`}
       />
     </SwitchHDLS>
   );

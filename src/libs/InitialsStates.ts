@@ -5,6 +5,25 @@ export const siteInitialState: Site = {
   nombre: "",
   descripcion: "",
   descripcion_corta: "",
+  //@ts-ignore
+  historial: [
+    {
+      id: 0,
+      id_reservacion: 0,
+      estado_reservacion: "",
+      fecha_creacion: "",
+      observaciones: "",
+      creado_por: "",
+    },
+    {
+      id: 0,
+      id_reservacion: 0,
+      estado_reservacion: "",
+      fecha_creacion: "",
+      observaciones: "",
+      creado_por: "",
+    },
+  ],
   id_categoria: 0,
   id_tarifas_espacio: 0,
   id_estado_espacio: 0,

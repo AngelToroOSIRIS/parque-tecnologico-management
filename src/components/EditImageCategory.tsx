@@ -143,7 +143,7 @@ export function EditImagesCategory({ category }: { category: string }) {
               </>
             )}
           </Modal>
-          <div className="mx-auto w-[55%] rounded-lg shadow-xl bg-gray-box mb-14 text-center ">
+          <div className="mx-auto w-[55%] rounded-lg normal-shadow bg-gray-box mb-14 text-center ">
             <div className="grid grid-cols-1 lg:grid-cols-3 mx-auto m-5 p-5 gap-7">
               {imageCategory.map((image) => (
                 <div key={image.id_image} className="grid mx-auto">

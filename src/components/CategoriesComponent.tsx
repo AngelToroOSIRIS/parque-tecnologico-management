@@ -172,7 +172,7 @@ const CategoriesComponent = () => {
               />
             )}
           </Modal>
-          <div className="w-full overflow-x mb-10 max-w-[1400px] mx-auto p-3 bg-default-white rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+          <div className="w-full overflow-x mb-10 max-w-[1400px] mx-auto p-3 bg-default-white rounded-xl normal-shadow">
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/categories/add")}
@@ -182,7 +182,7 @@ const CategoriesComponent = () => {
                 <i className="bi bi-plus-circle ml-2 text-xl "></i>
               </button>
             </div>
-            <section className="w-full p-5 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#ffffff] rounded-xl">
+            <section className="w-full p-5 normal-shadow bg-[#ffffff] rounded-xl">
               <article className="flex h-10 rounded-lg p-2 items-center justify-between select-none bg-borders-light text-borders text-md font-semibold">
                 <div className="w-[20%] ml-2">TÍTULO</div>
                 <div className="w-[20%] text-center">IDENTIFICADOR</div>

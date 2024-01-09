@@ -239,10 +239,10 @@ const Dates = ({ idSite }: { idSite: string }) => {
                       key={date.id}
                     >
                       <div className="w-[20%] px-2">
-                        {formatDate(date.fecha_inicio, true)}
+                        {formatDate(date.fecha_inicio)}
                       </div>
                       <div className="w-[20%] px-2">
-                        {formatDate(date.fecha_fin, true)}
+                        {formatDate(date.fecha_fin)}
                       </div>
                       <div className="w-[50%]">{date.observaciones}</div>
                       <div className="w-[10%]">
