@@ -7,8 +7,6 @@ import fetchFn from "@/libs/fetchFn";
 import toast from "react-hot-toast";
 import { Rol, UsersAndRoles } from "@/types/d";
 import { TailSpin } from "react-loader-spinner";
-import { useDisclosure } from "@nextui-org/react";
-import ButtonTable from "../ButtonTable";
 
 const UsersEdit = () => {
   const { data: session, status } = useSession();
@@ -52,7 +50,6 @@ const UsersEdit = () => {
       getRols();
     }
   }, [status]);
-  const { onClose } = useDisclosure();
   const router = useRouter();
   return (
     <>
@@ -62,14 +59,7 @@ const UsersEdit = () => {
       {!loading && (
         <>
           <div className="w-full overflow-y-auto mb-10 md:max-w-6xl mx-auto p-3 bg-default-white rounded-xl normal-shadow">
-            <div className="p-3 flex justify-between">
-            <ButtonTable
-                    text="Volver"
-                    icon="arrow-left"
-                    onClick={() => {
-                      router.back();
-                    }}
-                  />
+            <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/users/add")}
                 className="bg-borders-light px-2 py-1 border-2 items-center justify-center font-medium border-borders-light hover:border-default-400 transition-all text-borders rounded-xl"
