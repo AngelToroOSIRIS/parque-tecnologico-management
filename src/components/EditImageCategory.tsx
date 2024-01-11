@@ -12,6 +12,8 @@ import { useSession } from "next-auth/react";
 import useFormData from "@/hooks/UseFormData";
 import fetchFileFn from "@/libs/fetchFileFn";
 import { useAppSelector } from "@/redux/hook";
+import ButtonTable from "./ButtonTable";
+import { useRouter } from "next/navigation";
 
 export function EditImagesCategory({ category }: { category: string }) {
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,6 +36,8 @@ export function EditImagesCategory({ category }: { category: string }) {
   };
 
   const categories = useAppSelector((state) => state.categoriesReducer);
+
+  const router = useRouter();
 
   const { setData } = useFormData({
     minFiles: 1,
@@ -143,6 +147,15 @@ export function EditImagesCategory({ category }: { category: string }) {
               </>
             )}
           </Modal>
+          <div className="absolute top-24 lg:top-28 lg:ml-[23%] mx-4">
+                <ButtonTable
+                  text="Volver"
+                  icon="arrow-left"
+                  onClick={() => {
+                    router.back();
+                  }}
+                />
+              </div>
           <div className="mx-auto w-[55%] rounded-lg normal-shadow bg-gray-box mb-14 text-center ">
             <div className="grid grid-cols-1 lg:grid-cols-3 mx-auto m-5 p-5 gap-7">
               {imageCategory.map((image) => (

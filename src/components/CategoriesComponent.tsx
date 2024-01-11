@@ -72,6 +72,7 @@ const CategoriesComponent = () => {
 
   useEffect(() => {
     if (categories.data.length > 0) {
+      getCategories()
       setLoading(false);
     }
   }, [categories]);

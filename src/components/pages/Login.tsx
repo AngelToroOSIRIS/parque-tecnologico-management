@@ -27,7 +27,7 @@ export default function Login() {
               className="w-[95%] max-w-xs h-12 bg-primary text-off-white py-2 px-4 font-semibold rounded-xl hover:bg-dark-red transition-all"
               onClick={() => signIn("azure-ad", { callbackUrl: "/" })}
             >
-              <i className="bi bi-microsoft mr-2"></i> Ingresa con Microsoft
+              <i className="bi bi-microsoft mr-2"></i> Ingresar con Microsoft
             </button>
           </div>
         </div>

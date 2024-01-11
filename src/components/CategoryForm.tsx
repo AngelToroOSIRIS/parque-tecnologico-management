@@ -213,7 +213,9 @@ const CategoryForm = () => {
                   {imageList.length === 0 && (
                     <div className="w-[60%] p-2 md:p-10 justify-center rounded-lg mx-auto">
                       <p className="font-normal text-default-400 text-center select-none text-base md:text-xl mx-auto">
-                        * Puede subir mínimo 1 imagen, máximo 5 imagen. <br />
+                        * Puede subir mínimo 1 imagen, máximo 5 imagen. <br />{" "}
+                        Resolución recomendada: 1920 x 1080 *
+                        <br />
                         extensiones de archivo: jpg, png, jpeg
                       </p>
                     </div>
