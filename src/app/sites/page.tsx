@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SitesPageInter from "@/components/pages/SitesPageInter";
 
@@ -19,6 +20,7 @@ export default function SitesPage() {
           <SitesPageInter/>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

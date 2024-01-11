@@ -22,6 +22,8 @@ const Header = () => {
     name: "default",
     email: "useremail",
   };
+  const linkClass =
+    "p-1 items-center w-full justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0";
   const categories = useAppSelector((state) => state.categoriesReducer);
   const dispatch = useAppDispatch();
 
@@ -44,9 +46,49 @@ const Header = () => {
     if (categories.data.length < 1) getCategories();
   }, [categories]);
 
-
   return (
     <header className="fixed top-0 left-0 right-0 px-[7%] w-full h-[65px] text-start normal-shadow bg-gray-box border-b border-borders-light z-40 select-none">
+      <Modal
+        isOpen={showModal}
+        setIsOpen={setShowModal}
+        classContainer="max-w-[450px]"
+      >
+        <>
+          <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
+            Cerrar sesión
+          </h1>
+          <div>
+            <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
+              ¿Seguro que quiere cerrar sesión?
+            </p>
+          </div>
+          <div className="flex items-center gap-7 pb-3 justify-center text-center">
+            <div className="mt-5">
+              <button
+                onClick={() => {
+                  signOut({ callbackUrl: "/" });
+                }}
+                type="button"
+                className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+            <div className="mt-5">
+              <button
+                type="button"
+                className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </>
+      </Modal>
+
       <nav className="mx-auto flex items-center justify-between container-class gap-3">
         <section className="flex h-[65px] w-[130px] md:w-[230px]">
           <div>
@@ -60,24 +102,19 @@ const Header = () => {
             />
           </div>
         </section>
-        <section className="h-[65px] w-full items-center flex justify-center">
-          <ul className="flex items-center justify-center font-medium md:flex-row">
+
+        <section className="h-[65px] w-full flex-center ">
+          <ul className="flex items-center justify-center gap-4 font-medium md:flex-row">
             {!user.interno && (
-              <Link
-                href="/"
-                className="flex p-1 items-center w-[40px] lg:w-[100px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-              >
-                <i className="bi bi-house-door text-primary text-xl"></i>
+              <Link href="/" className={linkClass + " flex"}>
+                <i className="bi bi-house-door text-2xl text-primary md:text-xl"></i>
                 <p className="ml-2 hidden md:block">Inicio</p>
               </Link>
             )}
 
             {user.interno && (
-              <Link
-                href="/sites"
-                className="flex p-1 items-center w-[40px] lg:w-[100px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-              >
-                <i className="bi bi-house-door text-primary text-xl"></i>
+              <Link href="/sites" className={linkClass + " flex"}>
+                <i className="bi bi-house-door text-2xl text-primary md:text-xl"></i>
                 <p className="ml-2 hidden md:block">Inicio</p>
               </Link>
             )}
@@ -96,14 +133,14 @@ const Header = () => {
               </ContentLoader>
             )}
             {!user.interno && status === "authenticated" && (
-              <div className="flex items-center justify-center">
+              <>
                 {categories.data.length > 0 && (
                   <Menu
                     as="div"
-                    className="sm:relative mx-2 p-2 items-center w-full lg:w-[150px] justify-center font-semibold h-[40px] rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
+                    className={linkClass}
                   >
-                    <Menu.Button as="li" className={"flex px-2 w-full"}>
-                      <i className="bi bi-layers text-lg text-primary"></i>{" "}
+                    <Menu.Button as="li" className={"flex-center h-full px-2 w-full"}>
+                      <i className="bi bi-layers text-2xl md:text-xl text-primary"></i>{" "}
                       <p className="ml-2 hidden cursor-pointer md:flex">
                         Categorías
                       </p>
@@ -177,90 +214,51 @@ const Header = () => {
                 {!user.interno &&
                   status === "authenticated" &&
                   includesString(user.rols ?? [], ["superadmin", "users"]) && (
-                    <Link
-                      href="/users"
-                      className="flex p-2 items-center justify-center font-semibold h-[40px] w-full rounded-lg hover:text-primary hover:bg-borders-light hover:bg-opacity-60 transition ease-in duration-200 transform hover:-translate-y-1 active:translate-y-0"
-                    >
-                      <i className="bi bi-people text-primary text-xl"></i>
-                      <p className="ml-2 hidden md:block">Usuarios</p>
-                    </Link>
+                    <>
+                      <Link href="/users" className={linkClass + " flex"}>
+                        <i className="bi bi-people text-primary text-2xl md:text-xl"></i>
+                        <p className="ml-2 hidden md:block">Usuarios</p>
+                      </Link>
+                      <Link href="/notification" className={linkClass + " flex"}>
+                        <i className="bi bi-bell text-primary text-2xl md:text-xl"></i>
+                        <p className="ml-2 hidden md:block">Notificaciones</p>
+                      </Link>
+                    </>
                   )}
-              </div>
+              </>
             )}
           </ul>
         </section>
-        <section className="flex w-[130px] md:w-[260px]">
-            <div className="hidden w-full flex-col items-start transition-all justify-center lg:flex bg-borders-light bg-opacity-90 rounded-lg rounded-r-none ml-3 my-2 px-2">
-              {status === "loading" && (
-                <>
-                  <ContentLoader
-                    uniqueKey="user-info-header"
-                    speed={0.5}
-                    width={120}
-                    height={45}
-                    title="Cargando usuario..."
-                    backgroundColor="#cccccc"
-                    foregroundColor="#ecebeb"
-                  >
-                    <rect x="0" y="8" rx="5" ry="3" width="110" height="28" />
-                  </ContentLoader>
-                </>
-              )}
 
-              {status === "authenticated" && (
-                <>
-                  <p className="text-sm mx-auto text-center text-default-700 font-semibold">
-                    {user.name?.split(" ")[0]}
-                  </p>
-                </>
-              )}
-            </div>
-            <div className="flex flex-col items-start justify-center bg-borders-light bg-opacity-90 rounded-lg lg:rounded-lg lg:rounded-l-none my-2">
-              <Modal
-                isOpen={showModal}
-                setIsOpen={setShowModal}
-                classContainer="max-w-[450px]"
+        <section className="flex w-[130px] h-[40px] md:w-[260px] bg-borders-light bg-opacity-90 rounded-lg px-2">
+          <div className="hidden w-full flex-col items-start justify-center md:flex">
+            {status === "loading" && (
+              <ContentLoader
+                uniqueKey="user-info-header"
+                speed={0.5}
+                width={120}
+                height={45}
+                title="Cargando usuario..."
+                backgroundColor="#cccccc"
+                foregroundColor="#ecebeb"
               >
-                <>
-                  <h1 className="flex flex-col mt-4 mb-6 text-xl font-semibold text-primary text-center gap-1 outline-none">
-                    Cerrar sesión
-                  </h1>
-                  <div>
-                    <p className="text-lg text-center items-center justify-center rounded-lg outline-none">
-                      ¿Seguro que quiere cerrar sesión?
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-7 pb-3 justify-center text-center">
-                    <div className="mt-5">
-                      <button
-                        onClick={() => {
-                          signOut({ callbackUrl: "/" });
-                        }}
-                        type="button"
-                        className="inline-flex font-base hover:text-primary outline-none hover:font-bold border-none transition-all justify-center rounded-lg px-4 text-lg"
-                      >
-                        Cerrar sesión
-                      </button>
-                    </div>
-                    <div className="mt-5">
-                      <button
-                        type="button"
-                        className="inline-flex font-base hover:font-bold outline-none border-none transition-all justify-center rounded-lg px-4 text-lg"
-                        onClick={() => {
-                          setShowModal(false);
-                        }}
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </div>
-                </>
-              </Modal>
-              <i
-                onClick={() => setShowModal(true)}
-                className="bi bi-box-arrow-right text-xl hover:text-primary m-2 transition-all"
-              ></i>
-            </div>
+                <rect x="0" y="8" rx="5" ry="3" width="110" height="28" />
+              </ContentLoader>
+            )}
+
+            {status === "authenticated" && (
+              <p className="text-sm mx-auto text-center text-default-700 font-semibold">
+                {user.name?.split(" ")[0]}
+              </p>
+            )}
+          </div>
+
+          <div className="flex-center w-full lg:w-auto">
+            <i
+              onClick={() => setShowModal(true)}
+              className="bi bi-box-arrow-right text-xl hover:text-primary m-2 transition-all cursor-pointer"
+            ></i>
+          </div>
         </section>
       </nav>
     </header>

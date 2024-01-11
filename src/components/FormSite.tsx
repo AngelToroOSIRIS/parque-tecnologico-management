@@ -409,7 +409,7 @@ const FormSite = ({
               className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-4 md:p-10 m-2"
               onSubmit={(e) => e.preventDefault()}
             >
-              <div className="flex w-full px-10 justify-between">
+              <div className="flex w-full lg:px-10 justify-between">
                   <ButtonTable
                     text="Volver"
                     icon="arrow-left"
@@ -433,12 +433,12 @@ const FormSite = ({
                 {idSite ? "Editar" : "Añadir"} sitio {dataEdit?.nombre ?? ""}
               </h1>
               <div className="flex justify-between">
-                <p className="mb-2 text-primary text-start text-sm select-none">
+                <p className="mb-2 text-primary lg:ml-14 text-start text-sm select-none">
                   Campos obligatorios (
                   <i className="bi bi-asterisk text-xs"></i>)
                 </p>
               </div>
-              <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
+              <div className="items-center justify-center lg:px-14 gap-10 lg:flex py-1">
                 <InputForm
                   onChange={setField}
                   type="text"
@@ -477,7 +477,7 @@ const FormSite = ({
                   ))}
                 </SelectForm>
               </div>
-              <div className="items-center justify-center px-14 gap-10 lg:flex py-1">
+              <div className="items-center justify-center lg:px-14 gap-10 lg:flex py-1">
                 {/* <SelectForm
                   name="id_categori
                   defaultValue={
@@ -521,7 +521,7 @@ const FormSite = ({
                   ))}
                 </SelectForm>
               </div>
-              <div className="items-center px-14 justify-center gap-10 lg:flex py-1">
+              <div className="items-center lg:px-14 justify-center gap-10 lg:flex py-1">
                 <div className="lg:w-[50%]">
                   <TextareaForm
                     classContainer="w-[50%]"
@@ -814,7 +814,7 @@ const FormSite = ({
               className="bg-[#ffffff] min-w-unit-8 justify-center items-center rounded-lg p-4 md:p-10 m-2"
               onSubmit={(e) => e.preventDefault()}
             >
-              <p className="mb-2 text-primary text-start text-sm select-none">
+              <p className="mb-2 text-primary lg:ml-14 text-start text-sm select-none">
                 Campos obligatorios (<i className="bi bi-asterisk text-xs"></i>)
               </p>
               <h1 className="text-center text-3xl text-primary font-medium mt-4 mb-10">

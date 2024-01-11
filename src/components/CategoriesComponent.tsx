@@ -21,8 +21,8 @@ const CategoriesComponent = () => {
 
   const [category, setCategory] = useState<CategoryComplete>();
   const [contentModal, setContentModal] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const categories = useAppSelector((state) => state.categoriesReducer);
 
   const getCategories = async () => {

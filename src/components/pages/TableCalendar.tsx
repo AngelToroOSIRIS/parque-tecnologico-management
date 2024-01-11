@@ -147,6 +147,7 @@ export default function TableComponent({
               onClick={() => {
                 onClickAction(reservation, "info");
               }}
+              title="Información"
               className="bi bi-info-circle text-xl text-default-400 hover:text-custom-black transition-all"
             ></i>
             <i onClick={() => {

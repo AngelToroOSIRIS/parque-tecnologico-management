@@ -33,8 +33,6 @@ export default function CalendaryCategory({
   const [loading, setLoading] = useState<boolean>(true);
   const [reserCategory, setReserCategory] = useState<ReservationCategory[]>([]);
   const [selectedReserCategory, setSelectedReserCategory] = useState<ReservationCategory>();
-  const [selectedReservation, setSelectedReservation] =
-    useState<ReservationCategory>();
   const router = useRouter();
   const [contentModal, setContentModal] = useState<string>("");
   {
@@ -64,7 +62,6 @@ export default function CalendaryCategory({
           id: "1",
         });
       }
-      console.log(response.data)
       setReserCategory(response.data);
       setLoading(false);
     };
@@ -135,52 +132,52 @@ export default function CalendaryCategory({
                             <div>
                               <p>
                                 <strong># Reservación: </strong>
-                                {selectedReservation?.id}
+                                {selectedReserCategory?.id}
                               </p>
                               <p>
                                 <strong>Nombre del espacio: </strong>
-                                {selectedReservation?.nombre_espacio}
+                                {selectedReserCategory?.nombre_espacio}
                               </p>
                               <p>
                                 <strong>Fecha de creación: </strong>
                                 {formatDate(
-                                  selectedReservation?.fecha_creacion ?? "",
+                                  selectedReserCategory?.fecha_creacion ?? "",
                                   true
                                 )}
                               </p>
                               <p>
                                 <strong>Fecha ultima actualización: </strong>
                                 {formatDate(
-                                  selectedReservation?.fecha_actualizacion ??
+                                  selectedReserCategory?.fecha_actualizacion ??
                                     "",
                                   true
                                 )}
                               </p>
                               <p>
                                 <strong>Estado de la reservación: </strong>
-                                {selectedReservation?.estado_reservacion}
+                                {selectedReserCategory?.estado_reservacion}
                               </p>
                             </div>
                             <div>
                               <p>
                                 <strong>Valor espacio: </strong>
-                                {convertToCurrency(selectedReservation?.valor)}
+                                {convertToCurrency(selectedReserCategory?.valor)}
                               </p>
                               <p>
                                 <strong>Valor descuento: </strong>
                                 {convertToCurrency(
-                                  selectedReservation?.valor_descuento
+                                  selectedReserCategory?.valor_descuento
                                 )}
                               </p>
                               <p>
                                 <strong>Valor pagado: </strong>
                                 {convertToCurrency(
-                                  selectedReservation?.valor_pagado
+                                  selectedReserCategory?.valor_pagado
                                 )}
                               </p>
                               <p>
                                 <strong>Estado del pago: </strong>
-                                {selectedReservation?.estado_pago}
+                                {selectedReserCategory?.estado_pago}
                               </p>
                             </div>
                           </section>
@@ -195,15 +192,15 @@ export default function CalendaryCategory({
                             <div>
                               <p>
                                 <strong>Nombre cliente: </strong>
-                                {selectedReservation?.persona_info.nombre}
+                                {selectedReserCategory?.persona_info.nombre}
                               </p>
                               <p>
                                 <strong>Email cliente: </strong>
-                                {selectedReservation?.persona_info.email}
+                                {selectedReserCategory?.persona_info.email}
                               </p>
                               <p
                                 className={
-                                  selectedReservation?.persona_info
+                                  selectedReserCategory?.persona_info
                                     .email_facturacion
                                     ? "block"
                                     : "hidden"
@@ -211,7 +208,7 @@ export default function CalendaryCategory({
                               >
                                 <strong>Email facturación cliente: </strong>
                                 {
-                                  selectedReservation?.persona_info
+                                  selectedReserCategory?.persona_info
                                     .email_facturacion
                                 }
                               </p>
@@ -219,11 +216,11 @@ export default function CalendaryCategory({
                             <div>
                               <p>
                                 <strong>Telefono cliente: </strong>
-                                {selectedReservation?.persona_info.telefono}
+                                {selectedReserCategory?.persona_info.telefono}
                               </p>
                               <p>
                                 <strong>Dirección cliente: </strong>
-                                {selectedReservation?.persona_info.direccion}
+                                {selectedReserCategory?.persona_info.direccion}
                               </p>
                             </div>
                           </section>

@@ -175,6 +175,7 @@ export interface ReservationCategory {
   fecha_creacion: string;
   fecha_actualizacion: string;
   persona_info: PersonRequest;
+  fechas: Dates[];
 }
 
 export interface Site {
@@ -221,6 +222,34 @@ export interface CharacteristicSite {
   adicionales: string;
 }
 
+export interface PlaceComplete extends Site {
+  categoria: string;
+  images: ImageSite[];
+  estado: boolean;
+  tarifas_espacio: TarifySite;
+  dias_disponibilidad_espacio: {
+    id: number;
+    lunes: "0" | "1";
+    martes: "0" | "1";
+    miercoles: "0" | "1";
+    jueves: "0" | "1";
+    viernes: "0" | "1";
+    sabado: "0" | "1";
+    domingo: "0" | "1";
+    festivos: "0" | "1";
+    hora_inicio: string;
+    hora_fin: string;
+  };
+  caracteristicas_espacio: CharacteristicSite;
+  disponibilidad_espacio: {
+    id: number;
+    id_espacio: number;
+    fecha_inicio: string;
+    fecha_fin: string;
+    observaciones: string;
+  }[];
+}
+
 export interface DaysDisponibilitySite {
   id: number;
   lunes: string;
@@ -257,9 +286,12 @@ export interface ImageCategory {
 }
 [];
 
-export interface SiteInter {
+export interface SiteInter extends Site {
   id: number;
   nombre: string;
+  fecha_creacion: string;
+  fecha_actualizacion: string;
+  descripcion: string;
   descripcion_corta: string;
   img_card: string;
   images: ImageSite[];
@@ -275,6 +307,34 @@ export interface SiteInter {
     video_beam: number;
     adicionales: string;
   };
+  id_categoria: number;
+  categoria: string;
+  id_estado_espacio: number;
+  estado: boolean;
+  id_tarifas_espacio: number;
+  tarifas_espacio: TarifySite;
+  id_dias_disponibilidad_espacio: number;
+  dias_disponibilidad_espacio: {
+    id: number;
+    lunes: "0" | "1";
+    martes: "0" | "1";
+    miercoles: "0" | "1";
+    jueves: "0" | "1";
+    viernes: "0" | "1";
+    sabado: "0" | "1";
+    domingo: "0" | "1";
+    festivos: "0" | "1";
+    hora_inicio: string;
+    hora_fin: string;
+  };
+  id_caracteristicas_espacio: number;
+  disponibilidad_espacio: {
+    id: number;
+    id_espacio: number;
+    fecha_inicio: string;
+    fecha_fin: string;
+    observaciones: string;
+  }[];
 }
 
 export interface CategoryComplete {
@@ -290,4 +350,20 @@ export interface CategoryComplete {
     img: string;
     id_categoria: number;
   }[];
+}
+
+export interface Areas {
+  id: number;
+  descripcion: string;
+}
+
+export interface Notification {
+  id: number;
+  email: string;
+  area: string;
+}
+
+export interface NotificationInfo {
+  areas: Areas[];
+  notificaciones: Notification[];
 }

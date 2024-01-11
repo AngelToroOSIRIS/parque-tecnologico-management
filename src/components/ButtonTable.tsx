@@ -30,7 +30,7 @@ const ButtonTable = ({ route, text, onClick, type, icon, disabled = false }: Pro
       type={type ?? "button"}
     >
       {text}
-      <i className={`bi bi-${icon} hidden lg:flex text-xl ml-2`}></i>
+      <i className={`bi bi-${icon} flex text-xl ml-2`}></i>
     </button>
   );
 };

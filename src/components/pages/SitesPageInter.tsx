@@ -34,29 +34,40 @@ const SitesPageInter = () => {
           <div className="sm:grid lg:grid-cols-3 sm:grid-cols-2 md:grid-col-3 xl:grid-cols-4 gap-5 mt-10 mx-auto mb-10 items-center">
             {dataSite.map((site) => (
               <>
-                <div key={site.id}>
-                  <PlaceCard
-                    place={{
-                      id: site.id,
-                      descripcion_corta: site.descripcion_corta,
-                      img_card: site.img_card,
-                      nombre: site.nombre,
-                      caracteristicas_espacio: {
-                        id: site.caracteristicas_espacio.id,
-                        adicionales: site.caracteristicas_espacio.adicionales,
-                        computadores: site.caracteristicas_espacio.computadores,
-                        dimensiones: site.caracteristicas_espacio.dimensiones,
-                        escritorios: site.caracteristicas_espacio.escritorios,
-                        mesa_reuniones:
-                          site.caracteristicas_espacio.mesa_reuniones,
-                        sillas: site.caracteristicas_espacio.sillas,
-                        tablero: site.caracteristicas_espacio.tablero,
-                        televisores: site.caracteristicas_espacio.televisores,
-                        video_beam: site.caracteristicas_espacio.video_beam,
-                      },
-                    }}
-                  />
-                </div>
+                {dataSite.length > 0 && (
+                  <div key={site.id}>
+                    <PlaceCard
+                      place={{
+                        id: site.id,
+                        descripcion_corta: site.descripcion_corta,
+                        img_card: site.img_card,
+                        nombre: site.nombre,
+                        caracteristicas_espacio: {
+                          id: site.caracteristicas_espacio.id,
+                          adicionales: site.caracteristicas_espacio.adicionales,
+                          computadores:
+                            site.caracteristicas_espacio.computadores,
+                          dimensiones: site.caracteristicas_espacio.dimensiones,
+                          escritorios: site.caracteristicas_espacio.escritorios,
+                          mesa_reuniones:
+                            site.caracteristicas_espacio.mesa_reuniones,
+                          sillas: site.caracteristicas_espacio.sillas,
+                          tablero: site.caracteristicas_espacio.tablero,
+                          televisores: site.caracteristicas_espacio.televisores,
+                          video_beam: site.caracteristicas_espacio.video_beam,
+                        },
+                      }}
+                    />
+                  </div>
+                )}
+                {dataSite.length === 0 && (
+                  <div className="text-center text-default-300 select-none">
+                    <i className="bi bi-x-circle text-7xl"></i>
+                    <p className="text-4xl mt-[1%]">
+                      No se han encontrado espacios
+                    </p>
+                  </div>
+                )}
               </>
             ))}
           </div>

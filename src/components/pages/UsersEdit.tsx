@@ -58,7 +58,7 @@ const UsersEdit = () => {
       </h1>
       {!loading && (
         <>
-          <div className="w-full overflow-y-auto mb-10 md:max-w-6xl mx-auto p-3 bg-default-white rounded-xl normal-shadow">
+          <div className="w-full mb-10 md:max-w-6xl mx-auto p-3 bg-default-white rounded-xl normal-shadow">
             <div className="p-3 flex justify-end">
               <button
                 onClick={() => router.push("/users/add")}
@@ -68,7 +68,7 @@ const UsersEdit = () => {
                 <i className="bi bi-person-plus-fill ml-2 text-xl "></i>
               </button>
             </div>
-            <section className="w-full p-5 normal-shadow bg-[#ffffff] rounded-xl">
+            <section className="w-full overflow-x-auto p-5 normal-shadow bg-[#ffffff] rounded-xl">
               <article className="flex h-10 rounded-lg p-2 items-center justify-between select-none bg-borders-light text-borders text-md font-semibold">
                 <div className="w-[30%] ml-2">CORREO</div>
                 <div className="w-[30%] text-center">ROL</div>

@@ -7,7 +7,7 @@ export default function Login() {
   return (
     <>
       <div className="flex justify-between">
-        <div className="image-login hidden md:flex h-[966px] w-[70%]"></div>
+        <div className="image-login hidden md:flex h-[100vh] w-[70%]"></div>
         <div className="mx-auto w-[80%] md:w-[40%] text-center mt-[12%] max-w-md justify-center items-center">
           <Image
             className="mx-auto"
